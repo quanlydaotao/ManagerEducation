@@ -1,0 +1,15 @@
+.subMenu {
+    background: #FFF;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    text-align: center;
+    display: none;
+    width: 100%;
+}
+
+.wrapSubMenu {
+    margin: 0 auto;
+}
+
+

@@ -1,0 +1,33 @@
+.searchInput {
+    position: relative;
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 1.42857143;
+    height: 30px;
+    background-color: transparent;
+    padding: 6px 12px;
+}
+
+.searchInput:focus {
+    border-color:#ced4da;
+    box-shadow: none;
+}
+
+
+:global #icSearch {
+    display: inline-block;
+    margin-top: 1px; 
+    width: 15px;
+    height: 15px;
+    background-image: url(./images/ic-search-black.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.openForm {
+    display: inline-block;
+}
+
+.closeForm {
+    display: none;
+}

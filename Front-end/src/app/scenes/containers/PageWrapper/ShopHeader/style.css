@@ -1,0 +1,37 @@
+header ul {
+    display: table;
+    height: 100%;
+}
+
+header ul li {
+    list-style: none;
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 40px;
+}
+
+.headerMain {
+    font-size: 14px;
+	font-family: 'K2D','Roboto', sans-serif;
+    background-color: white;
+    position: relative;
+}
+.sticky {
+    position: fixed;
+    top: 0;
+    overflow: hidden;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 999999;
+    display: block;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+}
+
+header ul li > a {
+    color: #333;
+}
