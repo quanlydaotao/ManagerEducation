@@ -16,11 +16,10 @@ a {
 	text-decoration: none !important;
 	color: #313132;
 }
-
 strike {color: black;}
 body {
 	line-height:1;
-	font-family: 'Playfair Display', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 	background-color: white !important;
 	font-size: 14px;
 	margin: 0;
