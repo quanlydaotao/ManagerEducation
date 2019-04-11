@@ -1,0 +1,13 @@
+.panel {
+    background: url('http://thisinh.thithptquocgia.edu.vn/Content/bootstrap/images/dot-2.png');
+    border-radius: 5px;
+    width: 980px;
+    margin: 10% auto 0 auto;
+    margin-top: 25px;
+    padding: 1px;
+}
+.loginPanel {
+    background: #f4f4f4;
+    margin: 20px;
+    padding: 20px;
+}

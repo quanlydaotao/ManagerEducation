@@ -1,0 +1,29 @@
+.control {
+    display: block;
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 13px;
+    height: auto;
+}
+.uName {
+    background: #fff url('http://thisinh.thithptquocgia.edu.vn/Content/bootstrap/images/user.png') no-repeat 95% center;
+}
+.uPass {
+    background: #fff url('http://thisinh.thithptquocgia.edu.vn/Content/bootstrap/images/locked.png') no-repeat 95% center;
+}
+.captcha {
+    margin-top: 10px;
+}
+
+.btnLogin {
+    background-color: #5cb85c;
+    color: #ffffff;
+    border: 1px solid #43a343;
+}
+form {
+    border: 0;
+    padding: 0 30px 0 0;
+    border-right: 1px solid #ccc;
+    border-radius: 0;
+    box-shadow: none;
+}

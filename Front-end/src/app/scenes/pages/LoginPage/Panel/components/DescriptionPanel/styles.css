@@ -1,0 +1,16 @@
+.logContent {
+    width: 100%;
+}
+.logContent ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+.logContent ul li {
+    color: #6a6e7b;
+    line-height: 22px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    font-size: 13px;
+    background: url('http://thisinh.thithptquocgia.edu.vn/Content/bootstrap/images/dot-3.png') no-repeat left 10px;
+}
