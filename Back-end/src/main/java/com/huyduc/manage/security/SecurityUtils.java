@@ -1,5 +1,4 @@
 package com.huyduc.manage.security;
-
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,11 +6,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Optional;
 
 /**
- * Ultility class for Spring security
+ * Utility class for Spring Security.
  */
 public final class SecurityUtils {
-    private SecurityUtils() {
 
+    private SecurityUtils() {
     }
 
     /**
@@ -19,7 +18,7 @@ public final class SecurityUtils {
      *
      * @return the login of the current user
      */
-    public static Optional<String> getCurrentLoginUser() {
+    public static Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
             .map(authentication -> {
@@ -38,11 +37,11 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user
      */
-    public static Optional<String> getCurrentJwtUser() {
+    public static Optional<String> getCurrentUserJWT() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-                .filter(authentication -> authentication.getCredentials() instanceof String)
-                .map(authentication -> (String) authentication.getCredentials());
+            .filter(authentication -> authentication.getCredentials() instanceof String)
+            .map(authentication -> (String) authentication.getCredentials());
     }
 
     /**
