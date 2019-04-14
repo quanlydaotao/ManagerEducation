@@ -3,6 +3,7 @@ import {
     combineReducers,
     applyMiddleware
 } from 'redux';
+import { sessionReducer, redirectAfterLoginReducer } from '../ducks/session';
 import thunkMiddleware from "redux-thunk";
 import {
     apiService,
@@ -11,10 +12,8 @@ import {
 
 export default function configStore(initialState) {
     const rootReducer = combineReducers({
-        // toggleMenuReducer,
-        // searchHeaderReducer,
-        // menuReducer,
-        // bannerReducer
+        sessionReducer,
+        redirectAfterLoginReducer
     });
 
     return createStore(

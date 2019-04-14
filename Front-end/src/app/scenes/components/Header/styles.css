@@ -1,0 +1,65 @@
+.headerMain {
+    width: 100%;
+    background-color: #4267b2;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.ctn {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.headerRight {
+    color: white;
+}
+
+.logo a {
+    background-size: cover;
+    width: 178px;
+    height: 30px;
+    margin-top: 4px;
+}
+
+.iconBar {
+    display: inline-block;
+}
+
+.account {
+    display: inline-block;
+}
+
+.imgAccount img {
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.dropdownWrap {
+    font-size: 13px;
+}
+
+.iconRight{
+    color:white;
+    display: inline-block;
+    border-left: 1px solid #ffffff;
+    padding: 0 10px;
+}
+
+.iconRight a:hover i {
+    color: bisque;
+}
+
+.iconRight a i {
+    font-size: 15px;
+}
+
+.titleSystem {
+    text-align: left;
+}
+
+.titleSystem h1 {
+    margin: 0;
+    color: white;
+    font-weight: 100;
+    font-size: 18px;
+    line-height: 38px;
+}

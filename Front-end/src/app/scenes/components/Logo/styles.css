@@ -6,6 +6,6 @@
 .logoBig {
     width: 334px;
     height: 56px;
-    display: block;
+    display: inline-block;
     background: url('http://thisinh.thithptquocgia.edu.vn/Content/bootstrap/images/logo-big.png') no-repeat;
 }
