@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './app/scenes/containers/App';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
+import { HashRouter, BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import './assets/css/Site.css';
 import './assets/js/Site';
@@ -13,9 +13,9 @@ const store = configStore(
 
 ReactDOM.render(
     <Provider store = { store }>
-        <BrowserRouter>
+        <Router>
             <App />
-        </BrowserRouter>
+        </Router>
     </Provider>,
     document.getElementById('t')
 );

@@ -25,10 +25,10 @@ const Header = () => {
                                             <span style={{ fontSize: 13 }}>Huy Đức</span>
                                         </a>
                                         <div className={`dropdown-menu ${styles.dropdownWrap}`} aria-labelledby="navbarDropdown">
-                                            <a className="dropdown-item" href="#"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;Profile</a>
-                                            <a className="dropdown-item" href="#"><i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Settings</a>
+                                            <a className="dropdown-item" href="#"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;Tài khoản</a>
+                                            <a className="dropdown-item" href="#"><i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Cài đặt tài khoản</a>
                                             <div className="dropdown-divider" />
-                                            <a className="dropdown-item" href="#"><i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;&nbsp;Logout</a>
+                                            <a className="dropdown-item" href="#"><i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;&nbsp;Đăng xuất</a>
                                         </div>
                                     </li>
                                 </ul>

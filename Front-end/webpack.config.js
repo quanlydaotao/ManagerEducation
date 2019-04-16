@@ -67,6 +67,7 @@ module.exports = {
          inject: true,
          hash: false,
          template: './src/assets/index.html',
+         favicon: "./src/assets/favicon/fav.ico",
          filename: 'index.html',
          minify: {
             collapseWhitespace: true
@@ -163,5 +164,4 @@ module.exports = {
       maxAssetSize: 512000
    },
    devServer
-
 };

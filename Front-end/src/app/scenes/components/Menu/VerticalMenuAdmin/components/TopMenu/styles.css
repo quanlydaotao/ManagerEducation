@@ -1,0 +1,30 @@
+.headerTopMenu {
+    background-color: #4267b2;
+    padding: 0 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.headerTopMenu  img {
+    width: 50px;
+    margin-top: 5px;
+    border-radius: 4px;
+}
+
+.detailtAccount {
+    width: 100%;
+    margin: 14px 0;
+}
+
+.detailtAccount li {
+    display: block;
+    width: 100%;
+    font-size: 12px;
+    font-weight: 100;
+    color: #ffffff;
+    padding: 6px 10px;
+}
+
+.detailtAccount li i {
+    font-size: 15px;
+}

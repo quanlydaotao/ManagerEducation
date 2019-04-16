@@ -1,8 +1,8 @@
-import { LoginPage } from '../scenes/pages/LoginPage';
+import { HomeAdmin } from '../scenes/pages/HomeAdmin';
 const routes = [
     {
-        path: "/",
-        component: LoginPage,
+        path: '/admin',
+        component: HomeAdmin,
         exact: true
     }
 ];
