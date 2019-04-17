@@ -3,6 +3,11 @@
     height: 100%;
     border: 1px solid hsl(0, 4%, 86%);
     display: block;
+    transition: all ease 1s;
+    -webkit-box-shadow: -1px 14px 51px -17px rgba(0,0,0,.75);
+    -moz-box-shadow: -1px 14px 51px -17px rgba(0,0,0,.75);
+    box-shadow: -1px 14px 51px -17px rgba(0,0,0,.75);
+    /* padding: 5px; */
 }
 .topCard {
     padding: 15px 20px;
@@ -38,6 +43,7 @@
 
 .footerCard {
     text-align: right;
+    position: relative;
     border-top: 1px solid #d8d1d1;
     padding: 5px;
 }
@@ -61,3 +67,4 @@
 .footerCard a i {
     font-size: 25px;
 }
+
