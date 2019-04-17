@@ -13,6 +13,7 @@ class HomeAdmin extends Component {
             <div className={`${styles.mainHomeAdmin}`}>
                 <Breadcumbs breadcums="Trang chủ" />
                 <hr className="tall"/>
+                <img src="https://image.flaticon.com/icons/svg/1040/1040214.svg" alt="" style={{width: '10%'}}/>
             </div>
         );
     }
