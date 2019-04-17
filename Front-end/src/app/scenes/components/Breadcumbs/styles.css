@@ -4,7 +4,7 @@
 }
 .imgBreadcumb {
     float: left;
-    width: 5%;
+    width: 70px;
 }
 
 .mainBreadcums {
@@ -14,5 +14,5 @@
 .mainBreadcums h1 {
     color: #4267b2;
     font-weight: 700;
-    font-size: 25px;
+    font-size: 22px;
 }

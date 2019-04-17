@@ -1,0 +1,63 @@
+.cardClass {
+    width: 100%;
+    height: 100%;
+    border: 1px solid hsl(0, 4%, 86%);
+    display: block;
+}
+.topCard {
+    padding: 15px 20px;
+    display: block;
+    background-image:url(https://lh3.googleusercontent.com/Zr8T5HumaWnhw_loEURMzkh426pSaJzB5ZyLpgRi0w-w1UE4RwhCypwSpHYATY343dFNpoBNnoQEoWRrXQ=w960-h334-no);
+    background-size: cover;
+}
+
+.topCard > a {
+    font-size: 20px;
+}
+
+.topCard span {
+    font-size: 11px;
+}
+
+.topCard > a:hover {
+    color: orange;
+}
+
+.topCard > a, .topCard > span {
+    color: #ffffff;
+}
+
+.bottomCard {
+    padding: 15px 20px;
+    display: block;
+    font-weight: 400;
+    color: #797575;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+.footerCard {
+    text-align: right;
+    border-top: 1px solid #d8d1d1;
+    padding: 5px;
+}
+
+.footerCard a {
+    color: #333;
+    width: 50px;
+    line-height: 55px;
+    text-align: center;
+    height: 50px;
+    transition: 0.3s ease all;
+    display: inline-block;
+}
+
+.footerCard a:hover {
+    transition: 0.3s ease all;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+}
+
+.footerCard a i {
+    font-size: 25px;
+}

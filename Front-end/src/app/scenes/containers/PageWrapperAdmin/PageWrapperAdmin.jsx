@@ -12,12 +12,12 @@ class PageWrapperAdmin extends Component {
         return (
             <React.Fragment>
                 <Header />
-                <div className={`${styles.main} container-fluid`} style={{ paddingLeft: 5 }}>
+                <div className={`${styles.main} container-fluid`} style={{ paddingLeft: 0}}>
                     <div className="row">
-                        <div className="col-md-2">
+                        <div className="col-lg-3 col-md-2">
                             <VerticalMenuAdmin />
                         </div>
-                        <div className="col-md-10">
+                        <div className="col-lg-9 col-md-10">
                             {
                                 routes.map(route => (
                                     <Route key={route.path} {...route} />

@@ -1,0 +1,19 @@
+.labelYears {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.imgLabel, .mainLabel {
+    float: left;
+}
+
+.mainLabel {
+    margin-left: 8px;
+}
+
+.mainLabel h2 {
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 16px;
+}
