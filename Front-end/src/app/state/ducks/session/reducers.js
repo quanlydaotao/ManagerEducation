@@ -1,28 +1,25 @@
-import * as types from './types';
+import { combineReducers } from "redux";
+import * as types from "./types";
+import * as utils from './utils';
+import { createReducer } from "../../utils";
 
-const initialState1 = false;
-const initialState2 = "";
+let user = sessionStorage.getItem('user');
 
-const sessionReducer = (state = initialState1, action) => {
-    switch (action.type) {
-        case types.LOGIN:
-            return true;
-        case types.LOGOUT:
-            return false;
-        case types.SET_REDIRECT_AFTER_LOGIN:
-            return action.payload.redirectUrl;
-        default: return state;
+const initialState = user ? { loggedIn:true, user } : {};
+
+const authReducer = createReducer( initialState )( {
+    [ types.LOGIN_COMPLETED ]: ( state, action ) => {
+        if (action.payload) {
+            utils.saveJwtTokenOnTheStograte(action.payload.id_token);
+        }
+        state = {loggedIn: true, user: action.payload.id_token};
+        return state;
+    },
+    [ types.LOGOUT ]: ( state, action ) => {
+        return null;
     }
-}
+} );
 
-const redirectAfterLoginReducer = (state = initialState2, action) => {
-    switch (action.type) {
-        case types.SET_REDIRECT_AFTER_LOGIN:
-            return action.payload.redirectUrl;
-        default: return state;
-    }
-}
-export {
-    sessionReducer,
-    redirectAfterLoginReducer
-};
+export default combineReducers( {
+    isAuthenticated: authReducer
+} );

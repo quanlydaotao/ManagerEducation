@@ -1,13 +1,22 @@
 import * as types from "./types";
 
-export const login = ( ) => ( {
+export const login = (username, password, rememberMe) => ( {
     type: types.LOGIN,
-});
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/authenticate",
+        method: "POST",
+        body: {username, password, rememberMe}
+    }
+} );
 
 export const logout = ( ) => ( {
     type: types.LOGOUT,
-});
-
-export const setRedirectAfterLogin = ( ) => ( {
-    type: types.SET_REDIRECT_AFTER_LOGIN,
-});
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/logout",
+        method: "GET",
+    }
+} );

@@ -12,10 +12,20 @@ export default (url, method, body) => {
 
 
 function requestHeaders() {
-    return {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-    };
+    let user = sessionStorage.getItem('user');
+    if (user) {
+        console.log('Bearer ' + user);
+        return { 
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + user
+        };
+    } else {
+        return {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        };
+    }
 }
 
 function parseStatus(status, res) {
@@ -23,6 +33,7 @@ function parseStatus(status, res) {
         if (status >= 200 && status < 300) {
             res.then(response => resolve(response));
         } else {
+            localStorage.removeItem('user');
             res.then(response => reject({
                 status,
                 response

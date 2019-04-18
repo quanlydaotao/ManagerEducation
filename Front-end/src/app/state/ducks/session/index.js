@@ -1,4 +1,4 @@
-import { sessionReducer, redirectAfterLoginReducer } from "./reducers";
+import reducer from "./reducers";
 
 import * as sessionOperations from "./operations";
 
@@ -6,7 +6,4 @@ export {
     sessionOperations,
 };
 
-export {
-    sessionReducer,
-    redirectAfterLoginReducer
-};
+export default reducer;

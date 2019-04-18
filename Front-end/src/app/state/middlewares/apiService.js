@@ -1,7 +1,7 @@
 import { fetch } from "../utils";
 
 // const baseUrl = typeof document === "undefined" ? "http://5ca705a29853bd0014973545.mockapi.io/api" : "/api";
-const baseUrl = "http://5ca705a29853bd0014973545.mockapi.io/api";
+const baseUrl = "http://localhost:8080/api";
 
 function handleErrors( err, action, next ) {
     next( {
@@ -26,7 +26,6 @@ const apiService = ( ) => ( next ) => ( action ) => {
     if ( !action.meta || !action.meta.async ) {
         return result;
     }
-
     const { path, method = "GET", body } = action.meta;
 
     if ( !path ) {

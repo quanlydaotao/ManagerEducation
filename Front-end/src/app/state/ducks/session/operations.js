@@ -1,7 +1,6 @@
-import { login, logout, setRedirectAfterLogin } from "./actions";
+import { login, logout } from "./actions";
 
 export {
     login,
-    logout,
-    setRedirectAfterLogin
+    logout
 };

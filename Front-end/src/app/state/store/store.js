@@ -1,20 +1,10 @@
-import {
-    createStore,
-    combineReducers,
-    applyMiddleware
-} from 'redux';
-import { sessionReducer, redirectAfterLoginReducer } from '../ducks/session';
+import { createStore,combineReducers,applyMiddleware } from 'redux';
 import thunkMiddleware from "redux-thunk";
-import {
-    apiService,
-    createLogger
-} from "../middlewares";
+import * as reducer from '../ducks';
+import { apiService, createLogger } from "../middlewares";
 
 export default function configStore(initialState) {
-    const rootReducer = combineReducers({
-        sessionReducer,
-        redirectAfterLoginReducer
-    });
+    const rootReducer = combineReducers ( reducer );
 
     return createStore(
         rootReducer,
