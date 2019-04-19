@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import * as types from "./types";
 import * as utils from './utils';
 import { createReducer } from "../../utils";
+import { history } from '../../utils';
 
 let user = sessionStorage.getItem('user');
 
@@ -13,10 +14,11 @@ const authReducer = createReducer( initialState )( {
             utils.saveJwtTokenOnTheStograte(action.payload.id_token);
         }
         state = {loggedIn: true, user: action.payload.id_token};
+        history.push('/administrator/home');
         return state;
     },
     [ types.LOGOUT ]: ( state, action ) => {
-        return null;
+        return state;
     }
 } );
 

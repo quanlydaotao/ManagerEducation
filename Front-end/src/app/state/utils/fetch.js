@@ -14,7 +14,6 @@ export default (url, method, body) => {
 function requestHeaders() {
     let user = sessionStorage.getItem('user');
     if (user) {
-        console.log('Bearer ' + user);
         return { 
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -33,7 +32,7 @@ function parseStatus(status, res) {
         if (status >= 200 && status < 300) {
             res.then(response => resolve(response));
         } else {
-            localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
             res.then(response => reject({
                 status,
                 response
