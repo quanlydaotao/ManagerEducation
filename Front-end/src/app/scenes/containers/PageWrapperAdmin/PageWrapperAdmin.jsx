@@ -8,11 +8,12 @@ import routes from '../../../routes';
 import { NavLink, Route, Switch } from 'react-router-dom';
 
 class PageWrapperAdmin extends Component {
+    // fake authentication Promise
     render() {
         return (
             <React.Fragment>
                 <Header />
-                <div className={`${styles.main} container-fluid`} style={{ paddingLeft: 0}}>
+                <div className={`${styles.main} container-fluid`} style={{ paddingLeft: 0 }}>
                     <div className="row">
                         <div className="col-lg-3 col-md-2">
                             <VerticalMenuAdmin />
@@ -29,6 +30,11 @@ class PageWrapperAdmin extends Component {
             </React.Fragment>
         );
     }
+}
+
+
+function demoAsyncCall() {
+    return new Promise((resolve) => setTimeout(() => resolve(), 2500));
 }
 
 export default PageWrapperAdmin;
