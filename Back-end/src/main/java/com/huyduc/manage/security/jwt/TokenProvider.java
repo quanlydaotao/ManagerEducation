@@ -1,5 +1,4 @@
 package com.huyduc.manage.security.jwt;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,10 +37,8 @@ public class TokenProvider {
         byte[] keyBytes = Decoders.BASE64.decode( Constants.SECRET_KEY);
 
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.tokenValidityInMilliseconds =
-                1000 * Constants.TIME_LIFE;
-        this.tokenValidityInMillisecondsForRememberMe =
-                1000 * Constants.TIME_LIFE_REMEMBER;
+        this.tokenValidityInMilliseconds = 1000 * Constants.TIME_LIFE;
+        this.tokenValidityInMillisecondsForRememberMe = 1000 * Constants.TIME_LIFE_REMEMBER;
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
@@ -80,13 +77,14 @@ public class TokenProvider {
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(key).parseClaimsJws(authToken).getBody();
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-
+            return false;
         } catch (ExpiredJwtException e) {
-
+            return false;
         } catch (UnsupportedJwtException e) {
+            return false;
         } catch (IllegalArgumentException e) {
         }
         return false;
