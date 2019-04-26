@@ -1,3 +1,3 @@
 export function saveJwtTokenOnTheStograte( token ) {
-    return sessionStorage.setItem('user', token);
+    return localStorage.setItem('user', token);
 }

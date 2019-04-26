@@ -1,20 +1,97 @@
 import React, { Component } from 'react';
 import styles from './styles.css';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import Paper from '@material-ui/core/Paper';
+import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
+import Chip from '@material-ui/core/Chip';
+import Avatar from '@material-ui/core/Avatar';
+import HomeIcon from '@material-ui/icons/Home';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+const style = theme => ({
+    root: {
+        padding: theme.spacing.unit,
+    },
+    chip: {
+        backgroundColor: theme.palette.grey[100],
+        height: 24,
+        color: theme.palette.grey[800],
+        fontWeight: theme.typography.fontWeightRegular,
+        '&:hover, &:focus': {
+            backgroundColor: theme.palette.grey[300],
+        },
+        '&:active': {
+            boxShadow: theme.shadows[1],
+            backgroundColor: emphasize(theme.palette.grey[300], 0.12),
+        },
+    },
+    avatar: {
+        background: 'none',
+        marginRight: -theme.spacing.unit * 1.5,
+    },
+});
+
+function handleClick(event) {
+    event.preventDefault();
+    alert('You clicked a breadcrumb.'); // eslint-disable-line no-alert
+}
+
+function CustomBreadcrumb(props) {
+    const { classes, ...rest } = props;
+    return <Chip className={classes.chip} {...rest} />;
+}
+
+CustomBreadcrumb.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+const StyledBreadcrumb = withStyles(styles)(CustomBreadcrumb);
 
 class Breadcumbs extends Component {
     render() {
+        // return (
+        //     <div className={`${styles.breadcums} clearfix`}>
+        //         <div className={`${styles.imgBreadcumb}`}>
+        //             <img style={{ marginTop: 2, marginRight: 15 }} src="https://image.flaticon.com/icons/svg/1055/1055686.svg" alt="aaa" />
+        //         </div>
+        //         <div className={`${styles.mainBreadcums}`}>
+        //             <h1>{ this.props.breadcums }</h1>
+        //             <span>Hà nội : 02/04/2019 GMT +7 20:50 PM</span>
+        //        </div>
+        //     </div>
+        // );
+        const { classes } = this.props;
         return (
-            <div className={`${styles.breadcums} clearfix`}>
-                <div className={`${styles.imgBreadcumb}`}>
-                    <img style={{ marginTop: 2, marginRight: 15 }} src="https://image.flaticon.com/icons/svg/1055/1055686.svg" alt="aaa" />
-                </div>
-                <div className={`${styles.mainBreadcums}`}>
-                    <h1>{ this.props.breadcums }</h1>
-                    <span>Hà nội : 02/04/2019 GMT +7 20:50 PM</span>
-               </div>
-            </div>
+            <Paper className={classes.root} style={{marginTop: 10}}>
+                <Breadcrumbs arial-label="Breadcrumb">
+                    <StyledBreadcrumb
+                        component="a"
+                        href="#"
+                        label="Home"
+                        avatar={
+                            <Avatar className={classes.avatar}>
+                                <HomeIcon />
+                            </Avatar>
+                        }
+                        onClick={handleClick}
+                    />
+                    <StyledBreadcrumb component="a" href="#" label="Catalog" onClick={handleClick} />
+                    <StyledBreadcrumb
+                        label="Accessories"
+                        deleteIcon={<ExpandMoreIcon />}
+                        onClick={handleClick}
+                        onDelete={handleClick}
+                    />
+                </Breadcrumbs>
+            </Paper>
         );
     }
 }
 
-export default Breadcumbs;
+Breadcrumbs.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(style)(Breadcumbs);

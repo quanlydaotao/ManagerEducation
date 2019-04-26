@@ -1,0 +1,14 @@
+.iconRight{
+    color:white;
+    display: inline-block;
+    border-left: 1px solid #ffffff;
+    padding: 0 10px;
+}
+
+.iconRight a:hover i {
+    color: bisque;
+}
+
+.iconRight a i {
+    font-size: 15px;
+}

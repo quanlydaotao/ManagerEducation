@@ -12,11 +12,5 @@ export const login = (username, password, rememberMe) => ( {
 } );
 
 export const logout = ( ) => ( {
-    type: types.LOGOUT,
-    meta: {
-        async: true,
-        blocking: true,
-        path: "/logout",
-        method: "GET",
-    }
+    type: types.LOGOUT
 } );

@@ -1,0 +1,12 @@
+.mainManageAccount {
+    width: 100%;
+    display: block;
+    position: relative;
+}
+
+
+.fixed {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+}

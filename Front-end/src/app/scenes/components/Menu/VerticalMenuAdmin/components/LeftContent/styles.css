@@ -4,28 +4,17 @@
     width: 100%;
 }
 
+.leftContent a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
+.leftContent a span {
+    color: rgb(86, 110, 122);
+    font-size: 13px;
+}
+
 .wrapperContentLeft {
     display: block;
-}
-.wrapperContentLeft  li a {
-    padding: 17px;
-    display: block;
-    color: #6d6d6d;
-    font-weight: 600;
-    font-size: 11px;
-    transition: 0.3s all ease;
-    border-bottom: 1px solid white;
-}
-
-.wrapperContentLeft  li a:hover, .activeStyle {
-    background-color: #f9f9f9;
-    border-left: 5px solid #4267b2;
-    transition: 0.3s all ease;
-    color: #4267b2 !important;
-    font-weight: 600 !important;
-}
-
-.wrapperContentLeft  li a i {
-    font-size: 20px;
-    color: #4c4c4c;
 }

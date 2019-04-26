@@ -13,15 +13,11 @@ class FormPanel extends Component {
         this.state = {
             username: '',
             password: '',
-            role: '',
             rememberMe: false,
             isVerifyCaptcha: false
         }
     }
-    resetRecaptcha = () => {
-        recaptchaInstance.reset();
-        this.setState({isVerifyCaptcha: false});
-    }
+
     handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "rememberMe") {
@@ -30,22 +26,31 @@ class FormPanel extends Component {
             this.setState({ [name]: value });
         }
     }
+
     handleSubmit = (e) => {
         e.preventDefault();
-        const { username, password, role, rememberMe, isVerifyCaptcha } = this.state;
+        const { username, password, rememberMe, isVerifyCaptcha } = this.state;
         // login if not errors
         if (isVerifyCaptcha)
             this.props.login(username, password, rememberMe);
         this.resetRecaptcha();
     }
+
     // captcha config
     callback = () => {
     }
+
     verifyCallback = (res) => {
         if (res) {
             this.setState({ isVerifyCaptcha: true })
         }
     }
+
+    resetRecaptcha = () => {
+        recaptchaInstance.reset();
+        this.setState({ isVerifyCaptcha: false });
+    }
+
     render() {
         const { isVerifyCaptcha } = this.state;
         const { isAuth } = this.props;
@@ -64,13 +69,6 @@ class FormPanel extends Component {
                 </div> : ''}
                 <input className={`form-control ${styles.uName} ${styles.control}`} id="UserName" name="username" placeholder="Mã đăng nhập cá nhân" type="text" onChange={this.handleChange} required />
                 <input autoComplete="off" className={`form-control ${styles.uPass} ${styles.control}`} id="Password" name="password" placeholder="Mật khẩu" type="password" onChange={this.handleChange} required />
-                <select name="role" style={{ marginTop: 15, fontSize: 13, color: '#6c757d' }} className={`custom-select mr-sm-2 ${styles.control}`} onChange={this.handleChange} required>
-                    <option value="">-- Đăng nhập với tư cách --</option>
-                    <option value="administrator">Tài khoản quản trị viên</option>
-                    <option value="teacher">Tài khoản giáo viên</option>
-                    <option value="parents">Tài khoản phụ huynh</option>
-                    <option value="student">Tài khoản học sinh</option>
-                </select>
                 <div className={`${styles.captcha}`}>
                     <Recaptcha
                         ref={e => recaptchaInstance = e}
@@ -88,7 +86,7 @@ class FormPanel extends Component {
                 <a href="#" style={{ color: '#666666' }}><small>Quên mã đăng nhập?</small></a>
                 <div className="mgt" style={{ color: 'red' }}>
                 </div>
-                <button disabled={!isVerifyCaptcha} type="submit" id="btn-dangnhap" className={`btn btn-primary btn-block`} value="ĐĂNG NHẬP" style={{ marginTop: 15 }}>ĐĂNG NHẬP <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button><br />
+                <button disabled={!isVerifyCaptcha} type="submit" id="btn-dangnhap" className={`btn btn-primary btn-block`} value="ĐĂNG NHẬP" style={{ marginTop: 15 }}>ĐĂNG NHẬP {(!isAuth.loggedIn && (isAuth.user === "progress" ? <i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{fontSize: 18}}></i> : <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>))}</button><br />
             </form>
         );
     }

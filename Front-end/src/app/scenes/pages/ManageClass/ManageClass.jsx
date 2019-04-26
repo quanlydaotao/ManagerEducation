@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styles from './styles.css';
-import { Breadcumbs } from '../../components/Breadcumbs';
 
 class ManageClass extends Component {
     componentDidMount() {
@@ -9,8 +8,6 @@ class ManageClass extends Component {
     render() {
         return (
             <div className={`${styles.mainManageClass}`}>
-                <Breadcumbs breadcums="Quản lý lớp học" />
-                <hr className="tall" />
             </div>
         );
     }

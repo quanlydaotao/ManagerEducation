@@ -1,14 +1,19 @@
-import { HomeAdmin } from '../scenes/pages/HomeAdmin';
-import { ManageClass } from '../scenes/pages/ManageClass';
+import React from 'react';
+
 const routes = [
     {
         path: '/administrator/home',
-        component: HomeAdmin,
+        component: React.lazy(() => import('../scenes/pages/HomeAdmin/HomeAdmin')),
         exact: true
     },
     {
         path: '/administrator/class',
-        component: ManageClass,
+        component: React.lazy(() => import('../scenes/pages/ManageClass/ManageClass')),
+        exact: true
+    },
+    {
+        path: '/administrator/account',
+        component: React.lazy(() => import('../scenes/pages/ManageAccount/ManageAccount')),
         exact: true
     }
 ];

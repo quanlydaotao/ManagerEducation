@@ -5,7 +5,8 @@ const Sort = () => {
     return (
         <div className={`${styles.sort}`}>
             <select name="" id="input" className="form-control" required="required" style={{ fontSize: 13 }}>
-                <option value="">--- Tất cả ---</option>
+                <option value="">--- Sắp xếp ---</option>
+                <option value="">Tất cả</option>
                 <option value="">Lớp đang học</option>
                 <option value="">Lớp đã đóng</option>
                 <option value="">Lớp đang học mới nhất</option>

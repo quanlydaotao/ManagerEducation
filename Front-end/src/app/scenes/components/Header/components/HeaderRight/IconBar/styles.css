@@ -1,0 +1,15 @@
+.iconBar {
+    display: inline-block;
+}
+
+.account {
+    display: inline-block;
+}
+
+.imgAccount img {
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.dropdownWrap {
+    font-size: 13px;
+}
