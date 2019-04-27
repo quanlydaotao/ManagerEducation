@@ -6,27 +6,23 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.BatchSize;
 import javax.validation.constraints.Email;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.time.Instant;
 
 /**
  * A user.
  */
 @Entity
 @Table(name = "user")
-
-public class User  implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,6 +73,32 @@ public class User  implements Serializable {
     @Column(name = "reset_key", length = 20)
     @JsonIgnore
     private String resetKey;
+
+    @Size(max = 254)
+    @Column(name = "address", length = 254)
+    private String address;
+
+    @Size(max = 20)
+    @Column(name = "phone_number", length = 20)
+    private String phone_number;
+
+    @Size(max = 20)
+    @Column(name = "identity_card_number", length = 20)
+    private String identity_card_number;
+
+    @Column(name = "birthday")
+    private Date birthday;
+
+    @Column(name = "sex")
+    private Boolean sex;
+
+    @Size(max = 50)
+    @Column(name = "nations", length = 50)
+    private String nations;
+
+    @Size(max = 254)
+    @Column(name = "address1", length = 254)
+    private String address1;
 
     @JsonIgnore
     @ManyToMany
@@ -185,6 +207,66 @@ public class User  implements Serializable {
         this.authorities = authorities;
     }
 
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
+    }
+
+    public String getIdentity_card_number() {
+        return identity_card_number;
+    }
+
+    public void setIdentity_card_number(String identity_card_number) {
+        this.identity_card_number = identity_card_number;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Boolean getSex() {
+        return sex;
+    }
+
+    public void setSex(Boolean sex) {
+        this.sex = sex;
+    }
+
+    public String getNations() {
+        return nations;
+    }
+
+    public void setNations(String nations) {
+        this.nations = nations;
+    }
+
+    public String getAddress1() {
+        return address1;
+    }
+
+    public void setAddress1(String address1) {
+        this.address1 = address1;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -206,14 +288,25 @@ public class User  implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
-            "}";
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", activated=" + activated +
+                ", langKey='" + langKey + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", activationKey='" + activationKey + '\'' +
+                ", resetKey='" + resetKey + '\'' +
+                ", address='" + address + '\'' +
+                ", phone_number='" + phone_number + '\'' +
+                ", identity_card_number='" + identity_card_number + '\'' +
+                ", birthday=" + birthday +
+                ", sex=" + sex +
+                ", nations='" + nations + '\'' +
+                ", address1='" + address1 + '\'' +
+                ", authorities=" + authorities +
+                '}';
     }
 }

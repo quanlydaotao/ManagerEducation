@@ -32,11 +32,8 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
-
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthorityRepository authorityRepository;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
@@ -122,7 +119,7 @@ public class UserService {
 
     public User createUser(UserDTO userDTO) {
         User user = new User();
-        user.setLogin(userDTO.getLogin().toLowerCase());
+        user.setLogin(userDTO.getLogin().toUpperCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail().toLowerCase());
@@ -158,7 +155,7 @@ public class UserService {
      * @param langKey language key
      * @param imageUrl image URL of user
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String address, String phone_number, String identity_card_number) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -167,6 +164,9 @@ public class UserService {
                 user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
+                user.setAddress(address);
+                user.setPhone_number(phone_number);
+                user.setIdentity_card_number(identity_card_number);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -190,6 +190,9 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
+                user.setAddress(userDTO.getAddress());
+                user.setPhone_number(userDTO.getPhone_number());
+                user.setIdentity_card_number(userDTO.getIdentity_card_number());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
@@ -231,7 +234,6 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-        System.out.println("loz");
         return userRepository.findOneWithAuthoritiesByLogin(login);
     }
 

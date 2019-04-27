@@ -49,6 +49,13 @@ public class UserMapper {
             user.setImageUrl(userDTO.getImageUrl());
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
+            user.setAddress(userDTO.getAddress());
+            user.setPhone_number(userDTO.getPhone_number());
+            user.setIdentity_card_number(userDTO.getIdentity_card_number());
+            user.setBirthday(userDTO.getBirthday());
+            user.setSex(userDTO.getSex());
+            user.setNations(userDTO.getNations());
+            user.setAddress1(user.getAddress1());
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
             return user;

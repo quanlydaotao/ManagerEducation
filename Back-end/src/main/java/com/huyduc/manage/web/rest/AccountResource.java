@@ -33,7 +33,6 @@ public class AccountResource {
 
 
     public AccountResource(UserRepository userRepository, UserService userService) {
-
         this.userRepository = userRepository;
         this.userService = userService;
     }
@@ -103,16 +102,12 @@ public class AccountResource {
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
-            throw new EmailAlreadyUsedException();
-        }
         Optional<User> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
             throw new InternalServerErrorException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl());
+            userDTO.getLangKey(), userDTO.getImageUrl(), userDTO.getAddress(), userDTO.getPhone_number(), userDTO.getIdentity_card_number());
     }
 
     /**
