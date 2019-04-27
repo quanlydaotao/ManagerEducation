@@ -3,7 +3,6 @@ import * as types from "./types";
 import * as utils from './utils';
 import { createReducer } from "../../utils";
 
-
 const accountReducer = createReducer( [] )( {
     [ types.GET_ALL_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
         if (action.payload) {

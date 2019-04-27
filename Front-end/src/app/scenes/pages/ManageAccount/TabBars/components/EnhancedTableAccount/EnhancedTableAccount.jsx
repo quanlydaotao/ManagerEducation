@@ -8,9 +8,26 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import { EnhancedTableHead } from './components/EnhancedTableHead';
-import { EnhancedTableToolBar } from './components/EnhancedTableToolBar';
+import Chip from '@material-ui/core/Chip';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import { connect } from 'react-redux';
+import { accountShape } from '../../../../../propTypes';
+import { accountOperations } from '../../../../../../state/ducks/account';
+import { EnhancedTableHead } from '../../../../../components/EnhancedTableHead';
+import { EnhancedTableToolBar } from '../../../../../components/EnhancedTableToolBar';
+import { ImageAvatars } from '../../../../../components/ImageAvatars';
 
+const rows = [
+    { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
+    { id: 'firstName', numeric: false, disablePadding: false, label: 'Họ' },
+    { id: 'lastName', numeric: false, disablePadding: false, label: 'Tên' },
+    { id: 'login', numeric: false, disablePadding: false, label: 'Mã đăng nhập' },
+    { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
+    { id: 'phone_number', numeric: false, disablePadding: false, label: 'Số điện thoại' },
+    { id: 'authorities', numeric: false, disablePadding: false, label: 'Loại tài khoản' },
+    { id: 'activated', numeric: false, disablePadding: false, label: 'Trạng thái' }
+]
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -36,7 +53,7 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-const styles = theme => ({
+const style = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing.unit * 3,
@@ -46,19 +63,28 @@ const styles = theme => ({
     },
     tableWrapper: {
         overflowX: 'auto',
-    }
+    },
+    chip: {
+        margin: theme.spacing.unit,
+    },
 });
 
-class EnhancedTable extends React.Component {
+class EnhancedTableAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             order: 'asc',
             orderBy: 'calories',
-            data: [],
             selected: [],
             page: 0,
-            rowsPerPage: 10
+            rowsPerPage: 5
+        }
+    }
+
+    componentDidMount() {
+        const { accounts } = this.props;
+        if (accounts.length === 0) {
+            this.props.getAllUserAccount();
         }
     }
 
@@ -76,7 +102,7 @@ class EnhancedTable extends React.Component {
 
     handleSelectAllClick = event => {
         if (event.target.checked) {
-            this.setState({ selected: this.props.datas.map(n => n.id) });
+            this.setState({ selected: this.props.accounts.map(n => n.id) });
             return;
         }
         this.setState({ selected: [] });
@@ -114,9 +140,9 @@ class EnhancedTable extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes, listName, datas, cells } = this.props;
+        const { classes, listName, accounts } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, datas.length - page * rowsPerPage);
+        const emptyRows = rowsPerPage - Math.min(rowsPerPage, accounts.length - page * rowsPerPage);
         return (
             <Paper className={classes.root}>
                 <EnhancedTableToolBar numSelected={selected.length} listName={listName} />
@@ -129,33 +155,63 @@ class EnhancedTable extends React.Component {
                             orderBy={orderBy}
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={datas.length}
+                            rowCount={accounts.length}
+                            rows={rows}
                         />
                         <TableBody>
-                            {stableSort(datas, getSorting(order, orderBy))
+                            {stableSort(accounts, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
                                     const isSelected = this.isSelected(n.id);
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={event => this.handleClick(event, n.id)}
                                             role="checkbox"
                                             aria-checked={isSelected}
                                             tabIndex={-1}
                                             key={n.id}
                                             selected={isSelected}
                                         >
-                                            <TableCell padding="checkbox">
+                                            <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
                                                 <Checkbox checked={isSelected} color="default" />
                                             </TableCell>
-                                            { cells.map((value, index) => {
-                                                return (
-                                                    <TableCell key={index} padding="default">
-                                                        { n[value] }
-                                                    </TableCell>
-                                                );
-                                            }) }
+                                            <TableCell padding="default">
+                                                <ImageAvatars url={n.imageUrl}/>
+                                            </TableCell>
+                                            <TableCell padding="default">
+                                                <b>{n.firstName}</b>
+                                            </TableCell>
+                                            <TableCell padding="default">
+                                                <b>{n.lastName}</b>
+                                            </TableCell>
+                                            <TableCell padding="default">
+                                                {n.login}
+                                            </TableCell>
+                                            <TableCell padding="default">
+                                                {n.email}
+                                            </TableCell>
+                                            <TableCell padding="default">
+                                                {n.phone_number}
+                                            </TableCell>
+                                            <TableCell padding="default">
+                                                { n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : '' }
+                                                { n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : '' }
+                                                { n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : '' }
+                                                { n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : '' }
+                                            </TableCell>
+                                            <TableCell padding="default">
+                                                { n.activated ? <Chip
+                                                                    icon={<CheckCircleIcon />}
+                                                                    label="Đã kích hoạt"
+                                                                    className={classes.chip}
+                                                                    color="primary"
+                                                                /> : <Chip
+                                                                        icon={<RemoveCircleIcon />}
+                                                                        label="Chưa kích hoạt"
+                                                                        className={classes.chip}
+                                                                        color="secondary"
+                                                                    /> }
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -170,7 +226,7 @@ class EnhancedTable extends React.Component {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
                     component="div"
-                    count={datas.length}
+                    count={accounts.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     backIconButtonProps={{
@@ -187,9 +243,23 @@ class EnhancedTable extends React.Component {
     }
 }
 
-EnhancedTable.propTypes = {
+EnhancedTableAccount.propTypes = {
     classes: PropTypes.object.isRequired,
-    listName: PropTypes.string.isRequired
+    listName: PropTypes.string.isRequired,
+    accounts: PropTypes.arrayOf(accountShape).isRequired,
+    getAllUserAccount: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(EnhancedTable);
+EnhancedTableAccount.defaultProps = {
+    accounts: []
+}
+
+const mapStateToProps = state => ({
+    accounts: state.account.accounts
+});
+
+const mapDispatchToProps = {
+    getAllUserAccount: accountOperations.getAllUserAccount
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableAccount));

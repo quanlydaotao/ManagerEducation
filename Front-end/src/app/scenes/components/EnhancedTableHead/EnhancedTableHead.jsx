@@ -74,8 +74,4 @@ EnhancedTableHead.defaultProps = {
   rows: []
 }
 
-const mapStateToProps = state => ({
-  rows: state.table.tableRows
-});
-
-export default connect(mapStateToProps, null)(EnhancedTableHead);
+export default (EnhancedTableHead);
