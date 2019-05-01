@@ -5,11 +5,9 @@ import com.huyduc.manage.config.*;
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.BatchSize;
-import javax.validation.constraints.Email;
+
+import javax.validation.constraints.*;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.HashSet;
@@ -27,14 +25,16 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
+    @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
+    @Size(min = 7, max = 50)
     @Column(length = 50, unique = true, nullable = false)
     private String login;
 
-    @JsonIgnore
     @NotNull
+    @NotBlank
     @Size(min = 60, max = 60)
     @Column(name = "password_hash", length = 60, nullable = false)
     private String password;
@@ -83,7 +83,7 @@ public class User implements Serializable {
     private String phone_number;
 
     @Size(max = 20)
-    @Column(name = "identity_card_number", length = 20)
+    @Column(name = "identity_card_number", length = 20, unique = true)
     private String identity_card_number;
 
     @Column(name = "birthday")

@@ -18,10 +18,16 @@ public class UserDTO {
 
     private Long id;
 
+    @NotNull
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
+    @Size(min = 7, max = 50)
     private String login;
+
+    @NotNull
+    @NotBlank
+    @Size(min = 4, max = 100)
+    private String password;
 
     @Size(max = 50)
     private String firstName;
@@ -70,6 +76,7 @@ public class UserDTO {
     public UserDTO(User user) {
         this.id = user.getId();
         this.login = user.getLogin();
+        this.password = user.getPassword();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
@@ -216,11 +223,20 @@ public class UserDTO {
         this.identity_card_number = identity_card_number;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

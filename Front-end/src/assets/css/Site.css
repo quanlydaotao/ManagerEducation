@@ -10314,6 +10314,7 @@ a.text-dark:hover {
         border-color: #dee2e6
     }
 }
+tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 /* HEADER */
 @media screen and (min-width: 1200px) {
 	.wrapContent {

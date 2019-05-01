@@ -7,6 +7,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import LaunchIcon from '@material-ui/icons/Launch';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -26,7 +28,8 @@ const rows = [
     { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
     { id: 'phone_number', numeric: false, disablePadding: false, label: 'Số điện thoại' },
     { id: 'authorities', numeric: false, disablePadding: false, label: 'Loại tài khoản' },
-    { id: 'activated', numeric: false, disablePadding: false, label: 'Trạng thái' }
+    { id: 'activated', numeric: false, disablePadding: false, label: 'Trạng thái' },
+    { id: 'edit', numeric: false, disablePadding: false, label: 'Tác vụ' }
 ]
 
 function desc(a, b, orderBy) {
@@ -175,42 +178,49 @@ class EnhancedTableAccount extends React.Component {
                                             <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
                                                 <Checkbox checked={isSelected} color="default" />
                                             </TableCell>
-                                            <TableCell padding="default">
-                                                <ImageAvatars url={n.imageUrl}/>
+                                            <TableCell className="cell">
+                                                <ImageAvatars url={n.imageUrl} />
                                             </TableCell>
-                                            <TableCell padding="default">
+                                            <TableCell className="cell">
                                                 <b>{n.firstName}</b>
                                             </TableCell>
-                                            <TableCell padding="default">
+                                            <TableCell className="cell">
                                                 <b>{n.lastName}</b>
                                             </TableCell>
-                                            <TableCell padding="default">
+                                            <TableCell className="cell">
                                                 {n.login}
                                             </TableCell>
-                                            <TableCell padding="default">
+                                            <TableCell className="cell">
                                                 {n.email}
                                             </TableCell>
-                                            <TableCell padding="default">
+                                            <TableCell className="cell">
                                                 {n.phone_number}
                                             </TableCell>
-                                            <TableCell padding="default">
-                                                { n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : '' }
-                                                { n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : '' }
-                                                { n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : '' }
-                                                { n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : '' }
+                                            <TableCell className="cell">
+                                                {n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : ''}
+                                                {n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : ''}
+                                                {n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : ''}
+                                                {n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : ''}
                                             </TableCell>
-                                            <TableCell padding="default">
-                                                { n.activated ? <Chip
-                                                                    icon={<CheckCircleIcon />}
-                                                                    label="Đã kích hoạt"
-                                                                    className={classes.chip}
-                                                                    color="primary"
-                                                                /> : <Chip
-                                                                        icon={<RemoveCircleIcon />}
-                                                                        label="Chưa kích hoạt"
-                                                                        className={classes.chip}
-                                                                        color="secondary"
-                                                                    /> }
+                                            <TableCell className="cell">
+                                                {n.activated ? <Chip
+                                                    icon={<CheckCircleIcon />}
+                                                    label="Đã kích hoạt"
+                                                    color="primary"
+                                                    className={classes.chip}
+                                                    title="Đã kích hoạt"
+                                                /> : <Chip
+                                                        icon={<RemoveCircleIcon />}
+                                                        label="Chưa kích hoạt"
+                                                        className={classes.chip}
+                                                        color="inherit"
+                                                        title="Chưa kích hoạt"
+                                                    />}
+                                            </TableCell>
+                                            <TableCell className="cell">
+                                                <Button variant="contained" color="primary" style={{backgroundColor: '#17b304', minWidth: 0, padding: '5px'}} title="Chỉnh sửa thông tin tài khoản" >
+                                                    <LaunchIcon />
+                                                </Button>
                                             </TableCell>
                                         </TableRow>
                                     );

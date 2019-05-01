@@ -6,10 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import styles from './styles.css';
 import ViewListIcon from '@material-ui/icons/ViewListRounded';
-import PermDataSettingIcon from '@material-ui/icons/PermDataSettingRounded';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Typography from '@material-ui/core/Typography';
 import { EnhancedTableAccount } from './components/EnhancedTableAccount';
+import { Steppers } from './components/Steppers';
 
 function TabContainer(props) {
     return (
@@ -47,14 +47,12 @@ class TabBars extends React.Component {
             <div className={classes.root}>
                 <AppBar position="static" color="inherit" className={`${styles.HeaderAppBar}`}>
                     <Tabs value={value} onChange={this.handleChange} indicatorColor="inherit">
-                        <Tab value="one" icon={<ViewListIcon />} label="DANH SÁCH CHI TIẾT TÀI KHOẢN ĐĂNG NHẬP VÀO HỆ THỐNG"/>
-                        <Tab value="two" icon={<SupervisedUserCircleIcon />} label="THÊM MỚI TÀI KHOẢN" />
-                        <Tab value="three" icon={<PermDataSettingIcon />} label="CHỈNH SỬA THÔNG TIN TÀI KHOẢN" />
+                        <Tab value="one" icon={<ViewListIcon />} label="DANH SÁCH CHI TIẾT TÀI KHOẢN"/>
+                        <Tab value="two" icon={<PersonAddIcon />} label="THÊM MỚI TÀI KHOẢN" />
                     </Tabs>
                 </AppBar>
                 {value === 'one' && <TabContainer><EnhancedTableAccount listName="DANH SÁCH TÀI KHOẢN" /></TabContainer>}
-                {value === 'two' && <TabContainer>Item Two</TabContainer>}
-                {value === 'three' && <TabContainer>Item Three</TabContainer>}
+                {value === 'two' && <TabContainer><Steppers /></TabContainer>}
             </div>
         );
     }
