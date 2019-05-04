@@ -69,7 +69,7 @@ class Breadcumbs extends Component {
                     <StyledBreadcrumb
                         component="a"
                         href="#"
-                        label="Home"
+                        label="Trang chủ"
                         avatar={
                             <Avatar className={classes.avatar}>
                                 <HomeIcon />
@@ -77,9 +77,9 @@ class Breadcumbs extends Component {
                         }
                         onClick={handleClick}
                     />
-                    <StyledBreadcrumb component="a" href="#" label="Catalog" onClick={handleClick} />
+                    <StyledBreadcrumb component="a" href="#" label="Quản lý tài khoản" onClick={handleClick} />
                     <StyledBreadcrumb
-                        label="Accessories"
+                        label="Đăng ký tài khoản"
                         deleteIcon={<ExpandMoreIcon />}
                         onClick={handleClick}
                         onDelete={handleClick}

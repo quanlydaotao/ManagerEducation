@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -73,40 +74,48 @@ public class UserService {
             });
     }
 
-//    public User registerUser(UserDTO userDTO, String password) {
-//        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
-//            boolean removed = removeNonActivatedUser(existingUser);
-//            if (!removed) {
-//                throw new LoginAlreadyUsedException();
-//            }
-//        });
-//        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
-//            boolean removed = removeNonActivatedUser(existingUser);
-//            if (!removed) {
-//                throw new EmailAlreadyUsedException();
-//            }
-//        });
-//        User newUser = new User();
-//        String encryptedPassword = passwordEncoder.encode(password);
-//        newUser.setLogin(userDTO.getLogin().toLowerCase());
-//        // new user gets initially a generated password
-//        newUser.setPassword(encryptedPassword);
-//        newUser.setFirstName(userDTO.getFirstName());
-//        newUser.setLastName(userDTO.getLastName());
-//        newUser.setEmail(userDTO.getEmail().toLowerCase());
-//        newUser.setImageUrl(userDTO.getImageUrl());
-//        newUser.setLangKey(userDTO.getLangKey());
-//        // new user is not active
-//        newUser.setActivated(false);
-//        // new user gets registration key
-//        newUser.setActivationKey(RandomUtil.generateActivationKey());
-//        Set<Authority> authorities = new HashSet<>();
-//        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-//        newUser.setAuthorities(authorities);
-//        userRepository.save(newUser);
-//        log.debug("Created Information for User: {}", newUser);
-//        return newUser;
-//    }
+    public User registerUser(UserDTO userDTO, String password) {
+        userRepository.findOneByLogin(userDTO.getLogin().toUpperCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new LoginAlreadyUsedException();
+            }
+        });
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new EmailAlreadyUsedException();
+            }
+        });
+        User newUser = new User();
+        String encryptedPassword = passwordEncoder.encode(password);
+        newUser.setLogin(userDTO.getLogin());
+        // new user gets initially a generated password
+        newUser.setPassword(encryptedPassword);
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        newUser.setEmail(userDTO.getEmail().toLowerCase());
+        newUser.setImageUrl(userDTO.getImageUrl());
+        newUser.setLangKey(userDTO.getLangKey());
+        newUser.setPhone_number(userDTO.getPhone_number());
+        newUser.setAddress(userDTO.getAddress());
+        newUser.setAddress1(userDTO.getAddress1());
+        newUser.setNations(userDTO.getNations());
+        newUser.setSex(userDTO.getSex());
+        newUser.setIdentity_card_number(userDTO.getIdentity_card_number());
+        newUser.setActivated(userDTO.isActivated());
+        newUser.setBirthday(userDTO.getBirthday());
+        // new user gets registration key
+        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        Set<Authority> authorities = new HashSet<>();
+        userDTO.getAuthorities().forEach((item)->{
+            authorityRepository.findById(item).ifPresent(authorities::add);
+        });
+        newUser.setAuthorities(authorities);
+        userRepository.save(newUser);
+        log.debug("Created Information for User: {}", newUser);
+        return newUser;
+    }
 
     private boolean removeNonActivatedUser(User existingUser){
         if (existingUser.getActivated()) {

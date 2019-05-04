@@ -43,13 +43,12 @@ public class UserMapper {
             User user = new User();
             user.setId(userDTO.getId());
             user.setLogin(userDTO.getLogin());
-            user.setPassword(userDTO.getPassword());
             user.setFirstName(userDTO.getFirstName());
             user.setLastName(userDTO.getLastName());
             user.setEmail(userDTO.getEmail());
-            user.setImageUrl(userDTO.getImageUrl());
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
+            user.setImageUrl(userDTO.getImageUrl());
             user.setAddress(userDTO.getAddress());
             user.setPhone_number(userDTO.getPhone_number());
             user.setIdentity_card_number(userDTO.getIdentity_card_number());

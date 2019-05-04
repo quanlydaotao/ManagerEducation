@@ -69,6 +69,7 @@ const style = theme => ({
     },
     chip: {
         margin: theme.spacing.unit,
+        backgroundColor: '#455e6b'
     },
 });
 
@@ -212,7 +213,6 @@ class EnhancedTableAccount extends React.Component {
                                                 /> : <Chip
                                                         icon={<RemoveCircleIcon />}
                                                         label="Chưa kích hoạt"
-                                                        className={classes.chip}
                                                         color="inherit"
                                                         title="Chưa kích hoạt"
                                                     />}

@@ -13,4 +13,5 @@ export const login = (username, password, rememberMe) => ( {
 
 export const logout = ( ) => ( {
     type: types.LOGOUT
-} );
+});
+

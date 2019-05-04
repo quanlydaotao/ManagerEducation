@@ -1,5 +1,6 @@
 package com.huyduc.manage.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.huyduc.manage.config.Constants;
 
 import com.huyduc.manage.bean.Authority;
@@ -24,11 +25,6 @@ public class UserDTO {
     @Size(min = 7, max = 50)
     private String login;
 
-    @NotNull
-    @NotBlank
-    @Size(min = 4, max = 100)
-    private String password;
-
     @Size(max = 50)
     private String firstName;
 
@@ -36,20 +32,22 @@ public class UserDTO {
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 254)
+    @Size(max = 254)
     private String email;
-
-    @Size(max = 256)
-    private String imageUrl;
 
     @Size(max = 254)
     private String address;
 
+    @Size(max = 256)
+    private String imageUrl;
+
+    @NotNull
+    @NotBlank
+    @Size(min=10, max = 20)
     @Pattern(regexp = "^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$")
-    @Size(min=8, max = 20)
     private String phone_number;
 
-    @Size(min=9, max = 20)
+    @Size(max = 20)
     private String identity_card_number;
 
     private Date birthday;
@@ -76,7 +74,6 @@ public class UserDTO {
     public UserDTO(User user) {
         this.id = user.getId();
         this.login = user.getLogin();
-        this.password = user.getPassword();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
@@ -133,14 +130,6 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public boolean isActivated() {
@@ -223,12 +212,12 @@ public class UserDTO {
         this.identity_card_number = identity_card_number;
     }
 
-    public String getPassword() {
-        return password;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -236,12 +225,11 @@ public class UserDTO {
         return "UserDTO{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
                 ", address='" + address + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 ", phone_number='" + phone_number + '\'' +
                 ", identity_card_number='" + identity_card_number + '\'' +
                 ", birthday=" + birthday +

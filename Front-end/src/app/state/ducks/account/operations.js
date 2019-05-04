@@ -4,5 +4,5 @@ export {
     getAllUserAccount,
     addNewUserAccount,
     updateUserAccount,
-    deleteUserAccount
+    deleteUserAccount,
 };

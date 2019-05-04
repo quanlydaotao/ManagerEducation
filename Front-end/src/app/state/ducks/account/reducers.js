@@ -13,6 +13,10 @@ const accountReducer = createReducer( [] )( {
     [ types.ADD_NEW_USER_ACCOUNT ]: ( state, action ) => {
         return state;
     },
+    [ types.ADD_NEW_USER_ACCOUNT_COMPLETE ]: ( state, action ) => {
+        console.log('upload success!');
+        return state;
+    },
     [ types.UPDATE_USER_ACCOUNT ]: ( state, action ) => {
         return state;
     },
@@ -20,6 +24,7 @@ const accountReducer = createReducer( [] )( {
         return state;
     }
 } );
+
 
 export default combineReducers( {
     accounts: accountReducer

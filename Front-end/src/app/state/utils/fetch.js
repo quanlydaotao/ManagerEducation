@@ -1,6 +1,6 @@
 import isomorphicFetch from "isomorphic-fetch";
 
-export default (url, method, body) => {
+export default (url, method, body ) => {
     const options = {
         method,
         headers: requestHeaders(),
@@ -31,8 +31,13 @@ function parseStatus(status, res) {
     return new Promise((resolve, reject) => {
         if (status >= 200 && status < 300) {
             res.then(response => resolve(response));
-        } else {
+        } else if(status === 403 || status === 401) {
             localStorage.removeItem('user');
+            res.then(response => reject({
+                status,
+                response
+            }));
+        } else {
             res.then(response => reject({
                 status,
                 response

@@ -28,8 +28,8 @@ public class User implements Serializable {
 
     @NotNull
     @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 7, max = 50)
+    @Pattern(regexp = Constants.LOGIN_REGEX)
     @Column(length = 50, unique = true, nullable = false)
     private String login;
 
@@ -78,8 +78,10 @@ public class User implements Serializable {
     @Column(name = "address", length = 254)
     private String address;
 
-    @Size(max = 20)
-    @Column(name = "phone_number", length = 20)
+    @NotNull
+    @NotBlank
+    @Size(min = 10, max = 20)
+    @Column(name = "phone_number", unique = true, length = 20)
     private String phone_number;
 
     @Size(max = 20)
@@ -124,7 +126,7 @@ public class User implements Serializable {
 
     // Lowercase the login before saving it in database
     public void setLogin(String login) {
-        this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
+        this.login = StringUtils.upperCase(login, Locale.ENGLISH);
     }
 
     public String getPassword() {

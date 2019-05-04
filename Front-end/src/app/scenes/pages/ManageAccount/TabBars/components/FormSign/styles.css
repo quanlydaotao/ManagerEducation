@@ -1,0 +1,110 @@
+.formSign {
+    width: 100%;
+    display: inline-block;
+    padding: 30px 24px;
+}
+
+.formSign label {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.formSign h3 {
+    margin-bottom: 30px;
+    padding: 13px;
+    text-align: center;
+    background-color: #455e6b;
+    font-weight: 300;
+    color: #ffffff;
+    font-size: 28px;
+}
+
+.contentForm {
+    display: inline-block;
+    padding: 25px 0 0;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password], input[type=email], input[type=date], .sex, select {
+    width: 100%;
+    display: inline-block;
+    padding: 12px;
+    margin: 5px 0 18px 0;
+    background: #f1f1f1;
+    border: 1px solid #ffffff;
+}
+
+select {
+    color: #6d6d6d;
+}
+
+option {
+    color: #6d6d6d;
+    background-color: #ffffff;  
+}
+  
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+.avatarUpload {
+    position: relative;
+    display: inline-block;
+  }
+  .avatarUpload .avatarEdit {
+    position: absolute;
+    z-index: 1;
+    top: 13px;
+    left: 112px;
+  }
+  .avatarUpload .avatarEdit input {
+    display: none;
+  }
+  .avatarUpload .avatarEdit input + label {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0;
+    border-radius: 100%;
+    background: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-weight: normal;
+    transition: all 0.2s ease-in-out;
+  }
+  .avatarUpload .avatarEdit input + label:hover {
+    background: #f1f1f1;
+    border-color: #d6d6d6;
+  }
+  .avatarUpload .avatarEdit input + label:after {
+    content: "\f040";
+    font-family: 'FontAwesome';
+    color: #757575;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: auto;
+  }
+  .avatarUpload .avatarPreview {
+    width: 140px;
+    height: 140px;
+    padding: 1px;
+    position: relative;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  }
+  .avatarUpload .avatarPreview > div {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+
+
+  
+  

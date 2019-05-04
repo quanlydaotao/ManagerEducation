@@ -11,8 +11,11 @@ import com.huyduc.manage.web.rest.errors.*;
 import com.huyduc.manage.web.rest.vm.KeyAndPasswordVM;
 import com.huyduc.manage.web.rest.vm.ManagedUserVM;
 
+import com.huyduc.manage.web.rest.vm.RegisterUserAccountVM;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,19 +43,27 @@ public class AccountResource {
     /**
      * POST  /register : register the user.
      *
-     * @param managedUserVM the managed user View Model
+     * @param registerUserAccountVM the managed user View Model
      * @throws InvalidPasswordException 400 (Bad Request) if the password is incorrect
      * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
      * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already used
      */
-//    @PostMapping("/register")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-//        if (!checkPasswordLength(managedUserVM.getPassword())) {
-//            throw new InvalidPasswordException();
-//        }
-//        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-//    }
+    @PostMapping(value = "/register")
+    public ResponseEntity<User> registerAccount(@Valid @RequestBody RegisterUserAccountVM registerUserAccountVM) {
+        if (!checkPasswordLength(registerUserAccountVM.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+        if (!isIdenticalPassword(registerUserAccountVM.getPassword(), registerUserAccountVM.getRe_password())) {
+            throw new PasswordNotMatchException();
+        }
+        try {
+            User user = userService.registerUser(registerUserAccountVM, registerUserAccountVM.getPassword());
+            return new ResponseEntity(user, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity(Collections.singletonMap("Created user account failed!",
+                    e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     /**
      * GET  /activate : activate the registered user.
@@ -162,5 +173,9 @@ public class AccountResource {
         return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+    }
+
+    private static boolean isIdenticalPassword(String password, String re_password) {
+        return password.equals(re_password);
     }
 }

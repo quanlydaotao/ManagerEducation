@@ -9,7 +9,7 @@ import ViewListIcon from '@material-ui/icons/ViewListRounded';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Typography from '@material-ui/core/Typography';
 import { EnhancedTableAccount } from './components/EnhancedTableAccount';
-import { Steppers } from './components/Steppers';
+import { FormSign } from './components/FormSign';
 
 function TabContainer(props) {
     return (
@@ -52,7 +52,7 @@ class TabBars extends React.Component {
                     </Tabs>
                 </AppBar>
                 {value === 'one' && <TabContainer><EnhancedTableAccount listName="DANH SÁCH TÀI KHOẢN" /></TabContainer>}
-                {value === 'two' && <TabContainer><Steppers /></TabContainer>}
+                {value === 'two' && <TabContainer><FormSign /></TabContainer>}
             </div>
         );
     }
