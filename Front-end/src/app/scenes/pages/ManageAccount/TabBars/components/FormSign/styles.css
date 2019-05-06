@@ -25,7 +25,12 @@
 }
 
 /* Full-width input fields */
-input[type=text], input[type=password], input[type=email], input[type=date], .sex, select {
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=date],
+.sex,
+select {
     width: 100%;
     display: inline-block;
     padding: 12px;
@@ -40,10 +45,11 @@ select {
 
 option {
     color: #6d6d6d;
-    background-color: #ffffff;  
+    background-color: #ffffff;
 }
-  
-input[type=text]:focus, input[type=password]:focus {
+
+input[type=text]:focus,
+input[type=password]:focus {
     background-color: #ddd;
     outline: none;
 }
@@ -51,17 +57,20 @@ input[type=text]:focus, input[type=password]:focus {
 .avatarUpload {
     position: relative;
     display: inline-block;
-  }
-  .avatarUpload .avatarEdit {
+}
+
+.avatarUpload .avatarEdit {
     position: absolute;
     z-index: 1;
     top: 13px;
     left: 112px;
-  }
-  .avatarUpload .avatarEdit input {
+}
+
+.avatarUpload .avatarEdit input {
     display: none;
-  }
-  .avatarUpload .avatarEdit input + label {
+}
+
+.avatarUpload .avatarEdit input+label {
     display: inline-block;
     width: 34px;
     height: 34px;
@@ -73,12 +82,14 @@ input[type=text]:focus, input[type=password]:focus {
     cursor: pointer;
     font-weight: normal;
     transition: all 0.2s ease-in-out;
-  }
-  .avatarUpload .avatarEdit input + label:hover {
+}
+
+.avatarUpload .avatarEdit input+label:hover {
     background: #f1f1f1;
     border-color: #d6d6d6;
-  }
-  .avatarUpload .avatarEdit input + label:after {
+}
+
+.avatarUpload .avatarEdit input+label:after {
     content: "\f040";
     font-family: 'FontAwesome';
     color: #757575;
@@ -88,23 +99,24 @@ input[type=text]:focus, input[type=password]:focus {
     right: 0;
     text-align: center;
     margin: auto;
-  }
-  .avatarUpload .avatarPreview {
+}
+
+.avatarUpload .avatarPreview {
     width: 140px;
     height: 140px;
     padding: 1px;
     position: relative;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
-  }
-  .avatarUpload .avatarPreview > div {
+}
+
+.avatarUpload .avatarPreview>div {
     width: 100%;
     height: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-  }
-  
+}
 
-
-  
-  
+.errorAlert li {
+    list-style: circle;
+}

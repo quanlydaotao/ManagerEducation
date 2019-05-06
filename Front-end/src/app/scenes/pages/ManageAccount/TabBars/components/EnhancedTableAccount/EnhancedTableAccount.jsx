@@ -92,7 +92,6 @@ class EnhancedTableAccount extends React.Component {
         }
     }
 
-
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';

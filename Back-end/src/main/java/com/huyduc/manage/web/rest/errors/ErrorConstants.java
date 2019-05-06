@@ -14,6 +14,8 @@ public final class ErrorConstants {
     public static final URI INVALID_PASSWORD_TYPE = URI.create(PROBLEM_BASE_URL + "/invalid-password");
     public static final URI PASSWORD_NOT_MATCH_TYPE = URI.create(PROBLEM_BASE_URL + "/password-not-match");
     public static final URI EMAIL_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/email-already-used");
+    public static final URI PHONE_NUMBER_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/phone-number-already-used");
+    public static final URI IDENTITY_CARD_NUMBER_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/identity-card-number-already-used");
     public static final URI LOGIN_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/login-already-used");
     public static final URI EMAIL_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/email-not-found");
 

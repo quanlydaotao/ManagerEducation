@@ -60,7 +60,7 @@ public class AccountResource {
             User user = userService.registerUser(registerUserAccountVM, registerUserAccountVM.getPassword());
             return new ResponseEntity(user, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity(Collections.singletonMap("Created user account failed!",
+            return new ResponseEntity(Collections.singletonMap("createFailed",
                     e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
     }
@@ -118,7 +118,7 @@ public class AccountResource {
             throw new InternalServerErrorException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl(), userDTO.getAddress(), userDTO.getPhone_number(), userDTO.getIdentity_card_number());
+            userDTO.getLangKey(), userDTO.getImageUrl(), userDTO.getAddress(), userDTO.getPhoneNumber(), userDTO.getIdentityCardNumber());
     }
 
     /**

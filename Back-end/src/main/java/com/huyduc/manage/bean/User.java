@@ -82,11 +82,11 @@ public class User implements Serializable {
     @NotBlank
     @Size(min = 10, max = 20)
     @Column(name = "phone_number", unique = true, length = 20)
-    private String phone_number;
+    private String phoneNumber;
 
     @Size(max = 20)
     @Column(name = "identity_card_number", length = 20, unique = true)
-    private String identity_card_number;
+    private String identityCardNumber;
 
     @Column(name = "birthday")
     private Date birthday;
@@ -221,20 +221,20 @@ public class User implements Serializable {
         this.address = address;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getIdentity_card_number() {
-        return identity_card_number;
+    public String getIdentityCardNumber() {
+        return identityCardNumber;
     }
 
-    public void setIdentity_card_number(String identity_card_number) {
-        this.identity_card_number = identity_card_number;
+    public void setIdentityCardNumber(String identityCardNumber) {
+        this.identityCardNumber = identityCardNumber;
     }
 
     public Date getBirthday() {
@@ -302,8 +302,8 @@ public class User implements Serializable {
                 ", activationKey='" + activationKey + '\'' +
                 ", resetKey='" + resetKey + '\'' +
                 ", address='" + address + '\'' +
-                ", phone_number='" + phone_number + '\'' +
-                ", identity_card_number='" + identity_card_number + '\'' +
+                ", phone_number='" + phoneNumber + '\'' +
+                ", identity_card_number='" + identityCardNumber + '\'' +
                 ", birthday=" + birthday +
                 ", sex=" + sex +
                 ", nations='" + nations + '\'' +

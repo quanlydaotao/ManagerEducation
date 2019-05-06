@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,7 +9,8 @@ import ViewListIcon from '@material-ui/icons/ViewListRounded';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Typography from '@material-ui/core/Typography';
 import { EnhancedTableAccount } from './components/EnhancedTableAccount';
-import { FormSign } from './components/FormSign';
+
+const FormSign = React.lazy(() => import('./components/FormSign/FormSign'));
 
 function TabContainer(props) {
     return (
@@ -47,12 +48,23 @@ class TabBars extends React.Component {
             <div className={classes.root}>
                 <AppBar position="static" color="inherit" className={`${styles.HeaderAppBar}`}>
                     <Tabs value={value} onChange={this.handleChange} indicatorColor="inherit">
-                        <Tab value="one" icon={<ViewListIcon />} label="DANH SÁCH CHI TIẾT TÀI KHOẢN"/>
+                        <Tab value="one" icon={<ViewListIcon />} label="DANH SÁCH CHI TIẾT TÀI KHOẢN" />
                         <Tab value="two" icon={<PersonAddIcon />} label="THÊM MỚI TÀI KHOẢN" />
                     </Tabs>
                 </AppBar>
-                {value === 'one' && <TabContainer><EnhancedTableAccount listName="DANH SÁCH TÀI KHOẢN" /></TabContainer>}
-                {value === 'two' && <TabContainer><FormSign /></TabContainer>}
+                {value === 'one' &&
+                    <TabContainer>
+                        <EnhancedTableAccount listName="DANH SÁCH TÀI KHOẢN" />   
+                    </TabContainer>
+                }
+
+                {value === 'two' &&
+                    <TabContainer>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <FormSign />
+                        </Suspense>
+                    </TabContainer>
+                }
             </div>
         );
     }

@@ -10,9 +10,7 @@ import com.huyduc.manage.security.SecurityUtils;
 import com.huyduc.manage.service.dto.UserDTO;
 import com.huyduc.manage.service.util.RandomUtil;
 
-import com.huyduc.manage.web.rest.errors.EmailAlreadyUsedException;
-import com.huyduc.manage.web.rest.errors.InvalidPasswordException;
-import com.huyduc.manage.web.rest.errors.LoginAlreadyUsedException;
+import com.huyduc.manage.web.rest.errors.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -81,10 +79,22 @@ public class UserService {
                 throw new LoginAlreadyUsedException();
             }
         });
+        userRepository.findOneByPhoneNumber(userDTO.getPhoneNumber()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new PhoneNumberAlreadyUsedException();
+            }
+        });
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new EmailAlreadyUsedException();
+            }
+        });
+        userRepository.findOneByIdentityCardNumber(userDTO.getIdentityCardNumber()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new IdentityCardNumberAlreadyUsedException();
             }
         });
         User newUser = new User();
@@ -97,12 +107,12 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        newUser.setPhone_number(userDTO.getPhone_number());
+        newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setAddress(userDTO.getAddress());
         newUser.setAddress1(userDTO.getAddress1());
         newUser.setNations(userDTO.getNations());
         newUser.setSex(userDTO.getSex());
-        newUser.setIdentity_card_number(userDTO.getIdentity_card_number());
+        newUser.setIdentityCardNumber(userDTO.getIdentityCardNumber());
         newUser.setActivated(userDTO.isActivated());
         newUser.setBirthday(userDTO.getBirthday());
         // new user gets registration key
@@ -174,8 +184,8 @@ public class UserService {
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 user.setAddress(address);
-                user.setPhone_number(phone_number);
-                user.setIdentity_card_number(identity_card_number);
+                user.setPhoneNumber(phone_number);
+                user.setIdentityCardNumber(identity_card_number);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -200,8 +210,8 @@ public class UserService {
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
                 user.setAddress(userDTO.getAddress());
-                user.setPhone_number(userDTO.getPhone_number());
-                user.setIdentity_card_number(userDTO.getIdentity_card_number());
+                user.setPhoneNumber(userDTO.getPhoneNumber());
+                user.setIdentityCardNumber(userDTO.getIdentityCardNumber());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()

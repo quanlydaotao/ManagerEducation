@@ -50,8 +50,8 @@ public class UserMapper {
             user.setLangKey(userDTO.getLangKey());
             user.setImageUrl(userDTO.getImageUrl());
             user.setAddress(userDTO.getAddress());
-            user.setPhone_number(userDTO.getPhone_number());
-            user.setIdentity_card_number(userDTO.getIdentity_card_number());
+            user.setPhoneNumber(userDTO.getPhoneNumber());
+            user.setIdentityCardNumber(userDTO.getIdentityCardNumber());
             user.setBirthday(userDTO.getBirthday());
             user.setSex(userDTO.getSex());
             user.setNations(userDTO.getNations());

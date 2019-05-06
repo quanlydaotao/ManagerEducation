@@ -17,5 +17,5 @@ export default shape( {
     created_by: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
     phone_number: PropTypes.string.isRequired,
-    indentity_card_number: PropTypes.string.isRequired
+    indentity_card_number: PropTypes.string.isRequired,
 });

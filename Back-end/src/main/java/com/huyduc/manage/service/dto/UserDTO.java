@@ -45,10 +45,10 @@ public class UserDTO {
     @NotBlank
     @Size(min=10, max = 20)
     @Pattern(regexp = "^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$")
-    private String phone_number;
+    private String phoneNumber;
 
     @Size(max = 20)
-    private String identity_card_number;
+    private String identityCardNumber;
 
     private Date birthday;
 
@@ -79,8 +79,8 @@ public class UserDTO {
         this.email = user.getEmail();
         this.imageUrl = user.getImageUrl();
         this.address = user.getAddress();
-        this.phone_number = user.getPhone_number();
-        this.identity_card_number = user.getIdentity_card_number();
+        this.phoneNumber = user.getPhoneNumber();
+        this.identityCardNumber = user.getIdentityCardNumber();
         this.birthday = user.getBirthday();
         this.sex = user.getSex();
         this.nations = user.getNations();
@@ -196,20 +196,20 @@ public class UserDTO {
         this.address = address;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getIdentity_card_number() {
-        return identity_card_number;
+    public String getIdentityCardNumber() {
+        return identityCardNumber;
     }
 
-    public void setIdentity_card_number(String identity_card_number) {
-        this.identity_card_number = identity_card_number;
+    public void setIdentityCardNumber(String identityCardNumber) {
+        this.identityCardNumber = identityCardNumber;
     }
 
     public String getImageUrl() {
@@ -230,8 +230,8 @@ public class UserDTO {
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", phone_number='" + phone_number + '\'' +
-                ", identity_card_number='" + identity_card_number + '\'' +
+                ", phone_number='" + phoneNumber + '\'' +
+                ", identity_card_number='" + identityCardNumber + '\'' +
                 ", birthday=" + birthday +
                 ", sex=" + sex +
                 ", nations='" + nations + '\'' +
