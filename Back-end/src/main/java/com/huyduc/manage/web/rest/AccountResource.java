@@ -1,25 +1,29 @@
 package com.huyduc.manage.web.rest;
-
-
 import com.huyduc.manage.bean.User;
+import com.huyduc.manage.config.Constants;
 import com.huyduc.manage.repository.UserRepository;
 import com.huyduc.manage.security.SecurityUtils;
+import com.huyduc.manage.service.FileUploadService;
 import com.huyduc.manage.service.UserService;
 import com.huyduc.manage.service.dto.PasswordChangeDTO;
 import com.huyduc.manage.service.dto.UserDTO;
 import com.huyduc.manage.web.rest.errors.*;
 import com.huyduc.manage.web.rest.vm.KeyAndPasswordVM;
 import com.huyduc.manage.web.rest.vm.ManagedUserVM;
-
 import com.huyduc.manage.web.rest.vm.RegisterUserAccountVM;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -29,15 +33,18 @@ import java.util.*;
 @RequestMapping("/api")
 public class AccountResource {
 
-
+    private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
     private final UserRepository userRepository;
 
     private final UserService userService;
 
+    private final FileUploadService fileUploadService;
 
-    public AccountResource(UserRepository userRepository, UserService userService) {
+
+    public AccountResource(UserRepository userRepository, UserService userService, FileUploadService fileUploadService) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.fileUploadService = fileUploadService;
     }
 
     /**

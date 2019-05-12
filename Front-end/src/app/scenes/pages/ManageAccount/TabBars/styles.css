@@ -1,4 +1,20 @@
 .HeaderAppBar {
-    border-radius: 2px;
     line-height: 20px;
+}
+
+.appBar {
+    width: 100%;
+    display: block;
+    height: 100%;
+}
+
+.appBar a {
+    height: 100%;
+    display: inline-block;
+    color: #333;
+    padding: 20px 25px;
+}
+
+.appBar a:hover {
+    background-color: #fafafa;
 }

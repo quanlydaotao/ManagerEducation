@@ -1,10 +1,10 @@
 import isomorphicFetch from "isomorphic-fetch";
 
-export default (url, method, body ) => {
+export default (url, method, body, header ) => {
     const options = {
         method,
-        headers: requestHeaders(),
-        body: method !== "GET" ? JSON.stringify(body) : null,
+        headers: header ? header : requestHeaders(),
+        body: method !== "GET" ? body : null,
     }
     return isomorphicFetch(url, options)
         .then(res => parseStatus(res.status, res.json()));
@@ -17,7 +17,7 @@ function requestHeaders() {
         return { 
             Accept: "application/json",
             "Content-Type": "application/json",
-            'Authorization': 'Bearer ' + user
+            "Authorization": "Bearer " + user
         };
     } else {
         return {

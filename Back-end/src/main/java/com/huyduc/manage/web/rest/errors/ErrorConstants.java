@@ -18,6 +18,8 @@ public final class ErrorConstants {
     public static final URI IDENTITY_CARD_NUMBER_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/identity-card-number-already-used");
     public static final URI LOGIN_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/login-already-used");
     public static final URI EMAIL_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/email-not-found");
+    public static final URI FILE_UPLOAD_FAILURE = URI.create(PROBLEM_BASE_URL + "/file-upload-failure");
+    public static final URI FILE_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/file-not-found");
 
     private ErrorConstants() {
     }

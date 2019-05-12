@@ -14,11 +14,15 @@ import Chip from '@material-ui/core/Chip';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { connect } from 'react-redux';
+import noavatar from './images/no_avatar.jpg';
 import { accountShape } from '../../../../../propTypes';
 import { accountOperations } from '../../../../../../state/ducks/account';
 import { EnhancedTableHead } from '../../../../../components/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../../components/EnhancedTableToolBar';
 import { ImageAvatars } from '../../../../../components/ImageAvatars';
+import Skeleton from 'react-loading-skeleton';
+import LazyLoad from 'react-lazyload';
+import { NavLink } from 'react-router-dom';
 
 const rows = [
     { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
@@ -86,10 +90,7 @@ class EnhancedTableAccount extends React.Component {
     }
 
     componentDidMount() {
-        const { accounts } = this.props;
-        if (accounts.length === 0) {
-            this.props.getAllUserAccount();
-        }
+        this.props.getAllUserAccount();
     }
 
     handleRequestSort = (event, property) => {
@@ -145,7 +146,6 @@ class EnhancedTableAccount extends React.Component {
     render() {
         const { classes, listName, accounts } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, accounts.length - page * rowsPerPage);
         return (
             <Paper className={classes.root}>
                 <EnhancedTableToolBar numSelected={selected.length} listName={listName} />
@@ -167,66 +167,75 @@ class EnhancedTableAccount extends React.Component {
                                 .map(n => {
                                     const isSelected = this.isSelected(n.id);
                                     return (
-                                        <TableRow
-                                            hover
-                                            role="checkbox"
-                                            aria-checked={isSelected}
-                                            tabIndex={-1}
-                                            key={n.id}
-                                            selected={isSelected}
-                                        >
-                                            <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
-                                                <Checkbox checked={isSelected} color="default" />
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                <ImageAvatars url={n.imageUrl} />
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                <b>{n.firstName}</b>
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                <b>{n.lastName}</b>
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                {n.login}
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                {n.email}
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                {n.phone_number}
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                {n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : ''}
-                                                {n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : ''}
-                                                {n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : ''}
-                                                {n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : ''}
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                {n.activated ? <Chip
-                                                    icon={<CheckCircleIcon />}
-                                                    label="Đã kích hoạt"
-                                                    color="primary"
-                                                    className={classes.chip}
-                                                    title="Đã kích hoạt"
-                                                /> : <Chip
-                                                        icon={<RemoveCircleIcon />}
-                                                        label="Chưa kích hoạt"
-                                                        color="inherit"
-                                                        title="Chưa kích hoạt"
-                                                    />}
-                                            </TableCell>
-                                            <TableCell className="cell">
-                                                <Button variant="contained" color="primary" style={{backgroundColor: '#17b304', minWidth: 0, padding: '5px'}} title="Chỉnh sửa thông tin tài khoản" >
-                                                    <LaunchIcon />
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
+                                        <LazyLoad>
+                                            <TableRow
+                                                hover
+                                                role="checkbox"
+                                                aria-checked={isSelected}
+                                                tabIndex={-1}
+                                                key={n.id}
+                                                selected={isSelected}
+                                            >
+                                                <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
+                                                    <Checkbox checked={isSelected} color="default" />
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    <LazyLoad height={60}>
+                                                        <ImageAvatars url={n.imageUrl !== '' ? `http://localhost:8080/api/file/avatar/${n.imageUrl}` : noavatar} />
+                                                    </LazyLoad>
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    <b>{n.firstName || <Skeleton />}</b>
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    <b>{n.lastName || <Skeleton />}</b>
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    {n.login || <Skeleton />}
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    {n.email || <Skeleton />}
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    {n.phoneNumber || <Skeleton />}
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    {n.authorities.toString() === '' ? (<Skeleton />) : `
+                                                    ${n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : ''}
+                                                    ${n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : ''}
+                                                    ${n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : ''}
+                                                    ${n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : ''}
+                                                `}
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    {n.activated ? <Chip
+                                                        icon={<CheckCircleIcon />}
+                                                        label="Đã kích hoạt"
+                                                        color="primary"
+                                                        className={classes.chip}
+                                                        title="Đã kích hoạt"
+                                                    /> : <Chip
+                                                            icon={<RemoveCircleIcon />}
+                                                            label="Chưa kích hoạt"
+                                                            color="inherit"
+                                                            title="Chưa kích hoạt"
+                                                        />}
+                                                </TableCell>
+                                                <TableCell className="cell">
+                                                    <NavLink to={`/administrator/account/edit/${n.id}`} className="btn" variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }} 
+                                                            title="Chỉnh sửa thông tin tài khoản">
+                                                        <LaunchIcon />
+                                                    </NavLink>
+                                                </TableCell>
+                                            </TableRow>
+                                        </LazyLoad>
                                     );
                                 })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 49 * emptyRows }}>
-                                    <TableCell colSpan={6} />
+                            {accounts.length <= 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={10}>
+                                        <Skeleton count={10} height={60} duration={2} />
+                                    </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
@@ -257,6 +266,7 @@ EnhancedTableAccount.propTypes = {
     listName: PropTypes.string.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
     getAllUserAccount: PropTypes.func.isRequired,
+    openForm: PropTypes.func.isRequired
 };
 
 EnhancedTableAccount.defaultProps = {
@@ -264,11 +274,13 @@ EnhancedTableAccount.defaultProps = {
 }
 
 const mapStateToProps = state => ({
-    accounts: state.account.accounts
+    accounts: state.account.accounts,
 });
 
 const mapDispatchToProps = {
-    getAllUserAccount: accountOperations.getAllUserAccount
+    getAllUserAccount: accountOperations.getAllUserAccount,
+    openForm: accountOperations.openFormEdit,
+    closeForm: accountOperations.closeFormEdit,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableAccount));

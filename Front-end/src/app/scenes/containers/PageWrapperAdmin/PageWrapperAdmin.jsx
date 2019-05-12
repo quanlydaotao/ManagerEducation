@@ -1,11 +1,9 @@
 import React, { Suspense } from 'react';
 import styles from './styles.css';
-import { HomeAdmin } from '../../pages/HomeAdmin';
 import { Header } from '../../components/Header';
 import { VerticalMenuAdmin } from '../../components/Menu/VerticalMenuAdmin';
-import { Breadcrumbs } from "react-breadcrumbs-dynamic";
 import routes from '../../../routes';
-import { NavLink, Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Breadcumbs } from '../../components/Breadcumbs';
 
 const PageWrapperAdmin = () => {
@@ -18,8 +16,8 @@ const PageWrapperAdmin = () => {
                         <VerticalMenuAdmin />
                     </div>
                     <div className="col-lg-9 col-md-10">
-                        <Breadcumbs breadcums="Trang chủ"/> 
-                        <div style={{ marginTop: 10}}> 
+                        <Breadcumbs breadcums="Trang chủ" />
+                        <div style={{ marginTop: 10 }}>
                             <Suspense fallback={<div>Loading...</div>}>
                                 {
                                     routes.map(route => (

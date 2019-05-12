@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/DeleteSweep';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Button from '@material-ui/core/Button';
 import PrintIcon from '@material-ui/icons/PrintRounded';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import BallotIcon from '@material-ui/icons/BallotRounded';
 import GetAppIcon from '@material-ui/icons/GetAppRounded';
 import SearchIcon from '@material-ui/icons/SearchRounded';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -56,7 +56,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolBar = props => {
-    const { numSelected, classes } = props;
+    const { numSelected, classes, listName } = props;
     return (
         <Toolbar
             className={classNames(classes.root, {
@@ -70,7 +70,7 @@ let EnhancedTableToolBar = props => {
             </Typography>
                 ) : (
                         <Typography variant="h6" style={{ fontSize: 14 }} id="tableTitle">
-                            <DashboardIcon /> DANH SÁCH TÀI KHOẢN
+                            <BallotIcon /> {listName}
             </Typography>
                     )}
             </div>

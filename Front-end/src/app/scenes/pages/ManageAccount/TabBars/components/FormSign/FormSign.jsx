@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { accountShape } from '../../../../../propTypes';
 import { accountOperations } from '../../../../../../state/ducks/account';
+import { fileOperations } from '../../../../../../state/ducks/file';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
 import amber from '@material-ui/core/colors/amber';
@@ -24,73 +25,87 @@ const style = theme => ({
     error1: {
         backgroundColor: theme.palette.error.dark,
     },
+    success: {
+        backgroundColor: '#338ef9',
+    }
 });
 
 class FormSign extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            login: '',
-            password: '',
-            re_password: '',
-            phoneNumber: '',
-            authorities: [],
-            imageUrl: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            birthday: null,
-            sex: true,
-            nations: 'Kinh',
-            address: '',
-            address1: '',
-            langKey: 'vi',
-            identityCardNumber: '',
-            activated: true,
+            login: '', password: '', re_password: '',
+            phoneNumber: '', authorities: [], imageUrl: '',
+            firstName: '', lastName: '', email: '',
+            image: null, birthday: null, sex: true,
+            nations: 'Kinh', address: '', address1: '',
+            langKey: 'vi', identityCardNumber: '', activated: true,
             errors: {
                 login: '',
                 password: '',
                 re_password: '',
                 phone_number: '',
             },
-            open: true,
+            imagePreview: '',
+            open: false,
         }
     }
 
     handleChange = event => {
         var target = event.target;
-        if (target.name === 'authorities') {
+        if (target.name === 'authorities')
             this.setState({ authorities: [target.value] });
-        } else {
+        else
             this.setState({ [target.name]: target.value });
-        }
     };
 
     handleChangeFile = event => {
-        this.setState({ imageUrl: event.target.files[0].name });
+        let reader = new FileReader();
+        const file = event.target.files[0];
+        reader.onloadend = () => {
+            this.setState({
+                imageUrl: file.name,
+                image: file,
+                imagePreview: reader.result
+            });
+        }
+        reader.readAsDataURL(file);
+
     }
 
     handleSubmit = event => {
         event.preventDefault();
-        this.setState({open: true});
+        this.setState({ open: true });
         const check = this.isErrors(this.state);
         if (check) {
             const {
-                login, password, re_password, phoneNumber, authorities, 
-                imageUrl, firstName, lastName, email, birthday, sex, nations, 
-                address, address1, langKey, identityCardNumber, activated
+                login, password, re_password, phoneNumber, authorities,
+                imageUrl, firstName, lastName, email, birthday, sex, nations,
+                address, address1, langKey, identityCardNumber, activated, image
             } = this.state;
             const formData = {
-                login, password, re_password, phoneNumber, authorities, 
-                imageUrl, firstName, lastName, email, birthday, sex, nations, 
-                address, address1, langKey, identityCardNumber, activated
+                login, password, re_password, phoneNumber, authorities,
+                imageUrl, firstName, lastName, email, birthday, sex, nations,
+                address, address1, langKey, identityCardNumber, activated, image
             }
             this.props.addNewUserAccount(formData);
+            if (this.props.actions.status !== "ADD_FAILED") {
+                if (this.state.image) {
+                    const fd = new FormData();
+                    fd.append('image', this.state.image);
+                    fd.append('dir', 'avatar');
+                    this.props.uploadAvatar(fd);
+                }
+            }
         }
     }
 
     handleClose = () => {
-        this.setState({open: false})
+        this.setState({ open: false });
+    }
+
+    clearData = () => {
+        this.setState({ imagePreview: '' });
     }
 
     isErrors = datas => {
@@ -173,18 +188,20 @@ class FormSign extends Component {
 
     render() {
         const { classes, actions } = this.props;
-        const { errors } = this.state;
+        const { errors, imagePreview } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' || errors.password !== '' || errors.re_password !== '' || errors.phone_number !== '';
-        var isShowMessageAfterSubit =  !actions.progress && actions.status === 'ADD_FAILED' && actions.data.status === 400 && actions.data.response;
+        var isShowMessageFailueAfterSubit = !actions.progress && actions.status === 'ADD_FAILED'
+            && actions.data.status === 400 && actions.data.response;
+        var isShowMessageSuccessAfterSubit = !actions.progress && actions.status === 'ADD_SUCCESS';
         let alert = () => {
-            if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageAfterSubit)) {
+            if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
                 return (
                     <Snackbar
                         anchorOrigin={{
                             vertical: 'top',
                             horizontal: 'right',
                         }}
-                        open={this.state.open && (isShowMessageBeforeSubit || isShowMessageAfterSubit)}
+                        open={this.state.open && (isShowMessageBeforeSubit || isShowMessageFailueAfterSubit)}
                         autoHideDuration={6000}
                         ContentProps={{
                             'aria-describedby': 'message-id',
@@ -194,12 +211,13 @@ class FormSign extends Component {
                             className={classes.error}
                             message={
                                 <span>
-                                    <ul className={`${styles.errorAlert}`}>
+                                    <ul>
                                         {errors.login !== '' ? <li>{errors.login}</li> : ''}
                                         {errors.password !== '' ? <li>{errors.password}</li> : ''}
                                         {errors.re_password !== '' ? <li>{errors.re_password}</li> : ''}
                                         {errors.phone_number !== '' ? <li>{errors.phone_number}</li> : ''}
-                                        {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response.createFailed) ? <li>{actions.data.response.createFailed}</li> : ''}
+                                        {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
+                                            <li>{actions.data.response.createFailed ? actions.data.response.createFailed : 'Đăng ký thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -219,7 +237,45 @@ class FormSign extends Component {
                         />
                     </Snackbar>
                 )
-            } 
+            } else if (!isShowMessageBeforeSubit && isShowMessageSuccessAfterSubit) {
+                return (
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={this.state.open && !isShowMessageBeforeSubit}
+                        autoHideDuration={6000}
+                        ContentProps={{
+                            'aria-describedby': 'message-id',
+                        }}
+                    >
+                        <SnackbarContent
+                            className={classes.success}
+                            message={
+                                <span>
+                                    <ul>
+                                        {(!isShowMessageBeforeSubit && isShowMessageSuccessAfterSubit) ? <li>Tạo tài khoản thành công!</li> : ''}
+                                    </ul>
+                                </span>
+                            }
+                            action={[
+                                <span>
+                                    <IconButton
+                                        key="close"
+                                        aria-label="Close"
+                                        color="inherit"
+                                        className={classes.close}
+                                        onClick={this.handleClose}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                </span>
+                            ]}
+                        />
+                    </Snackbar>
+                )
+            }
         }
         return (
             <div className={`${styles.formSign}`}>
@@ -235,20 +291,21 @@ class FormSign extends Component {
                     </ul>
                 </div>
                 <div className={`${styles.contentForm}`}>
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={this.handleSubmit} encType="multipart/form-data">
                         <div className="row">
-                            <div className="col-md-5">
-                                <label htmlFor="login"><b>Mã đăng nhập (*)</b></label>
+                            <div className="col-md-4">
+                                <h2 className={`${styles.titleForm}`}>THÔNG TIN ĐĂNG KÝ TÀI KHOẢN</h2>
+                                <label htmlFor="login"><b>Mã đăng nhập: (*)</b></label>
                                 <input type="text" pattern="(AD|PH|GV|HV)+([0-9]{5})\b" minLength="7" maxLength="50" onChange={this.handleChange} placeholder="VD: AD88901, GV67834, PH09813, HV00001..." name="login" required />
-                                <label htmlFor="password"><b>Mật khẩu (*)</b></label>
+                                <label htmlFor="password"><b>Mật khẩu: (*)</b></label>
                                 <input type="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="VD: Meocon123, Abc@1234..." name="password" required />
-                                <label htmlFor="re_password"><b>Nhập lại mật khẩu (*)</b></label>
+                                <label htmlFor="re_password"><b>Nhập lại mật khẩu: (*)</b></label>
                                 <input type="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="Nhập lại mật khẩu..." name="re_password" required />
-                                <label htmlFor="phone_number"><b>Nhập số điện thoại (*)</b></label>
+                                <label htmlFor="phone_number"><b>Nhập số điện thoại: (*)</b></label>
                                 <input type="text" pattern="^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$" minLength="10" maxLength="20" onChange={this.handleChange} placeholder="VD: 0363205500, 0984610934..." name="phoneNumber" required />
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <label htmlFor="authorities"><b>Loại tài khoản (*)</b></label>
+                                        <label htmlFor="authorities"><b>Loại tài khoản: (*)</b></label>
                                         <select name="authorities" id="role" onChange={this.handleChange} required>
                                             <option value="">--- Loại tài khoản ---</option>
                                             <option value="ROLE_ADMIN">Quản trị viên</option>
@@ -258,7 +315,7 @@ class FormSign extends Component {
                                         </select>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="activated"><b>Trạng thái</b></label>
+                                        <label htmlFor="activated"><b>Trạng thái:</b></label>
                                         <select name="activated" onChange={this.handleChange} id="activated" required>
                                             <option value={true}>Kích hoạt</option>
                                             <option value={false}>Chưa kích hoạt</option>
@@ -267,22 +324,23 @@ class FormSign extends Component {
                                 </div>
                                 <p>By creating an account you agree to our <a href="#" style={{ color: 'dodgerblue' }}>Terms &amp; Privacy</a>.</p>
                                 <div className="clearfix">
-                                    <button type="reset" className="btn btn-danger" style={{ marginRight: 10 }}>XÓA THÔNG TIN <i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    <button type="reset" className="btn btn-danger" style={{ marginRight: 10 }} onClick={this.clearData}>XÓA THÔNG TIN <i class="fa fa-trash" aria-hidden="true"></i></button>
                                     <button type="submit" className="btn btn-primary">ĐĂNG KÝ <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
-                                    {actions.progress ? <span style={{marginLeft: 5, marginTop: 3}}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{fontSize: 30}}></i></span> : ''}
+                                    {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
                                 </div>
                             </div>
-                            <div className="col-md-7">
+                            <div className="col-md-8">
+                                <h2 className={`${styles.titleForm}`}>HOÀN THÀNH THÔNG TIN CÁ NHÂN</h2>
                                 <div className="row">
                                     <div className="col-md-3">
                                         <div className={`${styles.avatarUpload}`}>
-                                            <label htmlFor="imageUrl"><b>Ảnh</b></label>
+                                            <label htmlFor="imageUrl"><b>Ảnh:</b></label>
                                             <div className={`${styles.avatarEdit}`}>
                                                 <input type="file" id="imageUpload" onChange={this.handleChangeFile} name="imageUrl" accept=".png, .jpg, .jpeg" />
                                                 <label htmlFor="imageUpload" />
                                             </div>
                                             <div className={`${styles.avatarPreview}`}>
-                                                <div id="imagePreview" style={{ backgroundImage: 'url(https://www.diginet.com.vn/wp-content/uploads/2019/01/no-image.jpg)' }}>
+                                                <div style={{ backgroundImage: imagePreview === '' ? `url(http://localhost:8080/api/file/admin/no-image.jpg)` : `url(${imagePreview}` }}>
                                                 </div>
                                             </div>
                                         </div>
@@ -290,29 +348,29 @@ class FormSign extends Component {
                                     <div className="col-md-9">
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <label htmlFor="firstName"><b>Họ</b></label>
+                                                <label htmlFor="firstName"><b>Họ:</b></label>
                                                 <input type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đào Huy, Hoàng Ngọc, Hoàng Thị..." name="firstName" />
                                             </div>
                                             <div className="col-md-6">
-                                                <label htmlFor="lastName"><b>Tên</b></label>
+                                                <label htmlFor="lastName"><b>Tên:</b></label>
                                                 <input type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName" />
                                             </div>
                                         </div>
-                                        <label htmlFor="email"><b>Email</b></label>
+                                        <label htmlFor="email"><b>Email:</b></label>
                                         <input type="email" maxLength="5" maxLength="254" onChange={this.handleChange} placeholder="VD: huyducactvn.edu.vn, huyduc@gmail.com..." name="email" />
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="birthday"><b>Ngày sinh</b></label>
+                                        <label htmlFor="birthday"><b>Ngày sinh:</b></label>
                                         <input type="date" placeholder="VD: 1998-10-02, 1999-08-12" name="birthday" onChange={this.handleChange} />
-                                        <label htmlFor="nations"><b>Dân tộc</b></label>
+                                        <label htmlFor="nations"><b>Dân tộc:</b></label>
                                         <select name="nations" id="nations" onChange={this.handleChange}>
                                             <option value="Kinh">Kinh</option>
                                             <option value="Khác">Khác...</option>
                                         </select>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="sex"><b>Giới tính</b></label>
+                                        <label htmlFor="sex"><b>Giới tính:</b></label>
                                         <div className={`${styles.sex}`}>
                                             <div class="form-check-inline">
                                                 <label className="form-check-label">
@@ -325,16 +383,16 @@ class FormSign extends Component {
                                                 </label>
                                             </div>
                                         </div>
-                                        <label htmlFor="identity_card_number"><b>Số CMND/CCCD</b></label>
+                                        <label htmlFor="identity_card_number"><b>Số CMND/CCCD:</b></label>
                                         <input type="text" onChange={this.handleChange} placeholder="VD: 175077212, 178221981..." name="identityCardNumber" />
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="address"><b>Hộ khẩu thường trú</b></label>
+                                        <label htmlFor="address"><b>Hộ khẩu thường trú:</b></label>
                                         <input type="text" maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address" />
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="address1"><b>Nơi sống hiện tại</b></label>
+                                        <label htmlFor="address1"><b>Nơi sống hiện tại:</b></label>
                                         <input type="text" maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address1" />
                                     </div>
                                 </div>
@@ -351,6 +409,7 @@ FormSign.propTypes = {
     classes: PropTypes.object.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
     addNewUserAccount: PropTypes.func.isRequired,
+    uploadAvatar: PropTypes.func.isRequired,
     actions: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
@@ -360,7 +419,7 @@ FormSign.propTypes = {
 
 FormSign.defaultProps = {
     accounts: [],
-    actions: {progress: false, status: '', data: {}}
+    actions: { progress: false, status: '', data: {} }
 }
 
 const mapStateToProps = state => ({
@@ -369,7 +428,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    addNewUserAccount: accountOperations.addNewUserAccount
+    addNewUserAccount: accountOperations.addNewUserAccount,
+    uploadAvatar: fileOperations.uploadFile
 };
 
 

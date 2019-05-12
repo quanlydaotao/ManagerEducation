@@ -48,8 +48,8 @@ public class User implements Serializable {
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 254)
-    @Column(length = 254, unique = true)
+    @Size(max = 254)
+    @Column(length = 254)
     private String email;
 
     @NotNull
@@ -85,7 +85,7 @@ public class User implements Serializable {
     private String phoneNumber;
 
     @Size(max = 20)
-    @Column(name = "identity_card_number", length = 20, unique = true)
+    @Column(name = "identity_card_number", length = 20)
     private String identityCardNumber;
 
     @Column(name = "birthday")

@@ -10,16 +10,25 @@ export const getAllUserAccount = () => ( {
     }
 } );
 
-export const addNewUserAccount = (dataForm) => ( {
+export const addNewUserAccount = ( dataForm ) => ( {
     type: types.ADD_NEW_USER_ACCOUNT,
     meta: {
         async: true,
         blocking: true,
         path: "/register",
         method: "POST",
-        body: dataForm
+        body: JSON.stringify(dataForm)
     }
 });
+
+export const openFormEdit = ( ) => ( {
+    type: types.OPEN_EDIT,
+});
+
+export const closeFormEdit = ( ) => ( {
+    type: types.CLOSE_EDIT,
+});
+
 
 export const updateUserAccount = ( ) => ( {
     

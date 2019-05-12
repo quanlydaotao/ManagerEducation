@@ -9,8 +9,9 @@ import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.security.SecurityUtils;
 import com.huyduc.manage.service.dto.UserDTO;
 import com.huyduc.manage.service.util.RandomUtil;
-
 import com.huyduc.manage.web.rest.errors.*;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -85,18 +84,6 @@ public class UserService {
                 throw new PhoneNumberAlreadyUsedException();
             }
         });
-        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
-            boolean removed = removeNonActivatedUser(existingUser);
-            if (!removed) {
-                throw new EmailAlreadyUsedException();
-            }
-        });
-        userRepository.findOneByIdentityCardNumber(userDTO.getIdentityCardNumber()).ifPresent(existingUser -> {
-            boolean removed = removeNonActivatedUser(existingUser);
-            if (!removed) {
-                throw new IdentityCardNumberAlreadyUsedException();
-            }
-        });
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin());
@@ -105,7 +92,7 @@ public class UserService {
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
-        newUser.setImageUrl(userDTO.getImageUrl());
+        newUser.setImageUrl(hashFileName(userDTO.getImageUrl()));
         newUser.setLangKey(userDTO.getLangKey());
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setAddress(userDTO.getAddress());
@@ -125,6 +112,15 @@ public class UserService {
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    }
+
+    private String hashFileName(String fileName) {
+        if (!fileName.isEmpty()) {
+            String ext = FilenameUtils.getExtension(fileName);
+            String[] body = fileName.split("."+ext);
+            return DigestUtils.md5Hex(body[0]) + '.'+ext;
+        }
+        return "";
     }
 
     private boolean removeNonActivatedUser(User existingUser){

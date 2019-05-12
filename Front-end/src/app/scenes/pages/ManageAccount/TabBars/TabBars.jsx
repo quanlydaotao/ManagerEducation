@@ -8,9 +8,11 @@ import styles from './styles.css';
 import ViewListIcon from '@material-ui/icons/ViewListRounded';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Typography from '@material-ui/core/Typography';
-import { EnhancedTableAccount } from './components/EnhancedTableAccount';
-
+import LazyLoad from 'react-lazyload';
+import { NavLink, Route } from 'react-router-dom';
 const FormSign = React.lazy(() => import('./components/FormSign/FormSign'));
+const EnhancedTableAccount = React.lazy(() => import('./components/EnhancedTableAccount/EnhancedTableAccount'));
+
 
 function TabContainer(props) {
     return (
@@ -32,39 +34,52 @@ const style = theme => ({
 });
 
 class TabBars extends React.Component {
-    state = {
-        value: 'one',
-    };
-
-    handleChange = (event, value) => {
-        this.setState({ value });
-    };
-
+ 
     render() {
         const { classes } = this.props;
-        const { value } = this.state;
-
         return (
             <div className={classes.root}>
-                <AppBar position="static" color="inherit" className={`${styles.HeaderAppBar}`}>
+                {/* <AppBar position="static" color="inherit" className={`${styles.HeaderAppBar}`}>
                     <Tabs value={value} onChange={this.handleChange} indicatorColor="inherit">
-                        <Tab value="one" icon={<ViewListIcon />} label="DANH SÁCH CHI TIẾT TÀI KHOẢN" />
-                        <Tab value="two" icon={<PersonAddIcon />} label="THÊM MỚI TÀI KHOẢN" />
+                        <Tab value="one" icon={<ViewListIcon />} label="DANH SÁCH CHI TIẾT TÀI KHOẢN">
+                            
+                        </Tab>
+                        <Tab value="two" icon={<PersonAddIcon />} label="THÊM MỚI TÀI KHOẢN"/>
                     </Tabs>
-                </AppBar>
-                {value === 'one' &&
-                    <TabContainer>
-                        <EnhancedTableAccount listName="DANH SÁCH TÀI KHOẢN" />   
-                    </TabContainer>
-                }
-
-                {value === 'two' &&
-                    <TabContainer>
-                        <Suspense fallback={<div>Loading...</div>}>
-                            <FormSign />
-                        </Suspense>
-                    </TabContainer>
-                }
+                    
+                    
+                </AppBar> */}
+                {/* {value === 'one' && */}
+                <div className={`${styles.appBar}`}>
+                    <NavLink to="/administrator/account">
+                        <ViewListIcon /> DANH SÁCH CHI TIẾT TÀI KHOẢN
+                    </NavLink>
+                    <NavLink to="/administrator/account/add-new">
+                        <PersonAddIcon /> THÊM MỚI TÀI KHOẢN
+                    </NavLink>
+                </div>
+                <hr className="tall" />
+                <Route exact path="/administrator/account" render={() => (
+                    <LazyLoad>
+                        <TabContainer>
+                            <Suspense fallback={''}>
+                                <EnhancedTableAccount listName="DANH SÁCH QUẢN LÝ ĐĂNG NHẬP HỆ THỐNG" />
+                            </Suspense>
+                        </TabContainer>
+                    </LazyLoad>
+                )} />
+                {/* } */}
+                {/* {value === 'two' && */}
+                <Route exact path="/administrator/account/add-new" render={() => (
+                    <LazyLoad>
+                        <TabContainer>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <FormSign />
+                            </Suspense>
+                        </TabContainer>
+                    </LazyLoad>
+                )} />
+                {/* } */}
             </div>
         );
     }

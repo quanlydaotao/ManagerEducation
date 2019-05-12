@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './styles.css';
 import { SectionClassRoom } from './SectionClassRoom';
 import DocumentTitle from 'react-document-title';
+import LazyLoad from 'react-lazyload';
 
 
 class HomeAdmin extends Component {
@@ -9,8 +10,12 @@ class HomeAdmin extends Component {
         return (
             <DocumentTitle title='.:HỆ THỐNG QUẢN LÝ ĐÀO TẠO E-FINGTER:.'>
                 <div className={`${styles.mainHomeAdmin}`}>
-                    <SectionClassRoom />
-                    <SectionClassRoom />
+                    <LazyLoad>
+                        <SectionClassRoom />
+                    </LazyLoad>
+                    <LazyLoad>
+                        <SectionClassRoom />
+                    </LazyLoad>
                 </div>
             </DocumentTitle>
         );

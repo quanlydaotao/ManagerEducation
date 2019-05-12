@@ -7,7 +7,7 @@ export const login = (username, password, rememberMe) => ( {
         blocking: true,
         path: "/authenticate",
         method: "POST",
-        body: {username, password, rememberMe}
+        body: JSON.stringify({username, password, rememberMe})
     }
 } );
 

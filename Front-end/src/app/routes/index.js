@@ -14,7 +14,7 @@ const routes = [
     {
         path: '/administrator/account',
         component: React.lazy(() => import('../scenes/pages/ManageAccount/ManageAccount')),
-        exact: true
+        exact: false
     }
 ];
 

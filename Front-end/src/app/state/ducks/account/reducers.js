@@ -19,7 +19,8 @@ const actionReducer = createReducer( initialState )( {
         state = {progress: true, status: 'ADDING', data: {}}
         return state;
     },
-    [ types.ADD_NEW_USER_ACCOUNT_COMPLETE ]: ( state, action ) => {
+    [ types.ADD_NEW_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
+        state = {progress: false, status: 'ADD_SUCCESS', data: {}}
         return state;
     },
     [ types.ADD_NEW_USER_ACCOUNT_FAILED ]: ( state, action ) => {
@@ -34,10 +35,22 @@ const actionReducer = createReducer( initialState )( {
     }
 });
 
+const toggleEditAccountReducer = createReducer( false )( {
+    [ types.OPEN_EDIT ]: ( state, action ) => {
+        state = true;
+        return state;
+    },
+    [ types.CLOSE_EDIT ]: ( state, action ) => {
+        state = false;
+        return state;
+    }
+});
+
 
 
 
 export default combineReducers( {
     accounts: accountReducer,
-    actionsAccounts: actionReducer
+    actionsAccounts: actionReducer,
+    toggleEditAccounts: toggleEditAccountReducer
 } );

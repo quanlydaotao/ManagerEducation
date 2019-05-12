@@ -1,6 +1,8 @@
 package com.huyduc.manage.web.rest.vm;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huyduc.manage.service.dto.UserDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Size;
 
@@ -34,6 +36,8 @@ public class RegisterUserAccountVM extends UserDTO {
     public void setRe_password(String re_password) {
         this.re_password = re_password;
     }
+
+
 
     @Override
     public String toString() {

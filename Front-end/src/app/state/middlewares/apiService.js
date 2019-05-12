@@ -26,15 +26,14 @@ const apiService = ( ) => ( next ) => ( action ) => {
     if ( !action.meta || !action.meta.async ) {
         return result;
     }
-    const { path, method = "GET", body } = action.meta;
+    const { path, method = "GET", body, header } = action.meta;
 
     if ( !path ) {
         throw new Error( `'path' not specified for async action ${ action.type }` );
     }
 
     const url = `${ baseUrl }${ path }`;
-
-    return fetch( url, method, body ).then(
+    return fetch( url, method, body, header ).then(
         res => handleResponse( res, action, next ),
         err => handleErrors( err, action, next ),
     );

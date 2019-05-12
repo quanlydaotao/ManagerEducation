@@ -32,7 +32,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
 
-    Optional<User> findOneByIdentityCardNumber(String identityCardNumber);
-
     Optional<User> findOneByPhoneNumber(String phoneNumber);
 }
