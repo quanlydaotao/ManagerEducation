@@ -35,10 +35,10 @@ h2.titleForm {
 }
 
 /* Full-width input fields */
-input[type=text],
-input[type=password],
-input[type=email],
-input[type=date],
+.contentForm input[type=text],
+.contentForm input[type=password],
+.contentForm input[type=email],
+.contentForm input[type=date],
 .sex,
 select {
     width: 100%;
@@ -58,8 +58,8 @@ option {
     background-color: #ffffff;
 }
 
-input[type=text]:focus,
-input[type=password]:focus {
+.contentForm input[type=text]:focus,
+.contentForm input[type=password]:focus {
     background-color: #ddd;
     outline: none;
 }

@@ -85,7 +85,7 @@ class EnhancedTableAccount extends React.Component {
             orderBy: 'calories',
             selected: [],
             page: 0,
-            rowsPerPage: 5
+            rowsPerPage: 10
         }
     }
 
