@@ -72,7 +72,7 @@ const style = theme => ({
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
-            width: 200,
+            width: 360,
         },
     },
     sectionDesktop: {
@@ -168,19 +168,22 @@ class Header extends React.Component {
         return (
             <div className={classes.root} className={`${styles.headerMain}`}>
                 <AppBar position="static" style={{backgroundColor: '#455e6b'}}>
-                    <Toolbar style={{minHeight: 65}}>
-                        <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+                    <Toolbar style={{minHeight: 57}}>
+                        {/* <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
                             <MenuIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <Typography className={classes.title} variant="div" color="inherit" noWrap>
                             <Logo />
+                        </Typography>
+                        <Typography className={classes.title} variant="h6" color="inherit" noWrap style={{margin: '0px 14px'}}> 
+                            HỆ THỐNG QUẢN LÝ ĐÀO TẠO CMS
                         </Typography>
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
                                 <SearchIcon />
                             </div>
                             <InputBase
-                                placeholder="Search…"
+                                placeholder="Tìm kiếm..."
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput,

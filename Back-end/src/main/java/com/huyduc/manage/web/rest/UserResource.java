@@ -141,17 +141,15 @@ public class UserResource {
     }
 
     /**
-     * GET /users/:login : get the "login" user.
+     * GET /users/:id : get the id user.
      *
-     * @param login the login of the user to find
-     * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
+     * @param id the id of the user to find
+     * @return the ResponseEntity with status 200 (OK) and with body the id user, or with status 404 (Not Found)
      */
-    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
+    @GetMapping("/users/{id}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<UserDTO> getUser(@PathVariable String login) {
-        return ResponseEntity.ok().body(
-            userService.getUserWithAuthoritiesByLogin(login)
-                .map(UserDTO::new).get());
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.getUserWithAuthorities(id).map(UserDTO::new).get());
     }
 
     /**

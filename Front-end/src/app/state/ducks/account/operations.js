@@ -1,5 +1,5 @@
 import { getAllUserAccount, addNewUserAccount, updateUserAccount, 
-    deleteUserAccount, openFormEdit, closeFormEdit } from "./actions";
+    deleteUserAccount, openFormEdit, closeFormEdit, getUserAccountById } from "./actions";
 
 export {
     getAllUserAccount,
@@ -8,4 +8,5 @@ export {
     deleteUserAccount,
     openFormEdit,
     closeFormEdit,
+    getUserAccountById
 };

@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import amber from '@material-ui/core/colors/amber';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import DocumentTitle from 'react-document-title';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 const style = theme => ({
@@ -187,6 +188,7 @@ class FormSign extends Component {
     }
 
     render() {
+
         const { classes, actions } = this.props;
         const { errors, imagePreview } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' || errors.password !== '' || errors.re_password !== '' || errors.phone_number !== '';
@@ -278,129 +280,131 @@ class FormSign extends Component {
             }
         }
         return (
-            <div className={`${styles.formSign}`}>
-                {alert()}
-                <h3>ĐĂNG KÝ TÀI KHOẢN ĐĂNG NHẬP HỆ THỐNG</h3>
-                <div>
-                    <div><b>Chú ý:</b></div>
-                    <ul>
-                        <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
-                        <li>- Tên tài khoản tối thiểu 7 ký tự trong đó 2 ký tự đầu là mã chức vụ ứng với tài khoản. (<b>Admin</b>: 'ADxxxxx', <b>Giáo viên</b>: 'GVxxxxx', <b>Phụ huynh</b>: 'PHxxxxx' và <b>Học viên</b>: 'HVxxxxx').</li>
-                        <li>- Mật khẩu tối thiểu 4 ký tự và tối đa 100 ký tự.</li>
-                        <li>- Số điện thoại là các đầu số của <b>Việt Nam</b> (gồm 10 chữ số).</li>
-                    </ul>
-                </div>
-                <div className={`${styles.contentForm}`}>
-                    <form onSubmit={this.handleSubmit} encType="multipart/form-data">
-                        <div className="row">
-                            <div className="col-md-4">
-                                <h2 className={`${styles.titleForm}`}>THÔNG TIN ĐĂNG KÝ TÀI KHOẢN</h2>
-                                <label htmlFor="login"><b>Mã đăng nhập: (*)</b></label>
-                                <input type="text" pattern="(AD|PH|GV|HV)+([0-9]{5})\b" minLength="7" maxLength="50" onChange={this.handleChange} placeholder="VD: AD88901, GV67834, PH09813, HV00001..." name="login" required />
-                                <label htmlFor="password"><b>Mật khẩu: (*)</b></label>
-                                <input type="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="VD: Meocon123, Abc@1234..." name="password" required />
-                                <label htmlFor="re_password"><b>Nhập lại mật khẩu: (*)</b></label>
-                                <input type="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="Nhập lại mật khẩu..." name="re_password" required />
-                                <label htmlFor="phone_number"><b>Nhập số điện thoại: (*)</b></label>
-                                <input type="text" pattern="^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$" minLength="10" maxLength="20" onChange={this.handleChange} placeholder="VD: 0363205500, 0984610934..." name="phoneNumber" required />
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <label htmlFor="authorities"><b>Loại tài khoản: (*)</b></label>
-                                        <select name="authorities" id="role" onChange={this.handleChange} required>
-                                            <option value="">--- Loại tài khoản ---</option>
-                                            <option value="ROLE_ADMIN">Quản trị viên</option>
-                                            <option value="ROLE_TEACHER">Giảng viên</option>
-                                            <option value="ROLE_PARENTS">Phụ huynh</option>
-                                            <option value="ROLE_STUDENT">Học viên</option>
-                                        </select>
+            <DocumentTitle title={document.title === '.:Quản lý tài khoản:.' ? '.:Thêm mới tài khoản:.' : ''}>
+                <div className={`${styles.formSign}`}>
+                    {alert()}
+                    <h3>ĐĂNG KÝ TÀI KHOẢN ĐĂNG NHẬP HỆ THỐNG</h3>
+                    <div>
+                        <div><b>Chú ý:</b></div>
+                        <ul>
+                            <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
+                            <li>- Tên tài khoản tối thiểu 7 ký tự trong đó 2 ký tự đầu là mã chức vụ ứng với tài khoản. (<b>Admin</b>: 'ADxxxxx', <b>Giáo viên</b>: 'GVxxxxx', <b>Phụ huynh</b>: 'PHxxxxx' và <b>Học viên</b>: 'HVxxxxx').</li>
+                            <li>- Mật khẩu tối thiểu 4 ký tự và tối đa 100 ký tự.</li>
+                            <li>- Số điện thoại là các đầu số của <b>Việt Nam</b> (gồm 10 chữ số).</li>
+                        </ul>
+                    </div>
+                    <div className="contentForm">
+                        <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <h2 className="titleForm">THÔNG TIN ĐĂNG KÝ TÀI KHOẢN</h2>
+                                    <label htmlFor="login"><b>Mã đăng nhập: (*)</b></label>
+                                    <input type="text" pattern="(AD|PH|GV|HV)+([0-9]{5})\b" minLength="7" maxLength="50" onChange={this.handleChange} placeholder="VD: AD88901, GV67834, PH09813, HV00001..." name="login" required />
+                                    <label htmlFor="password"><b>Mật khẩu: (*)</b></label>
+                                    <input type="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="VD: Meocon123, Abc@1234..." name="password" required />
+                                    <label htmlFor="re_password"><b>Nhập lại mật khẩu: (*)</b></label>
+                                    <input type="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="Nhập lại mật khẩu..." name="re_password" required />
+                                    <label htmlFor="phone_number"><b>Nhập số điện thoại: (*)</b></label>
+                                    <input type="text" pattern="^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$" minLength="10" maxLength="20" onChange={this.handleChange} placeholder="VD: 0363205500, 0984610934..." name="phoneNumber" required />
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <label htmlFor="authorities"><b>Loại tài khoản: (*)</b></label>
+                                            <select name="authorities" id="role" onChange={this.handleChange} required>
+                                                <option value="">--- Loại tài khoản ---</option>
+                                                <option value="ROLE_ADMIN">Quản trị viên</option>
+                                                <option value="ROLE_TEACHER">Giảng viên</option>
+                                                <option value="ROLE_PARENTS">Phụ huynh</option>
+                                                <option value="ROLE_STUDENT">Học viên</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="activated"><b>Trạng thái:</b></label>
+                                            <select name="activated" onChange={this.handleChange} id="activated" required>
+                                                <option value={true}>Kích hoạt</option>
+                                                <option value={false}>Chưa kích hoạt</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="activated"><b>Trạng thái:</b></label>
-                                        <select name="activated" onChange={this.handleChange} id="activated" required>
-                                            <option value={true}>Kích hoạt</option>
-                                            <option value={false}>Chưa kích hoạt</option>
-                                        </select>
+                                    <p>By creating an account you agree to our <a href="#" style={{ color: 'dodgerblue' }}>Terms &amp; Privacy</a>.</p>
+                                    <div className="clearfix">
+                                        <button type="reset" className="btn btn-danger" style={{ marginRight: 10 }} onClick={this.clearData}>XÓA THÔNG TIN <i class="fa fa-trash" aria-hidden="true"></i></button>
+                                        <button type="submit" className="btn btn-primary">ĐĂNG KÝ <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
+                                        {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
                                     </div>
                                 </div>
-                                <p>By creating an account you agree to our <a href="#" style={{ color: 'dodgerblue' }}>Terms &amp; Privacy</a>.</p>
-                                <div className="clearfix">
-                                    <button type="reset" className="btn btn-danger" style={{ marginRight: 10 }} onClick={this.clearData}>XÓA THÔNG TIN <i class="fa fa-trash" aria-hidden="true"></i></button>
-                                    <button type="submit" className="btn btn-primary">ĐĂNG KÝ <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
-                                    {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
-                                </div>
-                            </div>
-                            <div className="col-md-8">
-                                <h2 className={`${styles.titleForm}`}>HOÀN THÀNH THÔNG TIN CÁ NHÂN</h2>
-                                <div className="row">
-                                    <div className="col-md-3">
-                                        <div className={`${styles.avatarUpload}`}>
-                                            <label htmlFor="imageUrl"><b>Ảnh:</b></label>
-                                            <div className={`${styles.avatarEdit}`}>
-                                                <input type="file" id="imageUpload" onChange={this.handleChangeFile} name="imageUrl" accept=".png, .jpg, .jpeg" />
-                                                <label htmlFor="imageUpload" />
-                                            </div>
-                                            <div className={`${styles.avatarPreview}`}>
-                                                <div style={{ backgroundImage: imagePreview === '' ? `url(http://localhost:8080/api/file/admin/no-image.jpg)` : `url(${imagePreview}` }}>
+                                <div className="col-md-8">
+                                    <h2 className="titleForm">HOÀN THÀNH THÔNG TIN CÁ NHÂN</h2>
+                                    <div className="row">
+                                        <div className="col-md-3">
+                                            <div className="avatarUpload">
+                                                <label htmlFor="imageUrl"><b>Ảnh:</b></label>
+                                                <div className="avatarEdit">
+                                                    <input type="file" id="imageUpload" onChange={this.handleChangeFile} name="imageUrl" accept=".png, .jpg, .jpeg" />
+                                                    <label htmlFor="imageUpload" />
+                                                </div>
+                                                <div className="avatarPreview">
+                                                    <div style={{ backgroundImage: imagePreview === '' ? `url(http://localhost:8080/api/file/admin/no-image.jpg)` : `url(${imagePreview}` }}>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="col-md-9">
-                                        <div className="row">
-                                            <div className="col-md-6">
-                                                <label htmlFor="firstName"><b>Họ:</b></label>
-                                                <input type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đào Huy, Hoàng Ngọc, Hoàng Thị..." name="firstName" />
+                                        <div className="col-md-9">
+                                            <div className="row">
+                                                <div className="col-md-6">
+                                                    <label htmlFor="firstName"><b>Họ:</b></label>
+                                                    <input type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đào Huy, Hoàng Ngọc, Hoàng Thị..." name="firstName" />
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <label htmlFor="lastName"><b>Tên:</b></label>
+                                                    <input type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName" />
+                                                </div>
                                             </div>
-                                            <div className="col-md-6">
-                                                <label htmlFor="lastName"><b>Tên:</b></label>
-                                                <input type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName" />
-                                            </div>
+                                            <label htmlFor="email"><b>Email:</b></label>
+                                            <input type="email" maxLength="5" maxLength="254" onChange={this.handleChange} placeholder="VD: huyducactvn.edu.vn, huyduc@gmail.com..." name="email" />
                                         </div>
-                                        <label htmlFor="email"><b>Email:</b></label>
-                                        <input type="email" maxLength="5" maxLength="254" onChange={this.handleChange} placeholder="VD: huyducactvn.edu.vn, huyduc@gmail.com..." name="email" />
-                                    </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="birthday"><b>Ngày sinh:</b></label>
-                                        <input type="date" placeholder="VD: 1998-10-02, 1999-08-12" name="birthday" onChange={this.handleChange} />
-                                        <label htmlFor="nations"><b>Dân tộc:</b></label>
-                                        <select name="nations" id="nations" onChange={this.handleChange}>
-                                            <option value="Kinh">Kinh</option>
-                                            <option value="Khác">Khác...</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="sex"><b>Giới tính:</b></label>
-                                        <div className={`${styles.sex}`}>
-                                            <div class="form-check-inline">
-                                                <label className="form-check-label">
-                                                    <input type="radio" value={true} onChange={this.handleChange} className="form-check-input" name="sex" checked />Nam
-                                                </label>
-                                            </div>
-                                            <div className="form-check-inline">
-                                                <label className="form-check-label">
-                                                    <input type="radio" value={false} onChange={this.handleChange} className="form-check-input" name="sex" />Nữ
-                                                </label>
-                                            </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="birthday"><b>Ngày sinh:</b></label>
+                                            <input type="date" placeholder="VD: 1998-10-02, 1999-08-12" name="birthday" onChange={this.handleChange} />
+                                            <label htmlFor="nations"><b>Dân tộc:</b></label>
+                                            <select name="nations" id="nations" onChange={this.handleChange}>
+                                                <option value="Kinh">Kinh</option>
+                                                <option value="Khác">Khác...</option>
+                                            </select>
                                         </div>
-                                        <label htmlFor="identity_card_number"><b>Số CMND/CCCD:</b></label>
-                                        <input type="text" onChange={this.handleChange} placeholder="VD: 175077212, 178221981..." name="identityCardNumber" />
-                                    </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="sex"><b>Giới tính:</b></label>
+                                            <div className="sex">
+                                                <div class="form-check-inline">
+                                                    <label className="form-check-label">
+                                                        <input type="radio" value={true} onChange={this.handleChange} className="form-check-input" name="sex" checked />Nam
+                                                </label>
+                                                </div>
+                                                <div className="form-check-inline">
+                                                    <label className="form-check-label">
+                                                        <input type="radio" value={false} onChange={this.handleChange} className="form-check-input" name="sex" />Nữ
+                                                </label>
+                                                </div>
+                                            </div>
+                                            <label htmlFor="identity_card_number"><b>Số CMND/CCCD:</b></label>
+                                            <input type="text" onChange={this.handleChange} placeholder="VD: 175077212, 178221981..." name="identityCardNumber" />
+                                        </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="address"><b>Hộ khẩu thường trú:</b></label>
-                                        <input type="text" maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address" />
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="address1"><b>Nơi sống hiện tại:</b></label>
-                                        <input type="text" maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address1" />
+                                        <div className="col-md-6">
+                                            <label htmlFor="address"><b>Hộ khẩu thường trú:</b></label>
+                                            <input type="text" maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address" />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="address1"><b>Nơi sống hiện tại:</b></label>
+                                            <input type="text" maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address1" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-            </div >
+                        </form>
+                    </div>
+                </div >
+            </DocumentTitle>
         );
     }
 }

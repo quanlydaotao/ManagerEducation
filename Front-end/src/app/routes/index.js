@@ -15,6 +15,11 @@ const routes = [
         path: '/administrator/account',
         component: React.lazy(() => import('../scenes/pages/ManageAccount/ManageAccount')),
         exact: false
+    },
+    {
+        path: '/administrator/account/edit/:id',
+        component: React.lazy(() => import('../scenes/pages/ManageAccount/PopupFormEdit/PopupFormEdit')),
+        exact: false
     }
 ];
 

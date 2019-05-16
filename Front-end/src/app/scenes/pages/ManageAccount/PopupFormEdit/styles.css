@@ -3,3 +3,11 @@
     height: 100%;
     min-height: 50px;
 }
+
+.formEdit input, select {
+    border-radius: 40px !important;
+}
+
+.rightContent {
+    padding-top: 20px;
+}

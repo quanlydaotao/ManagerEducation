@@ -7,3 +7,6 @@ export const UPDATE_USER_ACCOUNT = "account/UPDATE_USER_ACCOUNT";
 export const DELETE_USER_ACCOUNT = "account/DELETE_USER_ACCOUNT";
 export const OPEN_EDIT = "account/OPEN_EDIT";
 export const CLOSE_EDIT = "account/CLOSE_EDIT";
+export const GET_USER_ACCOUNT_BY_ID = "account/GET_USER_ACCOUNT_BY_ID";
+export const GET_USER_ACCOUNT_BY_ID_COMPLETED = "account/GET_USER_ACCOUNT_BY_ID_COMPLETED";
+export const GET_USER_ACCOUNT_BY_ID_FAILED = "account/GET_USER_ACCOUNT_BY_ID_FAILED";

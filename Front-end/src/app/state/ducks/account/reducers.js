@@ -12,6 +12,15 @@ const accountReducer = createReducer( [] )( {
     }
 });
 
+const getAccountReducer = createReducer( {} )( {
+    [ types.GET_USER_ACCOUNT_BY_ID_COMPLETED ]: ( state, action ) => {
+        if (action.payload) {
+            state = action.payload;
+        }
+        return state;
+    },
+});
+
 const initialState = {progress: false, status: '',  data: {}}
 
 const actionReducer = createReducer( initialState )( {
@@ -51,6 +60,7 @@ const toggleEditAccountReducer = createReducer( false )( {
 
 export default combineReducers( {
     accounts: accountReducer,
+    getAccounts: getAccountReducer,
     actionsAccounts: actionReducer,
     toggleEditAccounts: toggleEditAccountReducer
 } );

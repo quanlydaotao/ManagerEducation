@@ -10,6 +10,17 @@ export const getAllUserAccount = () => ( {
     }
 } );
 
+export const getUserAccountById = ( id ) => ( {
+    type: types.GET_USER_ACCOUNT_BY_ID,
+    meta: {
+        async: true,
+        blocking: true,
+        path: `/users/${id}`,
+        method: "GET"
+    }
+} );
+
+
 export const addNewUserAccount = ( dataForm ) => ( {
     type: types.ADD_NEW_USER_ACCOUNT,
     meta: {

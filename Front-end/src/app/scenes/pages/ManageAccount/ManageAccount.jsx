@@ -11,7 +11,6 @@ const ManageAccount = () => {
                 <div className={`${styles.mainManageAccount}`}>
                     <TabBars />
                 </div>
-                <Route exact path="/administrator/account/edit/:id" component={React.lazy(() => import('./PopupFormEdit/PopupFormEdit'))} />
             </React.Fragment>
         </DocumentTitle>
     );
