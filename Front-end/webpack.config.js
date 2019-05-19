@@ -7,7 +7,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const webpack = require('webpack');
 
 const devServer = {
-   port: 5000,
+   port: 3000,
    open: false,
    disableHostCheck: true,
    historyApiFallback: true,

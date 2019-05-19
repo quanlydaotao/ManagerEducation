@@ -13,9 +13,13 @@ const accountReducer = createReducer( [] )( {
 });
 
 const getAccountReducer = createReducer( {} )( {
+    [ types.GET_USER_ACCOUNT_BY_ID ]: ( state, action ) => {
+        state = {};
+        return state;
+    },
     [ types.GET_USER_ACCOUNT_BY_ID_COMPLETED ]: ( state, action ) => {
         if (action.payload) {
-            state = action.payload;
+            state = action.payload
         }
         return state;
     },

@@ -227,10 +227,9 @@ button,
 input,
 optgroup,
 select,
-textarea {
+textarea, .sex {
     margin: 0;
     font-family: inherit;
-    font-size: inherit;
     line-height: inherit
 }
 
@@ -2424,6 +2423,10 @@ textarea.form-control.is-invalid {
 
 .form-inline .form-check {
     width: 100%
+}
+
+label b {
+    color: rgba(0, 0, 0, 0.54);
 }
 
 @media (min-width:576px) {
@@ -10362,6 +10365,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     margin: 5px 0 18px 0;
     background: #f1f1f1;
     border: 1px solid #ffffff;
+    border-radius: 4px;
 }
 
 .contentForm input[type=text],

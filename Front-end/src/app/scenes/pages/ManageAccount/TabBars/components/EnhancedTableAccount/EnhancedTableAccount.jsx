@@ -23,6 +23,7 @@ import { ImageAvatars } from '../../../../../components/ImageAvatars';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import { NavLink } from 'react-router-dom';
+import { PopupFormEdit } from '../../../PopupFormEdit';
 
 const rows = [
     { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
@@ -137,6 +138,11 @@ class EnhancedTableAccount extends React.Component {
         this.setState({ page });
     };
 
+    handleOpenForm = (id) => {
+        this.props.findAccountById(id);
+        this.props.openForm();
+    }
+
     handleChangeRowsPerPage = event => {
         this.setState({ rowsPerPage: event.target.value });
     };
@@ -144,10 +150,11 @@ class EnhancedTableAccount extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes, listName, accounts } = this.props;
+        const { classes, listName, accounts, accountById } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
         return (
             <Paper className={classes.root}>
+                {accountById.id ? <PopupFormEdit data={accountById}/> : ''}
                 <EnhancedTableToolBar numSelected={selected.length} listName={listName} />
                 <hr className="tall" />
                 <div className={classes.tableWrapper}>
@@ -222,10 +229,10 @@ class EnhancedTableAccount extends React.Component {
                                                         />}
                                                 </TableCell>
                                                 <TableCell className="cell">
-                                                    <NavLink to={`/administrator/account/edit/${n.id}`} className="btn" variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }} 
+                                                    <Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }} 
                                                             title="Chỉnh sửa thông tin tài khoản">
                                                         <LaunchIcon />
-                                                    </NavLink>
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         </LazyLoad>
@@ -266,7 +273,8 @@ EnhancedTableAccount.propTypes = {
     listName: PropTypes.string.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
     getAllUserAccount: PropTypes.func.isRequired,
-    openForm: PropTypes.func.isRequired
+    openForm: PropTypes.func.isRequired,
+    findAccountById: PropTypes.func.isRequired
 };
 
 EnhancedTableAccount.defaultProps = {
@@ -275,12 +283,13 @@ EnhancedTableAccount.defaultProps = {
 
 const mapStateToProps = state => ({
     accounts: state.account.accounts,
+    accountById: state.account.getAccounts
 });
 
 const mapDispatchToProps = {
     getAllUserAccount: accountOperations.getAllUserAccount,
     openForm: accountOperations.openFormEdit,
-    closeForm: accountOperations.closeFormEdit,
+    findAccountById: accountOperations.getUserAccountById
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableAccount));

@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './styles.css';
-import { connect } from 'react-redux';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
-
-
 
 class EnhancedTableHead extends React.Component {
   createSortHandler = property => event => {
@@ -74,4 +70,4 @@ EnhancedTableHead.defaultProps = {
   rows: []
 }
 
-export default (EnhancedTableHead);
+export default EnhancedTableHead;

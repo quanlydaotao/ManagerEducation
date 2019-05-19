@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import styles from './styles.css';
 import DocumentTitle from 'react-document-title';
 import { TabBars } from './TabBars';
-import { Route } from 'react-router-dom';
 
 const ManageAccount = () => {
     return (

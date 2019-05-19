@@ -51,17 +51,6 @@ const StyledBreadcrumb = withStyles(styles)(CustomBreadcrumb);
 
 class Breadcumbs extends Component {
     render() {
-        // return (
-        //     <div className={`${styles.breadcums} clearfix`}>
-        //         <div className={`${styles.imgBreadcumb}`}>
-        //             <img style={{ marginTop: 2, marginRight: 15 }} src="https://image.flaticon.com/icons/svg/1055/1055686.svg" alt="aaa" />
-        //         </div>
-        //         <div className={`${styles.mainBreadcums}`}>
-        //             <h1>{ this.props.breadcums }</h1>
-        //             <span>Hà nội : 02/04/2019 GMT +7 20:50 PM</span>
-        //        </div>
-        //     </div>
-        // );
         const { classes } = this.props;
         return (
             <Paper className={classes.root} style={{marginTop: 10}}>
@@ -69,7 +58,7 @@ class Breadcumbs extends Component {
                     <StyledBreadcrumb
                         component="a"
                         href="#"
-                        label="Trang chủ"
+                        label="Trang chủ"Ba
                         avatar={
                             <Avatar className={classes.avatar}>
                                 <HomeIcon />
