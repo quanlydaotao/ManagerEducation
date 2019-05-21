@@ -12,6 +12,9 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import DocumentTitle from 'react-document-title';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 const style = theme => ({
     snackbar: {
@@ -28,7 +31,19 @@ const style = theme => ({
     },
     success: {
         backgroundColor: '#338ef9',
-    }
+    },
+    button: {
+        margin: theme.spacing.unit,
+    },
+    leftIcon: {
+        marginRight: theme.spacing.unit,
+    },
+    rightIcon: {
+        marginLeft: theme.spacing.unit,
+    },
+    iconSmall: {
+        fontSize: 20,
+    },
 });
 
 class FormSign extends Component {
@@ -288,9 +303,10 @@ class FormSign extends Component {
                         <div><b>Chú ý:</b></div>
                         <ul>
                             <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
-                            <li>- Tên tài khoản tối thiểu 7 ký tự trong đó 2 ký tự đầu là mã chức vụ ứng với tài khoản. (<b>Admin</b>: 'ADxxxxx', <b>Giáo viên</b>: 'GVxxxxx', <b>Phụ huynh</b>: 'PHxxxxx' và <b>Học viên</b>: 'HVxxxxx').</li>
+                            <li>- Mã đăng nhập tối thiểu 7 ký tự trong đó 2 ký tự đầu là mã chức vụ ứng với tài khoản. (<b>Admin</b>: 'ADxxxxx', <b>Giáo viên</b>: 'GVxxxxx', <b>Phụ huynh</b>: 'PHxxxxx' và <b>Học viên</b>: 'HVxxxxx').</li>
                             <li>- Mật khẩu tối thiểu 4 ký tự và tối đa 100 ký tự.</li>
-                            <li>- Số điện thoại là các đầu số của <b>Việt Nam</b> (gồm 10 chữ số).</li>
+                            <li>- Số điện thoại là số của các nhà mạng ở <b>Việt Nam</b> (số điện thoại bao gồm 10 chữ số).</li>
+                            <li>- Với mỗi mã đăng nhập sẽ tương ứng với 1 loại tài khoản. Trong đó, 2 chữ cái đầu tiên của mã đăng nhập sẽ phải trùng với loại tài khoản đã chọn..</li>
                         </ul>
                     </div>
                     <div className="contentForm">
@@ -327,8 +343,14 @@ class FormSign extends Component {
                                     </div>
                                     <p>By creating an account you agree to our <a href="#" style={{ color: 'dodgerblue' }}>Terms &amp; Privacy</a>.</p>
                                     <div className="clearfix">
-                                        <button type="reset" className="btn btn-danger" style={{ marginRight: 10 }} onClick={this.clearData}>XÓA THÔNG TIN <i class="fa fa-trash" aria-hidden="true"></i></button>
-                                        <button type="submit" className="btn btn-primary">ĐĂNG KÝ <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
+                                        <Button variant="contained" type="reset" color="secondary" className={classes.button} onClick={this.clearData}>
+                                            Xóa thông tin
+                                            <DeleteIcon className={classes.rightIcon} />
+                                        </Button>
+                                        <Button variant="contained" type="submit" color="primary" className={classes.button}>
+                                            ĐĂNG KÝ
+                                            <PersonAddIcon className={classes.rightIcon} />
+                                        </Button>
                                         {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
                                     </div>
                                 </div>
@@ -377,12 +399,12 @@ class FormSign extends Component {
                                             <div className="sex">
                                                 <div class="form-check-inline">
                                                     <label className="form-check-label">
-                                                        <input type="radio" value={true} onChange={this.handleChange} className="form-check-input" name="sex" checked />Nam
+                                                        <input type="radio" defaultValue={true} onChange={this.handleChange} className="form-check-input" defaultChecked={true} name="sex" />Nam
                                                 </label>
                                                 </div>
                                                 <div className="form-check-inline">
                                                     <label className="form-check-label">
-                                                        <input type="radio" value={false} onChange={this.handleChange} className="form-check-input" name="sex" />Nữ
+                                                        <input type="radio" defaultValue={false} onChange={this.handleChange} className="form-check-input" name="sex" />Nữ
                                                 </label>
                                                 </div>
                                             </div>
