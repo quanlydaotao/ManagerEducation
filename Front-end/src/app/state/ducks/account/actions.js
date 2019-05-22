@@ -20,13 +20,12 @@ export const getUserAccountById = ( id ) => ( {
     }
 } );
 
-
 export const addNewUserAccount = ( dataForm ) => ( {
     type: types.ADD_NEW_USER_ACCOUNT,
     meta: {
         async: true,
         blocking: true,
-        path: "/register",
+        path: "/users",
         method: "POST",
         body: JSON.stringify(dataForm)
     }
@@ -41,8 +40,15 @@ export const closeFormEdit = ( ) => ( {
 });
 
 
-export const updateUserAccount = ( ) => ( {
-    
+export const updateUserAccount = ( dataForm ) => ( {
+    type: types.UPDATE_USER_ACCOUNT,
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/users",
+        method: "PUT",
+        body: JSON.stringify(dataForm)
+    }
 });
 
 export const deleteUserAccount = ( ) => ( {

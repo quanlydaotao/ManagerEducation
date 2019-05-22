@@ -10,20 +10,12 @@ import com.huyduc.manage.service.dto.UserDTO;
 import com.huyduc.manage.web.rest.errors.*;
 import com.huyduc.manage.web.rest.vm.KeyAndPasswordVM;
 import com.huyduc.manage.web.rest.vm.ManagedUserVM;
-import com.huyduc.manage.web.rest.vm.RegisterUserAccountVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -38,39 +30,36 @@ public class AccountResource {
 
     private final UserService userService;
 
-    private final FileUploadService fileUploadService;
-
 
     public AccountResource(UserRepository userRepository, UserService userService, FileUploadService fileUploadService) {
         this.userRepository = userRepository;
         this.userService = userService;
-        this.fileUploadService = fileUploadService;
     }
 
-    /**
-     * POST  /register : register the user.
-     *
-     * @param registerUserAccountVM the managed user View Model
-     * @throws InvalidPasswordException 400 (Bad Request) if the password is incorrect
-     * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
-     * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already used
-     */
-    @PostMapping(value = "/register")
-    public ResponseEntity<User> registerAccount(@Valid @RequestBody RegisterUserAccountVM registerUserAccountVM) {
-        if (!checkPasswordLength(registerUserAccountVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
-        if (!isIdenticalPassword(registerUserAccountVM.getPassword(), registerUserAccountVM.getRe_password())) {
-            throw new PasswordNotMatchException();
-        }
-        try {
-            User user = userService.registerUser(registerUserAccountVM, registerUserAccountVM.getPassword());
-            return new ResponseEntity(user, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity(Collections.singletonMap("createFailed",
-                    e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
-    }
+//    /**
+//     * POST  /register : register the user.
+//     *
+//     * @param registerUserAccountVM the managed user View Model
+//     * @throws InvalidPasswordException 400 (Bad Request) if the password is incorrect
+//     * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
+//     * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already used
+//     */
+//    @PostMapping(value = "/register")
+//    public ResponseEntity<User> registerAccount(@Valid @RequestBody RegisterUserAccountVM registerUserAccountVM) {
+//        if (!checkPasswordLength(registerUserAccountVM.getPassword())) {
+//            throw new InvalidPasswordException();
+//        }
+//        if (!isIdenticalPassword(registerUserAccountVM.getPassword(), registerUserAccountVM.getRe_password())) {
+//            throw new PasswordNotMatchException();
+//        }
+//        try {
+//            User user = userService.registerUser(registerUserAccountVM, registerUserAccountVM.getPassword());
+//            return new ResponseEntity(user, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return new ResponseEntity(Collections.singletonMap("createFailed",
+//                    e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     /**
      * GET  /activate : activate the registered user.

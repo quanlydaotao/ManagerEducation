@@ -5,13 +5,14 @@ import com.huyduc.manage.bean.Authority;
 import com.huyduc.manage.bean.User;
 import com.huyduc.manage.repository.AuthorityRepository;
 import com.huyduc.manage.repository.UserRepository;
-import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.security.SecurityUtils;
 import com.huyduc.manage.service.dto.UserDTO;
 import com.huyduc.manage.service.util.RandomUtil;
 import com.huyduc.manage.web.rest.errors.*;
+import com.huyduc.manage.web.rest.vm.ManagedUserVM;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -71,7 +72,50 @@ public class UserService {
             });
     }
 
-    public User registerUser(UserDTO userDTO, String password) {
+//    public User registerUser(UserDTO userDTO, String password) {
+//        userRepository.findOneByLogin(userDTO.getLogin().toUpperCase()).ifPresent(existingUser -> {
+//            boolean removed = removeNonActivatedUser(existingUser);
+//            if (!removed) {
+//                throw new LoginAlreadyUsedException();
+//            }
+//        });
+//        userRepository.findOneByPhoneNumber(userDTO.getPhoneNumber()).ifPresent(existingUser -> {
+//            boolean removed = removeNonActivatedUser(existingUser);
+//            if (!removed) {
+//                throw new PhoneNumberAlreadyUsedException();
+//            }
+//        });
+//        User newUser = new User();
+//        String encryptedPassword = passwordEncoder.encode(password);
+//        newUser.setLogin(userDTO.getLogin());
+//        // new user gets initially a generated password
+//        newUser.setPassword(encryptedPassword);
+//        newUser.setFirstName(userDTO.getFirstName());
+//        newUser.setLastName(userDTO.getLastName());
+//        newUser.setEmail(userDTO.getEmail().toLowerCase());
+//        newUser.setImageUrl(hashFileName(userDTO.getImageUrl()));
+//        newUser.setLangKey(userDTO.getLangKey());
+//        newUser.setPhoneNumber(userDTO.getPhoneNumber());
+//        newUser.setAddress(userDTO.getAddress());
+//        newUser.setAddress1(userDTO.getAddress1());
+//        newUser.setNations(userDTO.getNations());
+//        newUser.setSex(userDTO.getSex());
+//        newUser.setIdentityCardNumber(userDTO.getIdentityCardNumber());
+//        newUser.setActivated(userDTO.isActivated());
+//        newUser.setBirthday(userDTO.getBirthday());
+//        // new user gets registration key
+//        newUser.setActivationKey(RandomUtil.generateActivationKey());
+//        Set<Authority> authorities = new HashSet<>();
+//        userDTO.getAuthorities().forEach((item)->{
+//            authorityRepository.findById(item).ifPresent(authorities::add);
+//        });
+//        newUser.setAuthorities(authorities);
+//        userRepository.save(newUser);
+//        log.debug("Created Information for User: {}", newUser);
+//        return newUser;
+//    }
+
+    public User createUser(UserDTO userDTO, String password, String rePassword) {
         userRepository.findOneByLogin(userDTO.getLogin().toUpperCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -84,16 +128,26 @@ public class UserService {
                 throw new PhoneNumberAlreadyUsedException();
             }
         });
+        if (!checkPasswordLength(password)) {
+            throw new InvalidPasswordException();
+        }
+        if (!isIdenticalPassword(password, rePassword)) {
+            throw new PasswordNotMatchException();
+        }
         User newUser = new User();
-        String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin());
         // new user gets initially a generated password
-        newUser.setPassword(encryptedPassword);
+        String encryptedPassword = passwordEncoder.encode(password);
+        newUser.setPassword(encryptedPassword);;
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(hashFileName(userDTO.getImageUrl()));
-        newUser.setLangKey(userDTO.getLangKey());
+        if (userDTO.getLangKey() == null) {
+            newUser.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+        } else {
+            newUser.setLangKey(userDTO.getLangKey());
+        }
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setAddress(userDTO.getAddress());
         newUser.setAddress1(userDTO.getAddress1());
@@ -101,6 +155,7 @@ public class UserService {
         newUser.setSex(userDTO.getSex());
         newUser.setIdentityCardNumber(userDTO.getIdentityCardNumber());
         newUser.setActivated(userDTO.isActivated());
+        newUser.setResetKey(RandomUtil.generateResetKey());
         newUser.setBirthday(userDTO.getBirthday());
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
@@ -112,53 +167,6 @@ public class UserService {
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
-    }
-
-    private String hashFileName(String fileName) {
-        if (!fileName.isEmpty()) {
-            String ext = FilenameUtils.getExtension(fileName);
-            String[] body = fileName.split("."+ext);
-            return DigestUtils.md5Hex(body[0]) + '.'+ext;
-        }
-        return "";
-    }
-
-    private boolean removeNonActivatedUser(User existingUser){
-        if (existingUser.getActivated()) {
-             return false;
-        }
-        userRepository.delete(existingUser);
-        userRepository.flush();
-        return true;
-    }
-
-    public User createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setLogin(userDTO.getLogin().toUpperCase());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail().toLowerCase());
-        user.setImageUrl(userDTO.getImageUrl());
-        if (userDTO.getLangKey() == null) {
-            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
-        } else {
-            user.setLangKey(userDTO.getLangKey());
-        }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-        user.setPassword(encryptedPassword);
-        user.setResetKey(RandomUtil.generateResetKey());
-        user.setActivated(true);
-        if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = userDTO.getAuthorities().stream()
-                .map(authorityRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
-            user.setAuthorities(authorities);
-        }
-        userRepository.save(user);
-        log.debug("Created Information for User: {}", user);
-        return user;
     }
 
     /**
@@ -192,22 +200,45 @@ public class UserService {
      * @param userDTO user to update
      * @return updated user
      */
-    public Optional<UserDTO> updateUser(UserDTO userDTO) {
+    public Optional<UserDTO> updateUser(UserDTO userDTO, String password, String rePassword) {
+        Optional<User> existingUser = userRepository.findOneByLogin(userDTO.getLogin());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new LoginAlreadyUsedException();
+        }
+        existingUser = userRepository.findOneByPhoneNumber(userDTO.getPhoneNumber());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new PhoneNumberAlreadyUsedException();
+        }
         return Optional.of(userRepository
             .findById(userDTO.getId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(user -> {
                 user.setLogin(userDTO.getLogin().toLowerCase());
+                if (!password.isEmpty() && !rePassword.isEmpty()) {
+                    if (!checkPasswordLength(password)) {
+                        throw new InvalidPasswordException();
+                    }
+                    if (!isIdenticalPassword(password, rePassword)) {
+                        throw new PasswordNotMatchException();
+                    }
+                    String encryptedPassword = passwordEncoder.encode(password);
+                    user.setPassword(encryptedPassword);
+                }
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
                 user.setEmail(userDTO.getEmail().toLowerCase());
-                user.setImageUrl(userDTO.getImageUrl());
-                user.setActivated(userDTO.isActivated());
-                user.setLangKey(userDTO.getLangKey());
+                if (!userDTO.getImageUrl().isEmpty() && !(userDTO.getImageUrl().equals(user.getImageUrl()))) {
+                    user.setImageUrl(hashFileName(userDTO.getImageUrl()));
+                }
                 user.setAddress(userDTO.getAddress());
                 user.setPhoneNumber(userDTO.getPhoneNumber());
+                user.setAddress1(userDTO.getAddress1());
+                user.setNations(userDTO.getNations());
+                user.setSex(userDTO.getSex());
                 user.setIdentityCardNumber(userDTO.getIdentityCardNumber());
+                user.setActivated(userDTO.isActivated());
+                user.setBirthday(userDTO.getBirthday());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
@@ -268,5 +299,34 @@ public class UserService {
      */
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+    }
+
+
+    private String hashFileName(String fileName) {
+        if (!fileName.isEmpty()) {
+            String ext = FilenameUtils.getExtension(fileName);
+            String[] body = fileName.split("."+ext);
+            return DigestUtils.md5Hex(body[0]) + '.'+ext;
+        }
+        return "";
+    }
+
+    private boolean removeNonActivatedUser(User existingUser){
+        if (existingUser.getActivated()) {
+            return false;
+        }
+        userRepository.delete(existingUser);
+        userRepository.flush();
+        return true;
+    }
+
+    private static boolean checkPasswordLength(String password) {
+        return !StringUtils.isEmpty(password) &&
+                password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
+                password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+    }
+
+    private static boolean isIdenticalPassword(String password, String re_password) {
+        return password.equals(re_password);
     }
 }

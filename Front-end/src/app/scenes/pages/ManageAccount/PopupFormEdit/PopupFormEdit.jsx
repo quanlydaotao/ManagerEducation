@@ -115,7 +115,7 @@ class PopupFormEdit extends React.Component {
         this.setState({
             id: id, login: login, phoneNumber: phoneNumber, authorities: authorities,
             imageUrl: imageUrl, firstName: firstName, lastName: lastName, email: email,
-            birthday: birthday, sex: sex, nations: nations, address: address, address1: address1,
+            birthday: birthday, sex: (sex === 'true' ? true : false), nations: nations, address: address, address1: address1,
             identityCardNumber: identityCardNumber, activated: activated
         });
     }
@@ -163,15 +163,15 @@ class PopupFormEdit extends React.Component {
                 imageUrl, firstName, lastName, email, birthday, sex, nations,
                 address, address1, langKey, identityCardNumber, activated, image
             }
-            // this.props.addNewUserAccount(formData);
-            // if (this.props.actions.status !== "ADD_FAILED") {
-            //     if (this.state.image) {
-            //         const fd = new FormData();
-            //         fd.append('image', this.state.image);
-            //         fd.append('dir', 'avatar');
-            //         this.props.uploadAvatar(fd);
-            //     }
-            // }
+            this.props.updateUserAccount(formData);
+            if (this.props.actions.status !== "UPDATE_FAILED") {
+                if (this.state.image) {
+                    const fd = new FormData();
+                    fd.append('image', this.state.image);
+                    fd.append('dir', 'avatar');
+                    this.props.uploadAvatar(fd);
+                }
+            }
         }
     }
 
@@ -262,9 +262,9 @@ class PopupFormEdit extends React.Component {
         const { classes, statusForm, data, actions } = this.props;
         const { expanded, errors, imagePreview } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' || errors.password !== '' || errors.re_password !== '' || errors.phone_number !== '';
-        var isShowMessageFailueAfterSubit = !actions.progress && actions.status === 'ADD_FAILED'
+        var isShowMessageFailueAfterSubit = !actions.progress && actions.status === 'UPDATE_FAILED'
             && actions.data.status === 400 && actions.data.response;
-        var isShowMessageSuccessAfterSubit = !actions.progress && actions.status === 'ADD_SUCCESS';
+        var isShowMessageSuccessAfterSubit = !actions.progress && actions.status === 'UPDATE_SUCCESS';
         console.log(this.state);
         let alert = () => {
             if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
@@ -290,7 +290,7 @@ class PopupFormEdit extends React.Component {
                                         {errors.re_password !== '' ? <li>{errors.re_password}</li> : ''}
                                         {errors.phone_number !== '' ? <li>{errors.phone_number}</li> : ''}
                                         {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
-                                            <li>{actions.data.response.createFailed ? actions.data.response.createFailed : 'Đăng ký thất bại!'}</li> : ''}
+                                            <li>{actions.data.response.updateFailed ? actions.data.response.updateFailed : 'Đăng ký thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -368,9 +368,9 @@ class PopupFormEdit extends React.Component {
                             <DialogContentText style={{ fontSize: '13px' }}>
                                 <div className="container bootstrap snippet contentForm">
                                     <div className="row">
-                                        <div className="col-sm-3">{/*left col*/}
+                                        <div className="col-sm-3">
                                             <div className="avatarUpload">
-                                                <img src={imagePreview === '' ? `http://ssl.gstatic.com/accounts/ui/avatar_2x.png` : `${imagePreview}`} className={`${styles.avatar}`} alt="avatar" />
+                                                <img src={imagePreview === '' && this.state.imageUrl === '' ? `http://ssl.gstatic.com/accounts/ui/avatar_2x.png` : (`${imagePreview}` || `http://localhost:8080/api/file/avatar/${this.state.imageUrl}`)} className={`${styles.avatar}`} alt="avatar" />
                                                 <h6>Upload a different photo...</h6>
                                                 <input type="file" id="imageUpload" onChange={this.handleChangeFile} name="imageUrl" accept=".png, .jpg, .jpeg" className="text-center center-block file-upload" /> 
                                             </div><br />
@@ -539,11 +539,11 @@ class PopupFormEdit extends React.Component {
                                                         </div>
                                                     </div>
                                                     <hr />
-                                                </div>{/*/tab-pane*/}
-                                            </div>{/*/tab-pane*/}
-                                        </div>{/*/tab-content*/}
-                                    </div>{/*/col-9*/}
-                                </div>{/*/row*/}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -553,6 +553,7 @@ class PopupFormEdit extends React.Component {
                             <Button type="submit" color="primary">
                                 Lưu
                             </Button>
+                            {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
                         </DialogActions>
                     </form>
                 </Dialog>
@@ -588,7 +589,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     closeForm: accountOperations.closeFormEdit,
-    addNewUserAccount: accountOperations.addNewUserAccount,
+    updateUserAccount: accountOperations.updateUserAccount,
     uploadAvatar: fileOperations.uploadFile
 };
 

@@ -54,28 +54,28 @@ class Breadcumbs extends Component {
         const { classes } = this.props;
         return (
             <Paper className={classes.root} style={{marginTop: 10}}>
-                <Breadcrumbs arial-label="Breadcrumb">
-                    <StyledBreadcrumb
-                        component="a"
-                        href="#"
-                        label="Trang chủ"Ba
-                        avatar={
-                            <Avatar className={classes.avatar}>
-                                <HomeIcon />
-                            </Avatar>
-                        }
-                        onClick={handleClick}
-                    />
-                    <StyledBreadcrumb component="a" href="#" label="Quản lý tài khoản" onClick={handleClick} />
-                    <StyledBreadcrumb
-                        label="Đăng ký tài khoản"
-                        deleteIcon={<ExpandMoreIcon />}
-                        onClick={handleClick}
-                        onDelete={handleClick}
-                    />
-                </Breadcrumbs>
+            <Breadcrumbs arial-label="Breadcrumb">
+            <StyledBreadcrumb
+            component="a"
+            href="#"
+            label="Trang chủ"Ba
+            avatar={
+                <Avatar className={classes.avatar}>
+                <HomeIcon />
+                </Avatar>
+            }
+            onClick={handleClick}
+            />
+            <StyledBreadcrumb component="a" href="#" label="Quản lý tài khoản" onClick={handleClick} />
+            <StyledBreadcrumb
+            label="Đăng ký tài khoản"
+            deleteIcon={<ExpandMoreIcon />}
+            onClick={handleClick}
+            onDelete={handleClick}
+            />
+            </Breadcrumbs>
             </Paper>
-        );
+            );
     }
 }
 

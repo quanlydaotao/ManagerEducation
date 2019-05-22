@@ -3,15 +3,14 @@ package com.huyduc.manage.web.rest;
 import com.huyduc.manage.config.Constants;
 import com.huyduc.manage.bean.User;
 import com.huyduc.manage.repository.UserRepository;
-import com.huyduc.manage.web.rest.errors.BadRequestAlertException;
-import com.huyduc.manage.web.rest.errors.LoginAlreadyUsedException;
+import com.huyduc.manage.web.rest.errors.*;
 import com.huyduc.manage.web.rest.util.HeaderUtil;
 import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.service.UserService;
 import com.huyduc.manage.service.dto.UserDTO;
-import com.huyduc.manage.web.rest.errors.EmailAlreadyUsedException;
 import com.huyduc.manage.web.rest.util.PaginationUtil;
-
+import com.huyduc.manage.web.rest.vm.RegisterUserAccountVM;
+import com.huyduc.manage.web.rest.vm.UpdateUserAccountVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -19,9 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
@@ -72,49 +69,41 @@ public class UserResource {
      * mail with an activation link.
      * The user needs to be activated on creation.
      *
-     * @param userDTO the user to create
+     * @param registerUserAccountVM the user to create
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
      * @throws URISyntaxException if the Location URI syntax is incorrect
      * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
      */
     @PostMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
-        if (userDTO.getId() != null) {
-            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
-            // Lowercase the user login before comparing with database
-        } else if (userRepository.findOneByLogin(userDTO.getLogin().toUpperCase()).isPresent()) {
-            throw new LoginAlreadyUsedException();
-        } else {
-            User newUser = userService.createUser(userDTO);
-            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert( "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
-                .body(newUser);
+    public ResponseEntity<User> createUser(@Valid @RequestBody RegisterUserAccountVM registerUserAccountVM) throws URISyntaxException {
+        try {
+            User user = userService.createUser(registerUserAccountVM, registerUserAccountVM.getPassword(), registerUserAccountVM.getRe_password());
+            return new ResponseEntity(user, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity(Collections.singletonMap("createFailed",
+                    e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
     /**
      * PUT /users : Updates an existing User.
      *
-     * @param userDTO the user to update
+     * @param updateUserAccountVM the user to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated user
      * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already in use
      * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already in use
      */
     @PutMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
-            throw new EmailAlreadyUsedException();
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UpdateUserAccountVM updateUserAccountVM) {
+        try {
+            Optional<UserDTO> updatedUser = userService.updateUser(updateUserAccountVM, updateUserAccountVM.getPassword(), updateUserAccountVM.getRe_password());
+            return ResponseEntity.ok().body(updatedUser.get());
+        } catch (Exception e) {
+            return new ResponseEntity(Collections.singletonMap("updateFailed",
+                    e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
-        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
-            throw new LoginAlreadyUsedException();
-        }
-        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-
-        return ResponseEntity.ok().body(updatedUser.get());
     }
 
     /**

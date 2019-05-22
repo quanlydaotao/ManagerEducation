@@ -41,6 +41,15 @@ const actionReducer = createReducer( initialState )( {
         return state;
     },
     [ types.UPDATE_USER_ACCOUNT ]: ( state, action ) => {
+        state = {progress: true, status: 'UPDATING', data: {}}
+        return state;
+    },
+    [ types.UPDATE_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
+        state = {progress: false, status: 'UPDATE_SUCCESS', data: {}}
+        return state;
+    },
+    [ types.UPDATE_USER_ACCOUNT_FAILED ]: ( state, action ) => {
+         state = {progress: false, status: 'UPDATE_FAILED', data: {}}
         return state;
     },
     [ types.DELETE_USER_ACCOUNT ]: ( state, action ) => {
