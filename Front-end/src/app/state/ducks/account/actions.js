@@ -51,8 +51,15 @@ export const updateUserAccount = ( dataForm ) => ( {
     }
 });
 
-export const deleteUserAccount = ( ) => ( {
-    
+export const deleteUserAccount = ( listId ) => ( {
+    type: types.DELETE_USER_ACCOUNT,
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/users",
+        method: "DELETE",
+        body: JSON.stringify(listId)
+    }
 });
 
  

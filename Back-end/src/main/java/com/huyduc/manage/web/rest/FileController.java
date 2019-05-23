@@ -1,7 +1,9 @@
 package com.huyduc.manage.web.rest;
 
-import com.huyduc.manage.config.Constants;
+import com.huyduc.manage.bean.User;
+import com.huyduc.manage.repository.UserRepository;
 import com.huyduc.manage.service.FileUploadService;
+import com.huyduc.manage.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * File controller for managing the current file upload
@@ -23,9 +26,11 @@ import java.io.IOException;
 public class FileController {
     private static final Logger log = LoggerFactory.getLogger(FileController.class);
     private final FileUploadService fileUploadService;
+    private final UserRepository userRepository;
 
-    public FileController(FileUploadService fileUploadService) {
+    public FileController(FileUploadService fileUploadService, UserRepository userRepository) {
         this.fileUploadService = fileUploadService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -60,6 +65,27 @@ public class FileController {
     @ResponseStatus(HttpStatus.OK)
     public String uploadFile(@RequestParam("image") MultipartFile image, @RequestParam("dir") String dir) {
         String resFile = fileUploadService.storeFile(image, dir);
+        return "{\"message\":\"Upload thành công!\"}";
+    }
+
+    /**
+     * POST  /update : update the file.
+     *
+     * @param image,dir the file image
+     */
+    @PutMapping(value = "/file/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public String updateFile(@RequestParam("image") MultipartFile image, @RequestParam("dir") String dir, @RequestParam("id") Long id) {
+        Optional<UserDTO> user1 = Optional.of(userRepository
+                .findById(id))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(user -> {
+
+                    log.debug("Changed Information for User: {}", user);
+                    return user;
+                }).map(UserDTO::new);
+        String resFile = fileUploadService.updateFile(image, dir, user1.get().getImageUrl());
         return "{\"message\":\"Upload thành công!\"}";
     }
 

@@ -115,7 +115,7 @@ class PopupFormEdit extends React.Component {
         this.setState({
             id: id, login: login, phoneNumber: phoneNumber, authorities: authorities,
             imageUrl: imageUrl, firstName: firstName, lastName: lastName, email: email,
-            birthday: birthday, sex: (sex === 'true' ? true : false), nations: nations, address: address, address1: address1,
+            birthday: birthday, sex: sex, nations: nations, address: address, address1: address1,
             identityCardNumber: identityCardNumber, activated: activated
         });
     }
@@ -169,7 +169,8 @@ class PopupFormEdit extends React.Component {
                     const fd = new FormData();
                     fd.append('image', this.state.image);
                     fd.append('dir', 'avatar');
-                    this.props.uploadAvatar(fd);
+                    fd.append('id', id);
+                    this.props.updateAvatar(fd);
                 }
             }
         }
@@ -290,7 +291,7 @@ class PopupFormEdit extends React.Component {
                                         {errors.re_password !== '' ? <li>{errors.re_password}</li> : ''}
                                         {errors.phone_number !== '' ? <li>{errors.phone_number}</li> : ''}
                                         {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
-                                            <li>{actions.data.response.updateFailed ? actions.data.response.updateFailed : 'Đăng ký thất bại!'}</li> : ''}
+                                            <li>{actions.data.response.updateFailed ? actions.data.response.updateFailed : 'Cập nhật thông tin thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -328,7 +329,7 @@ class PopupFormEdit extends React.Component {
                             message={
                                 <span>
                                     <ul>
-                                        {(!isShowMessageBeforeSubit && isShowMessageSuccessAfterSubit) ? <li>Tạo tài khoản thành công!</li> : ''}
+                                        {(!isShowMessageBeforeSubit && isShowMessageSuccessAfterSubit) ? <li>Cập nhật tài khoản thành công!</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -566,8 +567,8 @@ PopupFormEdit.propTypes = {
     closeForm: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
-    addNewUserAccount: PropTypes.func.isRequired,
-    uploadAvatar: PropTypes.func.isRequired,
+    updateUserAccount: PropTypes.func.isRequired,
+    updateAvatar: PropTypes.func.isRequired,
     actions: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
@@ -590,7 +591,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     closeForm: accountOperations.closeFormEdit,
     updateUserAccount: accountOperations.updateUserAccount,
-    uploadAvatar: fileOperations.uploadFile
+    updateAvatar: fileOperations.updateFile
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(PopupFormEdit));

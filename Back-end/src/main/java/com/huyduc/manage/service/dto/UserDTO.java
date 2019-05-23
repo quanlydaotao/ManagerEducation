@@ -1,8 +1,5 @@
 package com.huyduc.manage.service.dto;
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.huyduc.manage.config.Constants;
-
 import com.huyduc.manage.bean.Authority;
 import com.huyduc.manage.bean.User;
 import javax.validation.constraints.Email;
@@ -52,6 +49,8 @@ public class UserDTO {
 
     private Date birthday;
 
+    private Date dateSigned;
+
     private Boolean sex;
 
     @Size(max = 50)
@@ -82,6 +81,7 @@ public class UserDTO {
         this.phoneNumber = user.getPhoneNumber();
         this.identityCardNumber = user.getIdentityCardNumber();
         this.birthday = user.getBirthday();
+        this.dateSigned = user.getDateSigned();
         this.sex = user.getSex();
         this.nations = user.getNations();
         this.address1 = user.getAddress1();
@@ -220,6 +220,14 @@ public class UserDTO {
         this.imageUrl = imageUrl;
     }
 
+    public Date getDateSigned() {
+        return dateSigned;
+    }
+
+    public void setDateSigned(Date dateSigned) {
+        this.dateSigned = dateSigned;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -233,6 +241,7 @@ public class UserDTO {
                 ", phone_number='" + phoneNumber + '\'' +
                 ", identity_card_number='" + identityCardNumber + '\'' +
                 ", birthday=" + birthday +
+                ", dateSigned=" + dateSigned +
                 ", sex=" + sex +
                 ", nations='" + nations + '\'' +
                 ", address1='" + address1 + '\'' +

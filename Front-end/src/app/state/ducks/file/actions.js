@@ -27,3 +27,17 @@ export const getFile = ( dir , nameFile) => ({
         }
     }
 });
+
+export const updateFile = ( file ) => ({
+    type: types.UPDATE_FILE,
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/file/update",
+        method: "PUT",
+        body: file,
+        header: {
+            "Authorization": "Bearer " + localStorage.getItem('user')
+        }
+    }
+});

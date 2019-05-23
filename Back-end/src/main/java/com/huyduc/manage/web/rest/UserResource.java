@@ -1,6 +1,4 @@
 package com.huyduc.manage.web.rest;
-
-import com.huyduc.manage.config.Constants;
 import com.huyduc.manage.bean.User;
 import com.huyduc.manage.repository.UserRepository;
 import com.huyduc.manage.web.rest.errors.*;
@@ -12,7 +10,9 @@ import com.huyduc.manage.web.rest.util.PaginationUtil;
 import com.huyduc.manage.web.rest.vm.RegisterUserAccountVM;
 import com.huyduc.manage.web.rest.vm.UpdateUserAccountVM;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,13 +109,12 @@ public class UserResource {
     /**
      * GET /users : get all users.
      *
-     * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
     @GetMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        final Page<UserDTO> page = userService.getAllManagedUsers(PageRequest.of(0, 10000000, Sort.by("id").descending()));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -144,13 +143,13 @@ public class UserResource {
     /**
      * DELETE /users/:login : delete the "login" User.
      *
-     * @param login the login of the user to delete
+     * @param ids the list id of the user to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
+    @DeleteMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> deleteUser(@PathVariable String login) {
-        userService.deleteUser(login);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "A user is deleted with identifier " + login, login)).build();
+    public ResponseEntity<Void> deleteUser(@RequestBody List<Long> ids) {
+        userService.deleteUser(ids);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "Delete success!", "")).build();
     }
 }

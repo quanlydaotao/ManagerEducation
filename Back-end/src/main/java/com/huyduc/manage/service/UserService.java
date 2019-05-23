@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -138,7 +140,9 @@ public class UserService {
         newUser.setLogin(userDTO.getLogin());
         // new user gets initially a generated password
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setPassword(encryptedPassword);;
+        newUser.setPassword(encryptedPassword);
+
+        newUser.setDateSigned(new Date((new java.util.Date()).getTime()));
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
@@ -252,10 +256,12 @@ public class UserService {
             .map(UserDTO::new);
     }
 
-    public void deleteUser(String login) {
-        userRepository.findOneByLogin(login).ifPresent(user -> {
-            userRepository.delete(user);
-            log.debug("Deleted User: {}", user);
+    public void deleteUser(List<Long> ids) {
+        ids.forEach(id -> {
+            userRepository.findById(id).ifPresent(user -> {
+                userRepository.delete(user);
+                log.debug("Deleted User: {}", user);
+            });
         });
     }
 

@@ -55,66 +55,74 @@ const toolbarStyles = theme => ({
     },
 });
 
-let EnhancedTableToolBar = props => {
-    const { numSelected, classes, listName } = props;
-    return (
-        <Toolbar
-            className={classNames(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}
-        >
-            <div className={classes.title} >
-                {numSelected > 0 ? (
-                    <Typography color="default" style={{ fontSize: 14 }} variant="subtitle1">
-                        {numSelected} row(s) selected
-            </Typography>
-                ) : (
-                        <Typography variant="h6" style={{ fontSize: 14 }} id="tableTitle">
-                            <BallotIcon /> {listName}
-            </Typography>
-                    )}
-            </div>
-            <div className={classes.spacer} />
-            <div className={classes.actions}>
-                {numSelected > 0 ? (
-                    <Tooltip title="Xóa">
-                        <Button variant="contained" color="secondary" className={classes.button}>
-                            Xóa danh sách <DeleteIcon className={classes.rightIcon} />
-                        </Button>
-                    </Tooltip>
-                ) : (
-                        <div>
-                            <Tooltip title="Tìm kiếm">
-                                <IconButton aria-label="Tìm kiếm">
-                                    <SearchIcon />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Tải xuống danh sách excel">
-                                <IconButton aria-label="Tải xuống danh sách excel">
-                                    <GetAppIcon />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="In danh sách">
-                                <IconButton aria-label="In danh sách">
-                                    <PrintIcon />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Lọc danh sách">
-                                <IconButton aria-label="Lọc danh sách">
-                                    <FilterListIcon />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Upload">
-                                <Button variant="contained" color="inherit" className={classes.button}>
-                                    Upload
-                                    <CloudUploadIcon className={classes.rightIcon} />
-                                </Button>
-                            </Tooltip>
-                        </div>
-                    )}
-            </div>
-        </Toolbar>
-    );
+class EnhancedTableToolBar extends React.Component {
+
+
+    handleDelete = () => {
+        this.props.actionDelete();
+    }
+
+    render() {
+        const { numSelected, classes, listName } = this.props;
+        return (
+            <Toolbar
+                className={classNames(classes.root, {
+                    [classes.highlight]: numSelected > 0,
+                })}
+            >
+                <div className={classes.title} >
+                    {numSelected > 0 ? (
+                        <Typography color="default" style={{ fontSize: 14 }} variant="subtitle1">
+                            {numSelected} row(s) selected
+                </Typography>
+                    ) : (
+                            <Typography variant="h6" style={{ fontSize: 14 }} id="tableTitle">
+                                <BallotIcon /> {listName}
+                </Typography>
+                        )}
+                </div>
+                <div className={classes.spacer} />
+                <div className={classes.actions}>
+                    {numSelected > 0 ? (
+                        <Tooltip title="Xóa">
+                            <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleDelete}>
+                                Xóa danh sách <DeleteIcon className={classes.rightIcon} />
+                            </Button>
+                        </Tooltip>
+                    ) : (
+                            <div>
+                                <Tooltip title="Tìm kiếm">
+                                    <IconButton aria-label="Tìm kiếm">
+                                        <SearchIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Tải xuống danh sách excel">
+                                    <IconButton aria-label="Tải xuống danh sách excel">
+                                        <GetAppIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="In danh sách">
+                                    <IconButton aria-label="In danh sách">
+                                        <PrintIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Lọc danh sách">
+                                    <IconButton aria-label="Lọc danh sách">
+                                        <FilterListIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Upload">
+                                    <Button variant="contained" color="inherit" className={classes.button}>
+                                        Upload
+                                        <CloudUploadIcon className={classes.rightIcon} />
+                                    </Button>
+                                </Tooltip>
+                            </div>
+                        )}
+                </div>
+            </Toolbar>
+        );
+    }
 };
 
 EnhancedTableToolBar.propTypes = {

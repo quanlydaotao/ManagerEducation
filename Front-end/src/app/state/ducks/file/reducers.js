@@ -27,6 +27,17 @@ const fileReducer = createReducer( {} )( {
         console.log('get failed!');
         return state;
     },
+    [ types.UPDATE_FILE ]: ( state, action ) => {
+        return state;
+    },
+    [ types.UPDATE_FILE_COMPLETED ]: ( state, action ) => {
+        console.log('update completed!');
+        return state;
+    },
+    [ types.UPDATE_FILE_FAILED ]: ( state, action ) => {
+        console.log('update failed!');
+        return state;
+    },
 });
 
 export default combineReducers( {

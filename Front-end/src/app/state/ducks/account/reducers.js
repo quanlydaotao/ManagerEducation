@@ -49,10 +49,18 @@ const actionReducer = createReducer( initialState )( {
         return state;
     },
     [ types.UPDATE_USER_ACCOUNT_FAILED ]: ( state, action ) => {
-         state = {progress: false, status: 'UPDATE_FAILED', data: {}}
+        state = {progress: false, status: 'UPDATE_FAILED', data: action.payload}
         return state;
     },
     [ types.DELETE_USER_ACCOUNT ]: ( state, action ) => {
+        return state;
+    },
+    [ types.DELETE_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
+        state = {progress: false, status: 'DELETE_SUCCESS', data: {}}
+        return state;
+    },
+    [ types.DELETE_USER_ACCOUNT_FAILED ]: ( state, action ) => {
+        state = {progress: false, status: 'DELETE_FAILED', data: action.payload}
         return state;
     }
 });
@@ -67,8 +75,6 @@ const toggleEditAccountReducer = createReducer( false )( {
         return state;
     }
 });
-
-
 
 
 export default combineReducers( {

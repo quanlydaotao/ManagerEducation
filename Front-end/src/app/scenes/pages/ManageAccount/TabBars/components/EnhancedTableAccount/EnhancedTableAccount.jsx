@@ -22,8 +22,7 @@ import { EnhancedTableToolBar } from '../../../../../components/EnhancedTableToo
 import { ImageAvatars } from '../../../../../components/ImageAvatars';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
-import { NavLink } from 'react-router-dom';
-import { PopupFormEdit } from '../../../PopupFormEdit';
+import { PopupFormEdit } from '../../../../../components/Popup/PopupFormEdit';
 
 const rows = [
     { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
@@ -34,6 +33,7 @@ const rows = [
     { id: 'phone_number', numeric: false, disablePadding: false, label: 'Số điện thoại' },
     { id: 'authorities', numeric: false, disablePadding: false, label: 'Loại tài khoản' },
     { id: 'activated', numeric: false, disablePadding: false, label: 'Trạng thái' },
+    { id: 'dateSigned', numeric: false, disablePadding: false, label: 'Ngày đăng ký' },
     { id: 'edit', numeric: false, disablePadding: false, label: 'Tác vụ' }
 ]
 
@@ -147,6 +147,10 @@ class EnhancedTableAccount extends React.Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
+    handleDelete = (param) => {
+        this.props.deleteUserAccount(this.state.selected);
+    }
+
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
@@ -154,8 +158,8 @@ class EnhancedTableAccount extends React.Component {
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
         return (
             <Paper className={classes.root}>
-                {accountById.id ? <PopupFormEdit data={accountById}/> : ''}
-                <EnhancedTableToolBar numSelected={selected.length} listName={listName} />
+                 {accountById.id ? <PopupFormEdit data={accountById}/> : ''}
+                <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete}/>
                 <hr className="tall" />
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
@@ -229,6 +233,9 @@ class EnhancedTableAccount extends React.Component {
                                                         />}
                                                 </TableCell>
                                                 <TableCell className="cell">
+                                                    {n.dateSigned || <Skeleton />}
+                                                </TableCell>
+                                                <TableCell className="cell">
                                                     <Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }} 
                                                             title="Chỉnh sửa thông tin tài khoản">
                                                         <LaunchIcon />
@@ -249,7 +256,7 @@ class EnhancedTableAccount extends React.Component {
                     </Table>
                 </div>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
+                    rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
                     component="div"
                     count={accounts.length}
                     rowsPerPage={rowsPerPage}
@@ -274,7 +281,8 @@ EnhancedTableAccount.propTypes = {
     accounts: PropTypes.arrayOf(accountShape).isRequired,
     getAllUserAccount: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
-    findAccountById: PropTypes.func.isRequired
+    findAccountById: PropTypes.func.isRequired,
+    deleteUserAccount: PropTypes.func.isRequired
 };
 
 EnhancedTableAccount.defaultProps = {
@@ -289,7 +297,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     getAllUserAccount: accountOperations.getAllUserAccount,
     openForm: accountOperations.openFormEdit,
-    findAccountById: accountOperations.getUserAccountById
+    findAccountById: accountOperations.getUserAccountById,
+    deleteUserAccount: accountOperations.deleteUserAccount
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableAccount));

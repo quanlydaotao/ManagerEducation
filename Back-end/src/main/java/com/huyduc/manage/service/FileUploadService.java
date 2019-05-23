@@ -39,22 +39,7 @@ public class FileUploadService {
     public String storeFile(MultipartFile file, String locale) {
         String fileName = StringUtils.cleanPath(hashFileName(file.getOriginalFilename()));
         if (!checkExtensionFile(fileName)) throw new FileStorageException();
-        try {
-            Path fp = Paths.get("" + ROOT_PATCH_UPLOAD.resolve(locale));
-            if (!Files.exists(ROOT_PATCH_UPLOAD)) {
-                Files.createDirectory(ROOT_PATCH_UPLOAD);
-            }
-            if (!Files.exists(fp)) {
-                Files.createDirectory(fp);
-            }
-            Path pathSaveFile = fp.resolve(hashFileName(file.getOriginalFilename()));
-            Files.copy(file.getInputStream(), pathSaveFile, StandardCopyOption.REPLACE_EXISTING);
-            log.debug("FileName: {}", fileName);
-            return fileName;
-        } catch (IOException e) {
-            log.error("Create directory failed!: ", fileName);
-            throw new FileStorageException();
-        }
+        return store(fileName, locale, file);
     }
 
     /**
@@ -79,6 +64,46 @@ public class FileUploadService {
             throw new FileNotFoundException(fileName);
         }
     }
+
+
+    /**
+     * update file in the store
+     *
+     * @param file,locale save store file
+     * @return file name
+     */
+    public String updateFile(MultipartFile file, String locale, String fileDB) {
+        String fileName = StringUtils.cleanPath(hashFileName(file.getOriginalFilename()));
+        if (!checkExtensionFile(fileName)) throw new FileStorageException();
+        Path fd = Paths.get("" + ROOT_PATCH_UPLOAD.resolve(locale+"\\"+fileDB));
+        try {
+            Files.deleteIfExists(fd);
+        } catch (IOException e) {
+            log.error("Update directory failed!: ", fileName);
+            throw new FileStorageException();
+        }
+        return store(fileName, locale, file);
+    }
+
+    private String store(String fileName, String locale, MultipartFile file) {
+        try {
+            Path fp = Paths.get("" + ROOT_PATCH_UPLOAD.resolve(locale));
+            if (!Files.exists(ROOT_PATCH_UPLOAD)) {
+                Files.createDirectory(ROOT_PATCH_UPLOAD);
+            }
+            if (!Files.exists(fp)) {
+                Files.createDirectory(fp);
+            }
+            Path pathSaveFile = fp.resolve(hashFileName(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), pathSaveFile, StandardCopyOption.REPLACE_EXISTING);
+            log.debug("FileName: {}", fileName);
+            return fileName;
+        } catch (IOException e) {
+            log.error("Create directory failed!: ", fileName);
+            throw new FileStorageException();
+        }
+    }
+
 
     private String hashFileName(String fileName) {
         if (!fileName.isEmpty()) {

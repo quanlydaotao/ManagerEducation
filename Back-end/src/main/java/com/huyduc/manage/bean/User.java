@@ -102,6 +102,9 @@ public class User implements Serializable {
     @Column(name = "address1", length = 254)
     private String address1;
 
+    @Column(name = "date_signed")
+    private Date dateSigned;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -269,6 +272,14 @@ public class User implements Serializable {
         this.address1 = address1;
     }
 
+    public Date getDateSigned() {
+        return dateSigned;
+    }
+
+    public void setDateSigned(Date dateSigned) {
+        this.dateSigned = dateSigned;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -307,6 +318,7 @@ public class User implements Serializable {
                 ", birthday=" + birthday +
                 ", sex=" + sex +
                 ", nations='" + nations + '\'' +
+                ", date_signed'" + dateSigned  +
                 ", address1='" + address1 + '\'' +
                 ", authorities=" + authorities +
                 '}';
