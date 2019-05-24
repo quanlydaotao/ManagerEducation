@@ -2,7 +2,6 @@ package com.huyduc.manage.web.rest;
 import com.huyduc.manage.bean.User;
 import com.huyduc.manage.repository.UserRepository;
 import com.huyduc.manage.web.rest.errors.*;
-import com.huyduc.manage.web.rest.util.HeaderUtil;
 import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.service.UserService;
 import com.huyduc.manage.service.dto.UserDTO;
@@ -11,7 +10,6 @@ import com.huyduc.manage.web.rest.vm.RegisterUserAccountVM;
 import com.huyduc.manage.web.rest.vm.UpdateUserAccountVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * REST controller for managing users.
@@ -148,8 +147,10 @@ public class UserResource {
      */
     @DeleteMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> deleteUser(@RequestBody List<Long> ids) {
-        userService.deleteUser(ids);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "Delete success!", "")).build();
+    public ResponseEntity<AtomicInteger> deleteUser(@RequestBody List<Long> ids) {
+        AtomicInteger count = userService.deleteUser(ids);
+        if (count.get() <= 0)
+            return ResponseEntity.badRequest().body(count);
+        return ResponseEntity.ok().body(count);
     }
 }

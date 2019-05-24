@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import styles from './styles.css';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { accountShape } from '../../../../../propTypes';
-import { accountOperations } from '../../../../../../state/ducks/account';
-import { fileOperations } from '../../../../../../state/ducks/file';
+import { accountShape } from '../../../../propTypes';
+import { accountOperations } from '../../../../../state/ducks/account';
+import { fileOperations } from '../../../../../state/ducks/file';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
 import amber from '@material-ui/core/colors/amber';
@@ -298,7 +298,7 @@ class FormSign extends Component {
             <DocumentTitle title={document.title === '.:Quản lý tài khoản:.' ? '.:Thêm mới tài khoản:.' : ''}>
                 <div className={`${styles.formSign}`}>
                     {alert()}
-                    <h3>ĐĂNG KÝ TÀI KHOẢN ĐĂNG NHẬP HỆ THỐNG</h3>
+                    <h3>Đăng ký tài khoản đăng nhập hệ thống</h3>
                     <div>
                         <div><b>Chú ý:</b></div>
                         <ul>
@@ -313,7 +313,7 @@ class FormSign extends Component {
                         <form onSubmit={this.handleSubmit} encType="multipart/form-data">
                             <div className="row">
                                 <div className="col-md-4">
-                                    <h2 className="titleForm">THÔNG TIN ĐĂNG KÝ TÀI KHOẢN</h2>
+                                    <h2 className="titleForm">Thông tin đăng ký tài khoản ( Bắt buộc )</h2>
                                     <label htmlFor="login"><b>Mã đăng nhập: (*)</b></label>
                                     <input type="text" pattern="(AD|PH|GV|HV)+([0-9]{5})\b" minLength="7" maxLength="50" onChange={this.handleChange} placeholder="VD: AD88901, GV67834, PH09813, HV00001..." name="login" required />
                                     <label htmlFor="password"><b>Mật khẩu: (*)</b></label>
@@ -355,7 +355,7 @@ class FormSign extends Component {
                                     </div>
                                 </div>
                                 <div className="col-md-8">
-                                    <h2 className="titleForm">HOÀN THÀNH THÔNG TIN CÁ NHÂN</h2>
+                                    <h2 className="titleForm">Thông tin cá nhân ( Không bắt buộc )</h2>
                                     <div className="row">
                                         <div className="col-md-3">
                                             <div className="avatarUpload">

@@ -10,7 +10,7 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import HomeIcon from '@material-ui/icons/Home';
 import ShopTwoIcon from '@material-ui/icons/ShopTwo';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import FingerPrintIcon from '@material-ui/icons/FingerPrint';
+import FingerPrintIcon from '@material-ui/icons/Fingerprint';
 import EuroSymbolIcon from '@material-ui/icons/EuroSymbol';
 import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import { NavLink } from 'react-router-dom';

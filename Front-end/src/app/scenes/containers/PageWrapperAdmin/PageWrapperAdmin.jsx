@@ -10,14 +10,14 @@ const PageWrapperAdmin = () => {
     return (
         <React.Fragment>
             <Header />
-            <div className={`${styles.main} container-fluid`} style={{ paddingLeft: 0 }}>
+            <Breadcumbs />
+            <div className={`${styles.main} container-fluid`}>
                 <div className="row">
                     <div className="col-lg-3 col-md-2">
                         <VerticalMenuAdmin />
                     </div>
                     <div className="col-lg-9 col-md-10">
-                        <Breadcumbs breadcums="Trang chủ" />
-                        <div style={{ marginTop: 10 }}>
+                        <div style={{ marginTop: 0 }}>
                             <Suspense fallback={<div>Loading...</div>}>
                                 {
                                     routes.map(route => (

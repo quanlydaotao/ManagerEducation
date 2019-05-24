@@ -1,0 +1,2 @@
+export const OPEN_POPUP_DELETE = "popup/OPEN_POPUP_DELETE";
+export const CLOSE_POPUP_DELETE = "popup/CLOSE_POPUP_DELETE";

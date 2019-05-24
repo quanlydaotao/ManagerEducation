@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,15 +14,16 @@ import Chip from '@material-ui/core/Chip';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { connect } from 'react-redux';
-import noavatar from './images/no_avatar.jpg';
-import { accountShape } from '../../../../../propTypes';
-import { accountOperations } from '../../../../../../state/ducks/account';
-import { EnhancedTableHead } from '../../../../../components/EnhancedTableHead';
-import { EnhancedTableToolBar } from '../../../../../components/EnhancedTableToolBar';
-import { ImageAvatars } from '../../../../../components/ImageAvatars';
+import { accountShape } from '../../../../propTypes';
+import { accountOperations } from '../../../../../state/ducks/account';
+import { popupOperations } from '../../../../../state/ducks/popup';
+import { EnhancedTableHead } from '../../../../components/Table/EnhancedTableHead';
+import { EnhancedTableToolBar } from './components/EnhancedTableToolBar';
+import { ImageAvatars } from '../../../../components/ImageAvatars';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
-import { PopupFormEdit } from '../../../../../components/Popup/PopupFormEdit';
+import { PopupFormEdit } from '../../../../components/Popup/PopupFormEdit';
+import { PopupDelete } from '../../../../components/Popup/PopupDelete';
 
 const rows = [
     { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
@@ -65,6 +66,7 @@ const style = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing.unit * 3,
+        boxShadow: 'none'
     },
     table: {
         minWidth: 1020,
@@ -78,7 +80,7 @@ const style = theme => ({
     },
 });
 
-class EnhancedTableAccount extends React.Component {
+class EnhancedTableYear extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -148,6 +150,10 @@ class EnhancedTableAccount extends React.Component {
     };
 
     handleDelete = (param) => {
+        this.props.openPopupDelete();
+    }
+
+    deleteData = (param) => {
         this.props.deleteUserAccount(this.state.selected);
     }
 
@@ -158,8 +164,20 @@ class EnhancedTableAccount extends React.Component {
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
         return (
             <Paper className={classes.root}>
-                 {accountById.id ? <PopupFormEdit data={accountById}/> : ''}
+                {accountById.id ? <PopupFormEdit data={accountById}/> : ''}
+                <PopupDelete delete={this.deleteData} />
                 <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete}/>
+                <div style={{padding: '10px 0 15px 24px'}} className="message">
+                    <div>
+                        <b>Chú ý:</b>
+                    </div>
+                    <ul>
+                        <li>- Danh sách dưới bao gồm các năm học trong chương trình đào tạo.</li>
+                        <li>- Mỗi năm học sẽ có các lớp được mở tương ứng.</li>
+                        <li>- Khi kết thúc năm học bạn có thể đóng năm học đó lại thay vì xóa.</li>
+                        <li>- Trong trường hợp muốn xóa năm học, bạn hãy chắc chắn rằng muốn xóa tất cả dữ liệu trong năm học và không thể khôi phục.</li>
+                    </ul>
+                </div>
                 <hr className="tall" />
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
@@ -172,7 +190,7 @@ class EnhancedTableAccount extends React.Component {
                             rowCount={accounts.length}
                             rows={rows}
                         />
-                        <TableBody>
+                        <TableBody style={{backgroundColor: '#fafafa'}}>
                             {stableSort(accounts, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
@@ -192,7 +210,7 @@ class EnhancedTableAccount extends React.Component {
                                                 </TableCell>
                                                 <TableCell className="cell">
                                                     <LazyLoad height={60}>
-                                                        <ImageAvatars url={n.imageUrl !== '' ? `http://localhost:8080/api/file/avatar/${n.imageUrl}` : noavatar} />
+                                                        <div>xxx</div>
                                                     </LazyLoad>
                                                 </TableCell>
                                                 <TableCell className="cell">
@@ -275,7 +293,7 @@ class EnhancedTableAccount extends React.Component {
     }
 }
 
-EnhancedTableAccount.propTypes = {
+EnhancedTableYear.propTypes = {
     classes: PropTypes.object.isRequired,
     listName: PropTypes.string.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
@@ -285,7 +303,7 @@ EnhancedTableAccount.propTypes = {
     deleteUserAccount: PropTypes.func.isRequired
 };
 
-EnhancedTableAccount.defaultProps = {
+EnhancedTableYear.defaultProps = {
     accounts: []
 }
 
@@ -298,7 +316,8 @@ const mapDispatchToProps = {
     getAllUserAccount: accountOperations.getAllUserAccount,
     openForm: accountOperations.openFormEdit,
     findAccountById: accountOperations.getUserAccountById,
-    deleteUserAccount: accountOperations.deleteUserAccount
+    deleteUserAccount: accountOperations.deleteUserAccount,
+    openPopupDelete: popupOperations.openPopupDelete
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableAccount));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableYear));

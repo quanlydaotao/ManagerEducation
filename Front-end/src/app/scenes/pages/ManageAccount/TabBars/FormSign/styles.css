@@ -2,6 +2,9 @@
     width: 100%;
     display: inline-block;
     padding: 15px 24px 30px 24px;
+    background-color: #fff;
+    margin-top: 25px;
+    border-radius: 4px;
 }
 
 .formSign label {
@@ -11,10 +14,11 @@
 
 .formSign h3 {
     margin-bottom: 30px;
-    padding: 13px;
+    padding: 10px;
     text-align: center;
     background-color: #455e6b;
     font-weight: 300;
     color: #ffffff;
-    font-size: 28px;
+    border-radius: 4px;
+    font-size: 22px;
 }

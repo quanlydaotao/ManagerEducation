@@ -12,7 +12,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const style = theme => ({
     root: {
-        padding: theme.spacing.unit,
+        padding: '8px 18px',
+        borderRadius: '0'
     },
     chip: {
         backgroundColor: theme.palette.grey[100],
@@ -53,9 +54,10 @@ class Breadcumbs extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <Paper className={classes.root} style={{marginTop: 10}}>
+            <Paper className={classes.root} style={{marginBottom: 15}}>
             <Breadcrumbs arial-label="Breadcrumb">
             <StyledBreadcrumb
+            className={`${styles.itemBreadcums}`}
             component="a"
             href="#"
             label="Trang chủ"Ba
@@ -66,8 +68,9 @@ class Breadcumbs extends Component {
             }
             onClick={handleClick}
             />
-            <StyledBreadcrumb component="a" href="#" label="Quản lý tài khoản" onClick={handleClick} />
+            <StyledBreadcrumb className={`${styles.itemBreadcums}`} component="a" href="#" label="Quản lý tài khoản" onClick={handleClick} />
             <StyledBreadcrumb
+            className={`${styles.itemBreadcums}`}
             label="Đăng ký tài khoản"
             deleteIcon={<ExpandMoreIcon />}
             onClick={handleClick}

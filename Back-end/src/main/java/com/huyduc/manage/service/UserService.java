@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -256,13 +257,16 @@ public class UserService {
             .map(UserDTO::new);
     }
 
-    public void deleteUser(List<Long> ids) {
+    public AtomicInteger deleteUser(List<Long> ids) {
+        AtomicInteger count = new AtomicInteger();
         ids.forEach(id -> {
             userRepository.findById(id).ifPresent(user -> {
                 userRepository.delete(user);
+                count.getAndIncrement();
                 log.debug("Deleted User: {}", user);
             });
         });
+        return count;
     }
 
     public void changePassword(String currentClearTextPassword, String newPassword) {

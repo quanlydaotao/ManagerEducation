@@ -5,13 +5,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import styles from './styles.css';
-import ViewListIcon from '@material-ui/icons/ViewListRounded';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ContactsIcon from '@material-ui/icons/Contacts';
+import HowToRegIcon from '@material-ui/icons/HowToReg';
 import Typography from '@material-ui/core/Typography';
 import LazyLoad from 'react-lazyload';
 import { NavLink, Route } from 'react-router-dom';
-const FormSign = React.lazy(() => import('./components/FormSign/FormSign'));
-const EnhancedTableAccount = React.lazy(() => import('./components/EnhancedTableAccount/EnhancedTableAccount'));
+const FormSign = React.lazy(() => import('./FormSign/FormSign'));
+const EnhancedTableAccount = React.lazy(() => import('./EnhancedTableAccount/EnhancedTableAccount'));
 
 
 function TabContainer(props) {
@@ -28,8 +28,7 @@ TabContainer.propTypes = {
 
 const style = theme => ({
     root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
+        flexGrow: 1
     },
 });
 
@@ -52,13 +51,12 @@ class TabBars extends React.Component {
                 {/* {value === 'one' && */}
                 <div className={`${styles.appBar}`}>
                     <NavLink to="/administrator/account">
-                        <ViewListIcon /> DANH SÁCH CHI TIẾT TÀI KHOẢN
+                        <ContactsIcon /> DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP
                     </NavLink>
                     <NavLink to="/administrator/account/add-new">
-                        <PersonAddIcon /> THÊM MỚI TÀI KHOẢN
+                        <HowToRegIcon /> THÊM MỚI TÀI KHOẢN
                     </NavLink>
                 </div>
-                <hr className="tall" />
                 <Route exact path="/administrator/account" render={() => (
                     <LazyLoad>
                         <TabContainer>

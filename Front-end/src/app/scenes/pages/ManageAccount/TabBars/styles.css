@@ -6,14 +6,16 @@
     width: 100%;
     display: block;
     height: 100%;
+    background-color: #fff;
+    border-radius: 4px;
 }
 
 .appBar a {
     height: 100%;
     display: inline-block;
     font-weight: 600;
-    color: #333;
-    padding: 15px 25px;
+    color: #455e6b;
+    padding: 19px 25px 15px;
 }
 
 .appBar a:hover {

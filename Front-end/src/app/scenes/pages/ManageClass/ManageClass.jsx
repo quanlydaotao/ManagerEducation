@@ -1,14 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
+import DocumentTitle from 'react-document-title';
+import { TabBars } from './TabBars';
 
 class ManageClass extends Component {
-    componentDidMount() {
-        document.title = '.:Quản lý lớp học:.';
-    }
     render() {
         return (
-            <div className={`${styles.mainManageClass}`}>
-            </div>
+        	<DocumentTitle title='.:Quản lý lớp học:.'>
+                <React.Fragment>
+    	            <div className={`${styles.mainManageClass}`}>
+    					<TabBars />
+    	            </div>
+                </React.Fragment>
+            </DocumentTitle>
         );
     }
 }

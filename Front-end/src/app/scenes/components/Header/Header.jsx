@@ -28,7 +28,6 @@ const style = theme => ({
     },
     menuButton: {
         marginLeft: -12,
-        marginRight: 20,
     },
     title: {
         display: 'none',
@@ -72,7 +71,7 @@ const style = theme => ({
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
-            width: 360,
+            width: 535
         },
     },
     sectionDesktop: {
@@ -168,15 +167,12 @@ class Header extends React.Component {
         return (
             <div className={classes.root} className={`${styles.headerMain}`}>
                 <AppBar position="static" style={{backgroundColor: '#455e6b'}}>
-                    <Toolbar style={{minHeight: 57}}>
-                        {/* <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+                    <Toolbar style={{minHeight: 51}}>
+                        <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
                             <MenuIcon />
-                        </IconButton> */}
-                        <Typography className={classes.title} variant="div" color="inherit" noWrap>
-                            <Logo />
-                        </Typography>
-                        <Typography className={classes.title} variant="h6" color="inherit" noWrap style={{margin: '0px 14px'}}> 
-                            HỆ THỐNG QUẢN LÝ ĐÀO TẠO CMS
+                        </IconButton>
+                        <Typography className={classes.title} variant="h6" color="inherit" noWrap style={{margin: '0px 14px', fontWeight: '100'}}> 
+                            <b>Google</b> Admin
                         </Typography>
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>

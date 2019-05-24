@@ -10,10 +10,10 @@ const TopMenu = () => {
             <div style={{float: 'left'}}>
                 <ul className={`${styles.detailtAccount}`}>
                     <li>
-                        <i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Đào Huy Đức
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; <b>Người dùng</b>: Đào Huy Đức
                     </li>
                     <li>
-                        <i class="fa fa-id-card" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Administrator
+                        <i class="fa fa-id-card" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; <b>Chức vụ</b>: Administrator
                     </li>
                 </ul>
             </div>

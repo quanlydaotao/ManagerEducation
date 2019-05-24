@@ -22,7 +22,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import { accountShape } from '../../../propTypes';
 import { fileOperations } from '../../../../state/ducks/file';
 import ScreenLockRotationIcon from '@material-ui/icons/ScreenLockRotation';
-import PhoneLinkRingIcon from '@material-ui/icons/PhoneLinkRing';
+import PhoneLinkRingIcon from '@material-ui/icons/PhonelinkRing';
 import NaturePeopleIcon from '@material-ui/icons/NaturePeople';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import Snackbar from '@material-ui/core/Snackbar';

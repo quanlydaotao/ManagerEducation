@@ -10343,6 +10343,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     padding: 11px;
     font-size: 15px;
     color: white;
+    font-weight: 300;
     background-color: #566e7a;
     border-radius: 4px;
     text-align: center;
@@ -10456,6 +10457,18 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     background-position: center;
 }
 
-
 /* END CONTENT_FORM */
+
+
+/* ENHANCEDTABLE */
+.message {
+    background-color: #f7f7f7;
+    margin: 7px 15px;
+}
+.message ul li {
+    line-height: 25px;
+    color: #8e8e8e;
+    font-size: 13px;
+}
+/* END-ENHANCEDTABLE */
 

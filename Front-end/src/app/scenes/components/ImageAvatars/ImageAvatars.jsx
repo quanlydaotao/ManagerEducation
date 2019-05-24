@@ -9,16 +9,16 @@ const styles = {
         margin: 10,
     },
     bigAvatar: {
-        margin: 10,
-        width: 60,
-        height: 60,
+        margin: '6px 0',
+        width: 50,
+        height: 50,
     },
 };
 
 function ImageAvatars(props) {
     const { classes, url } = props;
     return (
-        <Grid container justify="center" alignItems="center">
+        <Grid container>
             <Avatar alt="Remy Sharp" src={url} className={classes.bigAvatar} />
         </Grid>
     );
