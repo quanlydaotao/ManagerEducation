@@ -29,7 +29,7 @@ class PopupDelete extends React.Component {
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             Sau khi xóa, tất cả dữ liệu sẽ bị xóa vĩnh viễn và không thể khôi phục. Bạn hãy chắc
-                            chắn rằng các trường thông tin bạn đã chọn là những trường mà bạn sẽ xóa.
+                            chắn rằng các trường thông tin bạn đã chọn là những trường mà bạn muốn xóa.
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>

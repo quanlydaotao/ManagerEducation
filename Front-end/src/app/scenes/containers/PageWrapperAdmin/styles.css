@@ -1,6 +1,12 @@
 .main {
-    width: 100%;
     height: 100%;
     background-color: #fafafa;
 }
+
+.mainWrapper input {
+    font-size: 13px;
+    padding-top: 6px;
+    padding-bottom: 7px;
+}
+
 

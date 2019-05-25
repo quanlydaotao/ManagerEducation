@@ -1,36 +1,75 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import styles from './styles.css';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { withStyles } from '@material-ui/core/styles';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import QueuePlayNextIcon from '@material-ui/icons/QueuePlayNext';
+import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import AddIcon from '@material-ui/icons/Add';
+import { NavLink } from 'react-router-dom';
 
-const useStyles = makeStyles({
-  root: {
-    width: 500,
-  },
+const style = theme => ({
+    root: {
+        width: '100%',
+        backgroundColor: theme.palette.background.paper,
+        marginTop: 24,
+    },
+    nested: {
+        paddingLeft: theme.spacing.unit * 4,
+    },
+    conf: {
+        fontSize: 13,
+        fontWeight: 'bold',
+        color: '#455e6b'
+    }
 });
 
-function ActionBar() {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+class ActionBar extends React.Component {
+    render() {
+        const { classes } = this.props;
 
-  return (
-    <BottomNavigation
-      value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
-      showLabels
-      className={classes.root}
-    >
-      <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-      <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-      <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-    </BottomNavigation>
-  );
+        return (
+            <List
+                component="nav"
+                subheader={<div style={{
+                    padding: '0px 10px 15px', fontWeight: 'bold',
+                    color: '#455e6b'
+                }}>DANH SÁCH TÁC VỤ</div>}
+                className={classes.root}
+            >
+                <ListItem component={NavLink} to="/administrator/class" button activeClassName={`${styles.active}`}>
+                    <ListItemIcon>
+                        <ListAltIcon />
+                    </ListItemIcon>
+                    <ListItemText inset primary="DANH SÁCH NĂM HỌC" classes={{ primary: classes.conf }} />
+                    <AddIcon />
+                </ListItem>
+                <ListItem component={NavLink} to="#" button>
+                    <ListItemIcon>
+                        <QueuePlayNextIcon />
+                    </ListItemIcon>
+                    <ListItemText inset primary="THÊM NĂM HỌC MỚI" classes={{ primary: classes.conf }} />
+                    <AddIcon />
+                </ListItem>
+                <ListItem component={NavLink} to="#" button>
+                    <ListItemIcon>
+                        <InsertChartOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText inset primary="THỐNG KÊ DỮ LIỆU" classes={{ primary: classes.conf }} />
+                    <AddIcon />
+                </ListItem>
+            </List>
+        );
+    }
 }
 
-export default ActionBar;
+ActionBar.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(style)(ActionBar);

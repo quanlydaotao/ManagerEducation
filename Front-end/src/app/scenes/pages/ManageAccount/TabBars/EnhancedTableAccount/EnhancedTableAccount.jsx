@@ -68,7 +68,8 @@ const style = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing.unit * 3,
-        boxShadow: 'none'
+        boxShadow: 'none',
+        padding: '0 24px'
     },
     table: {
         minWidth: 1020,
@@ -179,7 +180,6 @@ class EnhancedTableAccount extends React.Component {
                         <li>- Khi muốn thay đổi các thông tin hoặc xóa tài khoản, hãy chắc chắn rằng bạn muốn thực hiện điều đó và tất cả dữ liệu sẽ không thể khôi phục.</li>
                     </ul>
                 </div>
-                <hr className="tall" />
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <EnhancedTableHead
@@ -191,7 +191,7 @@ class EnhancedTableAccount extends React.Component {
                             rowCount={accounts.length}
                             rows={rows}
                         />
-                        <TableBody style={{backgroundColor: '#fafafa'}}>
+                        <TableBody>
                             {stableSort(accounts, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
@@ -266,7 +266,7 @@ class EnhancedTableAccount extends React.Component {
                                 })}
                             {accounts.length <= 0 && (
                                 <TableRow>
-                                    <TableCell colSpan={10}>
+                                    <TableCell colSpan={11}>
                                         <Skeleton count={10} height={60} duration={2} />
                                     </TableCell>
                                 </TableRow>

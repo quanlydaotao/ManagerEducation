@@ -10463,7 +10463,8 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 /* ENHANCEDTABLE */
 .message {
     background-color: #f7f7f7;
-    margin: 7px 15px;
+    margin-bottom: 5px;
+    border-radius: 5px;
 }
 .message ul li {
     line-height: 25px;

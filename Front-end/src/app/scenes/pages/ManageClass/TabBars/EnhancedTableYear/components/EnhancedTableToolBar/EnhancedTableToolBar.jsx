@@ -17,17 +17,18 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 
 const toolbarStyles = theme => ({
     root: {
-        paddingRight: theme.spacing.unit,
+        margin: 0,
+        padding: 0
     },
     highlight:
         theme.palette.type === 'light'
             ? {
                 color: '#333',
-                backgroundColor: '#fafafa'
+                backgroundColor: '#fff'
             }
             : {
                 color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
+                backgroundColor: '#fff',
             },
     spacer: {
         flex: '1 1 100%',
@@ -72,11 +73,11 @@ class EnhancedTableToolBar extends React.Component {
             >
                 <div className={classes.title} >
                     {numSelected > 0 ? (
-                        <Typography color="default" style={{ fontSize: 14 }} variant="subtitle1">
-                            {numSelected} row(s) selected
+                        <Typography  style={{ fontSize: 17, color: 'rgb(69, 94, 107)' }} variant="subtitle1">
+                            {numSelected} ( rows ) selected.
                 </Typography>
                     ) : (
-                            <Typography variant="h6" style={{ fontSize: 14 }} id="tableTitle">
+                            <Typography variant="h6" style={{ fontSize: 17, color: 'rgb(69, 94, 107)' }} id="tableTitle">
                                 <BallotIcon /> {listName}
                 </Typography>
                         )}

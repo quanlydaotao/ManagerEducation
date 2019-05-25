@@ -8,7 +8,7 @@ import LazyLoad from 'react-lazyload';
 class HomeAdmin extends Component {
     render() {
         return (
-            <DocumentTitle title='.:HỆ THỐNG QUẢN LÝ ĐÀO TẠO E-FINGTER:.'>
+            <DocumentTitle title='.:HỆ THỐNG QUẢN LÝ ĐÀO TẠO G-ADMIN:.'>
                 <div className={`${styles.mainHomeAdmin}`}>
                     <LazyLoad>
                         <SectionClassRoom />
