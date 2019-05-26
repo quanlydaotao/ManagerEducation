@@ -10359,6 +10359,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm input[type=password],
 .contentForm input[type=email],
 .contentForm input[type=date],
+.contentForm input[type=number],
 .sex,
 .contentForm select {
     width: 100%;
@@ -10374,6 +10375,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm input[type=password],
 .contentForm input[type=email],
 .contentForm input[type=date],
+.contentForm input[type=number],
 .sex,
 .contentForm select:focus {
     outline: none;
@@ -10389,7 +10391,10 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 }
 
 .contentForm input[type=text]:focus,
-.contentForm input[type=password]:focus {
+.contentForm input[type=password]:focus,
+.contentForm input[type=email]:focus,
+.contentForm input[type=date]:focus,
+.contentForm input[type=number]:focus {
     background-color: #ddd;
     outline: none;
 }

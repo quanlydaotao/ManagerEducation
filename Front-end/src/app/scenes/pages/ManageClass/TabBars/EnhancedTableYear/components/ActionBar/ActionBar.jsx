@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.css';
 import { withStyles } from '@material-ui/core/styles';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import QueuePlayNextIcon from '@material-ui/icons/QueuePlayNext';
 import InsertChartOutlinedIcon from '@material-ui/icons/InsertChartOutlined';
-import ListAltIcon from '@material-ui/icons/ListAlt';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import AddIcon from '@material-ui/icons/Add';
 import { NavLink } from 'react-router-dom';
 
@@ -30,9 +29,10 @@ const style = theme => ({
 });
 
 class ActionBar extends React.Component {
+    
     render() {
         const { classes } = this.props;
-
+        
         return (
             <List
                 component="nav"
@@ -42,21 +42,21 @@ class ActionBar extends React.Component {
                 }}>DANH SÁCH TÁC VỤ</div>}
                 className={classes.root}
             >
-                <ListItem component={NavLink} to="/administrator/class" button activeClassName={`${styles.active}`}>
-                    <ListItemIcon>
-                        <ListAltIcon />
-                    </ListItemIcon>
-                    <ListItemText inset primary="DANH SÁCH NĂM HỌC" classes={{ primary: classes.conf }} />
-                    <AddIcon />
-                </ListItem>
-                <ListItem component={NavLink} to="#" button>
+                <ListItem component={NavLink} to="/administrator/class/years/add-new" button activeClassName={`${styles.active}`}>
                     <ListItemIcon>
                         <QueuePlayNextIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="THÊM NĂM HỌC MỚI" classes={{ primary: classes.conf }} />
                     <AddIcon />
                 </ListItem>
-                <ListItem component={NavLink} to="#" button>
+                <ListItem component={NavLink} to="/administrator/class/years/add-notifications" button activeClassName={`${styles.active}`}>
+                    <ListItemIcon>
+                        <QuestionAnswerIcon />
+                    </ListItemIcon>
+                    <ListItemText inset primary="THÊM THÔNG BÁO" classes={{ primary: classes.conf }}/>
+                    <AddIcon />
+                </ListItem>
+                <ListItem component={NavLink} to="#" button activeClassName={`${styles.active}`}>
                     <ListItemIcon>
                         <InsertChartOutlinedIcon />
                     </ListItemIcon>

@@ -38,17 +38,6 @@ class TabBars extends React.Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-                {/* <AppBar position="static" color="inherit" className={`${styles.HeaderAppBar}`}>
-                    <Tabs value={value} onChange={this.handleChange} indicatorColor="inherit">
-                        <Tab value="one" icon={<ViewListIcon />} label="DANH SÁCH CHI TIẾT TÀI KHOẢN">
-                            
-                        </Tab>
-                        <Tab value="two" icon={<PersonAddIcon />} label="THÊM MỚI TÀI KHOẢN"/>
-                    </Tabs>
-                    
-                    
-                </AppBar> */}
-                {/* {value === 'one' && */}
                 <div className={`${styles.appBar}`}>
                     <NavLink to="/administrator/account">
                         <ContactsIcon /> DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP
@@ -66,8 +55,6 @@ class TabBars extends React.Component {
                         </TabContainer>
                     </LazyLoad>
                 )} />
-                {/* } */}
-                {/* {value === 'two' && */}
                 <Route exact path="/administrator/account/add-new" render={() => (
                     <LazyLoad>
                         <TabContainer>
@@ -77,7 +64,6 @@ class TabBars extends React.Component {
                         </TabContainer>
                     </LazyLoad>
                 )} />
-                {/* } */}
             </div>
         );
     }

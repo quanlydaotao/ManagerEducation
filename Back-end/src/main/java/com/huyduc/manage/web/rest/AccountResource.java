@@ -1,7 +1,8 @@
 package com.huyduc.manage.web.rest;
 import com.huyduc.manage.bean.User;
-import com.huyduc.manage.config.Constants;
+import com.huyduc.manage.bean.Years;
 import com.huyduc.manage.repository.UserRepository;
+import com.huyduc.manage.repository.YearsRepository;
 import com.huyduc.manage.security.SecurityUtils;
 import com.huyduc.manage.service.FileUploadService;
 import com.huyduc.manage.service.UserService;
@@ -29,11 +30,13 @@ public class AccountResource {
     private final UserRepository userRepository;
 
     private final UserService userService;
+    private final YearsRepository yearsRepository;
 
 
-    public AccountResource(UserRepository userRepository, UserService userService, FileUploadService fileUploadService) {
+    public AccountResource(UserRepository userRepository, UserService userService, FileUploadService fileUploadService, YearsRepository yearsRepository) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.yearsRepository = yearsRepository;
     }
 
 //    /**

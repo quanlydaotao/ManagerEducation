@@ -1,4 +1,4 @@
-package com.hanhtien.nckh.service.mapper;
+package com.huyduc.manage.service.mapper;
 
 import java.util.List;
 

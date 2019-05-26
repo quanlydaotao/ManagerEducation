@@ -2,6 +2,7 @@ import React, { Component, Suspense } from 'react';
 import styles from './style.css';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { PrivateRoute } from '../../../state/utils';
+import { PageWrapperAdmin } from '../PageWrapperAdmin';
 
 class App extends Component {
     constructor(props) {
@@ -10,7 +11,6 @@ class App extends Component {
     authenticate() {
         return new Promise(resolve => setTimeout(resolve, 2000))
     }
-
     componentDidMount() {
         this.authenticate().then(() => {
             const ele = document.getElementById('ipl-progress-indicator')
@@ -29,17 +29,45 @@ class App extends Component {
             <div className={`${styles.wrapper}`}>
             <Suspense fallback="">
                 <Switch>
-                    <Route exact path="/" render={() => (
-                        <Redirect to="/auth/login" />
-                    )} />
-                    <Route exact path="/auth" render={() => (
-                        <Redirect to="/auth/login" />
-                    )} />
-                    <Route exact path="/auth/login" component={React.lazy(()=> import('../LoginWrapper/LoginWrapper'))} />
-                    <Route exact path="/administrator" render={() => (
-                        <Redirect to="/administrator/home" />
-                    )} />
-                    <PrivateRoute path="/administrator" component={React.lazy(()=> import('../PageWrapperAdmin/PageWrapperAdmin'))} />
+                    {/* Redirect the login page  if the url is "/" */}
+                    <Route 
+                        exact 
+                        path="/" 
+                        render={() => (
+                            <Redirect to="/auth/login" />
+                        )} 
+                    />
+
+                    {/* Redirect the login page if the url is "/auth" */}
+                    <Route 
+                        exact 
+                        path="/auth" 
+                        render={() => (
+                            <Redirect to="/auth/login" />
+                        )} 
+                    />
+
+                    {/* Login page "/" */}
+                    <Route 
+                        exact 
+                        path="/auth/login" 
+                        component={ React.lazy(()=> import('../LoginWrapper/LoginWrapper')) } 
+                    />
+
+                    {/* Redirect the administrator page if the url is "/administrator" */}
+                    <Route 
+                        exact 
+                        path="/administrator" 
+                        render={() => (
+                            <Redirect to="/administrator/home" />
+                        )} 
+                    />
+
+                    {/* Private router for authentication */}
+                    <PrivateRoute 
+                        path="/administrator" 
+                        component={ PageWrapperAdmin } 
+                    />
                 </Switch>
             </Suspense>
             </div>

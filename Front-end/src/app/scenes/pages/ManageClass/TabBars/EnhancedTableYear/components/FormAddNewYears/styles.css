@@ -1,0 +1,16 @@
+.formAddNewYears {
+    background-color: #fff;
+    padding: 24px;
+    margin-top: 24px;
+}
+
+.formAddNewYears h3 {
+    margin-bottom: 30px;
+    padding: 10px;
+    text-align: center;
+    background-color: #455e6b;
+    font-weight: 300;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 22px;
+}

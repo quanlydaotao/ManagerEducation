@@ -26,6 +26,8 @@ import styles from './styles.css';
 import { PopupFormEdit } from '../../../../components/Popup/PopupFormEdit';
 import { PopupDelete } from '../../../../components/Popup/PopupDelete';
 import { ActionBar } from './components/ActionBar';
+import { Route, Switch } from 'react-router-dom';
+const FormAddNewYears = React.lazy(() => import('./components/FormAddNewYears/FormAddNewYears'));
 
 const rows = [
     { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
@@ -169,135 +171,156 @@ class EnhancedTableYear extends React.Component {
             <React.Fragment>
                 <div className="row">
                     <div className="col-md-9">
-                        <Paper className={classes.root}>
-                            {accountById.id ? <PopupFormEdit data={accountById}/> : ''}
-                            <PopupDelete delete={this.deleteData} />
-                            <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete}/>
-                            <div style={{padding: '10px 0 15px 24px'}} className="message">
-                                <div>
-                                    <b>Chú ý:</b>
-                                </div>
-                                <ul>
-                                    <li>- Danh sách dưới bao gồm các năm học trong chương trình đào tạo.</li>
-                                    <li>- Mỗi năm học sẽ có các lớp được mở tương ứng.</li>
-                                    <li>- Khi kết thúc năm học bạn có thể đóng năm học đó lại thay vì xóa.</li>
-                                    <li>- Trong trường hợp muốn xóa năm học, bạn hãy chắc chắn rằng muốn xóa tất cả dữ liệu trong năm học và không thể khôi phục.</li>
-                                </ul>
-                            </div>
-                            <div className={classes.tableWrapper}>
-                                <Table className={classes.table} aria-labelledby="tableTitle">
-                                    <EnhancedTableHead
-                                        numSelected={selected.length}
-                                        order={order}
-                                        orderBy={orderBy}
-                                        onSelectAllClick={this.handleSelectAllClick}
-                                        onRequestSort={this.handleRequestSort}
-                                        rowCount={accounts.length}
-                                        rows={rows}
-                                    />
-                                    <TableBody>
-                                        {stableSort(accounts, getSorting(order, orderBy))
-                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map(n => {
-                                                const isSelected = this.isSelected(n.id);
-                                                return (
-                                                    <LazyLoad>
-                                                        <TableRow
-                                                            hover
-                                                            role="checkbox"
-                                                            aria-checked={isSelected}
-                                                            tabIndex={-1}
-                                                            key={n.id}
-                                                            selected={isSelected}
-                                                        >
-                                                            <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
-                                                                <Checkbox checked={isSelected} color="default" />
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                <LazyLoad height={60}>
-                                                                    <div>xxx</div>
+                        <Switch>
+                            {/* Render the list years page if the url is "/administrator/class/years" */}
+                            <Route
+                                exact
+                                path="/administrator/class/years"
+                                render={() => (
+                                    <Paper className={classes.root}>
+                                        {accountById.id ? <PopupFormEdit data={accountById} /> : ''}
+                                        <PopupDelete delete={this.deleteData} />
+                                        <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
+                                        <div style={{ padding: '10px 0 15px 24px' }} className="message">
+                                            <div>
+                                                <b>Chú ý:</b>
+                                            </div>
+                                            <ul>
+                                                <li>- Danh sách dưới bao gồm các năm học trong chương trình đào tạo.</li>
+                                                <li>- Mỗi năm học sẽ có các lớp được mở tương ứng.</li>
+                                                <li>- Khi kết thúc năm học bạn có thể đóng năm học đó lại thay vì xóa.</li>
+                                                <li>- Trong trường hợp muốn xóa năm học, bạn hãy chắc chắn rằng muốn xóa tất cả dữ liệu trong năm học và không thể khôi phục.</li>
+                                            </ul>
+                                        </div>
+                                        <div className={classes.tableWrapper}>
+                                            <Table className={classes.table} aria-labelledby="tableTitle">
+                                                <EnhancedTableHead
+                                                    numSelected={selected.length}
+                                                    order={order}
+                                                    orderBy={orderBy}
+                                                    onSelectAllClick={this.handleSelectAllClick}
+                                                    onRequestSort={this.handleRequestSort}
+                                                    rowCount={accounts.length}
+                                                    rows={rows}
+                                                />
+                                                <TableBody>
+                                                    {stableSort(accounts, getSorting(order, orderBy))
+                                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                        .map(n => {
+                                                            const isSelected = this.isSelected(n.id);
+                                                            return (
+                                                                <LazyLoad>
+                                                                    <TableRow
+                                                                        hover
+                                                                        role="checkbox"
+                                                                        aria-checked={isSelected}
+                                                                        tabIndex={-1}
+                                                                        key={n.id}
+                                                                        selected={isSelected}
+                                                                    >
+                                                                        <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
+                                                                            <Checkbox checked={isSelected} color="default" />
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            <LazyLoad height={60}>
+                                                                                <div>xxx</div>
+                                                                            </LazyLoad>
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            <b>{n.firstName || <Skeleton />}</b>
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            <b>{n.lastName || <Skeleton />}</b>
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            {n.login || <Skeleton />}
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            {n.email || <Skeleton />}
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            {n.phoneNumber || <Skeleton />}
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            {n.authorities.toString() === '' ? (<Skeleton />) : `
+                                                                            ${n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : ''}
+                                                                            ${n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : ''}
+                                                                            ${n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : ''}
+                                                                            ${n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : ''}
+                                                                        `}
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            {n.activated ? <Chip
+                                                                                icon={<CheckCircleIcon />}
+                                                                                label="Đã kích hoạt"
+                                                                                color="primary"
+                                                                                className={classes.chip}
+                                                                                title="Đã kích hoạt"
+                                                                            /> : <Chip
+                                                                                    icon={<RemoveCircleIcon />}
+                                                                                    label="Chưa kích hoạt"
+                                                                                    color="inherit"
+                                                                                    title="Chưa kích hoạt"
+                                                                                />}
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            {n.dateSigned || <Skeleton />}
+                                                                        </TableCell>
+                                                                        <TableCell className="cell">
+                                                                            <Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }}
+                                                                                title="Chỉnh sửa thông tin tài khoản">
+                                                                                <LaunchIcon />
+                                                                            </Button>
+                                                                        </TableCell>
+                                                                    </TableRow>
                                                                 </LazyLoad>
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                <b>{n.firstName || <Skeleton />}</b>
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                <b>{n.lastName || <Skeleton />}</b>
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                {n.login || <Skeleton />}
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                {n.email || <Skeleton />}
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                {n.phoneNumber || <Skeleton />}
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                {n.authorities.toString() === '' ? (<Skeleton />) : `
-                                                                ${n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : ''}
-                                                                ${n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : ''}
-                                                                ${n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : ''}
-                                                                ${n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : ''}
-                                                            `}
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                {n.activated ? <Chip
-                                                                    icon={<CheckCircleIcon />}
-                                                                    label="Đã kích hoạt"
-                                                                    color="primary"
-                                                                    className={classes.chip}
-                                                                    title="Đã kích hoạt"
-                                                                /> : <Chip
-                                                                        icon={<RemoveCircleIcon />}
-                                                                        label="Chưa kích hoạt"
-                                                                        color="inherit"
-                                                                        title="Chưa kích hoạt"
-                                                                    />}
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                {n.dateSigned || <Skeleton />}
-                                                            </TableCell>
-                                                            <TableCell className="cell">
-                                                                <Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }} 
-                                                                        title="Chỉnh sửa thông tin tài khoản">
-                                                                    <LaunchIcon />
-                                                                </Button>
+                                                            );
+                                                        })}
+                                                    {accounts.length <= 0 && (
+                                                        <TableRow>
+                                                            <TableCell colSpan={10}>
+                                                                <Skeleton count={10} height={60} duration={2} />
                                                             </TableCell>
                                                         </TableRow>
-                                                    </LazyLoad>
-                                                );
-                                            })}
-                                        {accounts.length <= 0 && (
-                                            <TableRow>
-                                                <TableCell colSpan={10}>
-                                                    <Skeleton count={10} height={60} duration={2} />
-                                                </TableCell>
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                            <TablePagination
-                                rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
-                                component="div"
-                                count={accounts.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                backIconButtonProps={{
-                                    'aria-label': 'Previous Page',
-                                }}
-                                nextIconButtonProps={{
-                                    'aria-label': 'Next Page',
-                                }}
-                                onChangePage={this.handleChangePage}
-                                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                                                    )}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
+                                        <TablePagination
+                                            rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
+                                            component="div"
+                                            count={accounts.length}
+                                            rowsPerPage={rowsPerPage}
+                                            page={page}
+                                            backIconButtonProps={{
+                                                'aria-label': 'Previous Page',
+                                            }}
+                                            nextIconButtonProps={{
+                                                'aria-label': 'Next Page',
+                                            }}
+                                            onChangePage={this.handleChangePage}
+                                            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                                        />
+                                    </Paper>
+                                )}
                             />
-                        </Paper>
+
+                            {/* Render the add new year page if the url is "/administrator/class/years/add-new" */}
+                            <Route
+                                exact
+                                strict
+                                path="/administrator/class/years/add-new"
+                                render={() => (
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        <FormAddNewYears />
+                                    </Suspense>
+                                )}
+                            />
+                        </Switch>
                     </div>
                     <div className="col-md-3">
                         <div className={`${styles.actionBarManageClass}`}>
-                            <ActionBar/>
+                            <ActionBar />
                         </div>
                     </div>
                 </div>

@@ -14,10 +14,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MailIcon from '@material-ui/icons/Mail';
 import styles from './styles.css';
-import { VerticalMenuAdmin } from '../../components/Menu/VerticalMenuAdmin';
 import routes from '../../../routes';
 import { Route } from 'react-router-dom';
-import { Breadcumbs } from '../../components/Breadcumbs';
 import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -28,6 +26,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { Footer } from '../../components/Footer';
+
+const VerticalMenuAdmin = React.lazy(() => import('../../components/Menu/VerticalMenuAdmin/VerticalMenuAdmin'));
+const Breadcumbs = React.lazy(() => import('../../components/Breadcumbs/Breadcumbs'));
 
 const drawerWidth = 300;
 
@@ -175,7 +176,7 @@ class PageWrapperAdmin extends React.Component {
     handleMobileMenuClose = () => {
         this.setState({ mobileMoreAnchorEl: null });
     };
-    
+
     handleDrawerOpen = () => {
         this.setState({ open: true });
     };
@@ -316,15 +317,19 @@ class PageWrapperAdmin extends React.Component {
                         </IconButton>
                     </div>
                     <Divider />
-                    <VerticalMenuAdmin />
+                    <Suspense fallback={'loading'}>
+                        <VerticalMenuAdmin />
+                    </Suspense>
                 </Drawer>
                 <main
                     className={classNames(classes.content, {
                         [classes.contentShift]: open,
                     })}
-                    style={{marginTop: 51}}
+                    style={{ marginTop: 51 }}
                 >
-                    <Breadcumbs />
+                    <Suspense fallback={''}>
+                        <Breadcumbs />
+                    </Suspense>
                     <Typography paragraph>
                         <div style={{ marginTop: 0, padding: '0 24px' }}>
                             <Suspense fallback={<div>Loading...</div>}>

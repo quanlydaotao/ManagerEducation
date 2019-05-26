@@ -47,7 +47,7 @@ class LeftContent extends React.Component {
                     </ListItemIcon>
                     <ListItemText inset primary="Trang chủ" />
                 </ListItem>
-                <ListItem button component={NavLink} to="/administrator/class" activeClassName={classes.active}>
+                <ListItem button component={NavLink} to="/administrator/class/years" activeClassName={classes.active}>
                     <ListItemIcon>
                         <ShopTwoIcon />
                     </ListItemIcon>

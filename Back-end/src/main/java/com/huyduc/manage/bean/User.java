@@ -81,7 +81,7 @@ public class User implements Serializable {
     @NotNull
     @NotBlank
     @Size(min = 10, max = 20)
-    @Column(name = "phone_number", unique = true, length = 20)
+    @Column(name = "phone_number", unique = true, length = 20, nullable = false)
     private String phoneNumber;
 
     @Size(max = 20)
@@ -176,10 +176,6 @@ public class User implements Serializable {
         return activated;
     }
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
     public String getActivationKey() {
         return activationKey;
     }
@@ -214,6 +210,10 @@ public class User implements Serializable {
 
     public boolean isActivated() {
         return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
     }
 
     public String getAddress() {
