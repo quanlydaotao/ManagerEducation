@@ -1,17 +1,10 @@
 package com.huyduc.manage.service.dto;
 
-import com.huyduc.manage.bean.Classes;
-import com.huyduc.manage.bean.User;
-import com.huyduc.manage.bean.Years;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 /**
  * A DTO represents a class
@@ -36,22 +29,12 @@ public class ClassesDTO {
     @NotNull
     private boolean status;
 
-    private Years year;
-    private Set<User> users;
+    private YearsDTO yearDTO;
+
+    private Long idYear;
 
     public ClassesDTO() {
         // Empty constructor needed for Jackson.
-    }
-
-    public ClassesDTO(Classes classes) {
-        this.id = classes.getId();
-        this.name = classes.getName();
-        this.describe = classes.getDescribe();
-        this.openDay = classes.getOpenDay();
-        this.closeDay = classes.getCloseDay();
-        this.status = classes.isStatus();
-        this.year = classes.getYear();
-        this.users = classes.getUsers();
     }
 
     public long getId() {
@@ -102,20 +85,20 @@ public class ClassesDTO {
         this.status = status;
     }
 
-    public Years getYear() {
-        return year;
+    public YearsDTO getYearDTO() {
+        return yearDTO;
     }
 
-    public void setYear(Years year) {
-        this.year = year;
+    public void setYearDTO(YearsDTO yearDTO) {
+        this.yearDTO = yearDTO;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Long getIdYear() {
+        return idYear;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setIdYear(Long idYear) {
+        this.idYear = idYear;
     }
 
     @Override
@@ -138,15 +121,15 @@ public class ClassesDTO {
 
     @Override
     public String toString() {
-        return "Classes{" +
+        return "ClassesDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", describe='" + describe + '\'' +
                 ", openDay=" + openDay +
                 ", closeDay=" + closeDay +
                 ", status=" + status +
-                ", year=" + year +
-                ", users=" + users +
+                ", yearDTO=" + yearDTO +
+                ", idYear=" + idYear +
                 '}';
     }
 }

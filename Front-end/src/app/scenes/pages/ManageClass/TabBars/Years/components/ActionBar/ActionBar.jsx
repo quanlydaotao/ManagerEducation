@@ -42,21 +42,21 @@ class ActionBar extends React.Component {
                 }}>DANH SÁCH TÁC VỤ</div>}
                 className={classes.root}
             >
-                <ListItem component={NavLink} to="/administrator/class/years/add-new" button activeClassName={`${styles.active}`}>
+                <ListItem button component={NavLink} to="/administrator/education/years/add-new" activeClassName="active">
                     <ListItemIcon>
                         <QueuePlayNextIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="THÊM NĂM HỌC MỚI" classes={{ primary: classes.conf }} />
                     <AddIcon />
                 </ListItem>
-                <ListItem component={NavLink} to="/administrator/class/years/add-notifications" button activeClassName={`${styles.active}`}>
+                <ListItem button component={NavLink} to="/administrator/education/years/add-notifications" activeClassName="active">
                     <ListItemIcon>
                         <QuestionAnswerIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="THÊM THÔNG BÁO" classes={{ primary: classes.conf }}/>
                     <AddIcon />
                 </ListItem>
-                <ListItem component={NavLink} to="#" button activeClassName={`${styles.active}`}>
+                <ListItem button component={NavLink} to="#" activeClassName="active">
                     <ListItemIcon>
                         <InsertChartOutlinedIcon />
                     </ListItemIcon>

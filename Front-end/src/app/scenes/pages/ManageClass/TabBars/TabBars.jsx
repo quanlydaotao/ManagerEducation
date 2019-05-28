@@ -7,12 +7,12 @@ import Tab from '@material-ui/core/Tab';
 import styles from './styles.css';
 import StyleIcon from '@material-ui/icons/Style';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
+import EventIcon from '@material-ui/icons/Event';
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
 import Typography from '@material-ui/core/Typography';
 import LazyLoad from 'react-lazyload';
 import { NavLink, Route, Redirect, Switch } from 'react-router-dom';
-const EnhancedTableYear = React.lazy(() => import('./EnhancedTableYear/EnhancedTableYear'));
+const Years = React.lazy(() => import('./Years/Years'));
 
 function TabContainer(props) {
     return (
@@ -39,44 +39,50 @@ class TabBars extends React.Component {
         return (
             <div className={classes.root}>
                 <div className={`${styles.appBar}`}>
-                    <NavLink to="/administrator/class/years">
-                        <StyleIcon /> QUẢN LÝ NĂM HỌC
+                    <NavLink to="/administrator/education/years" activeClassName="active">
+                        <StyleIcon />  NĂM HỌC ĐÀO TẠO
                     </NavLink>
-                    <NavLink to="/administrator/class/list-classes">
-                        <CastForEducationIcon /> DANH SÁCH LỚP HỌC
+                    <NavLink to="/administrator/education/timetables" activeClassName="active">
+                        <EventIcon /> THỜI KHÓA BIỂU/ LỊCH HỌC
                     </NavLink>
-                    <NavLink to="/administrator/class/add-new-classes">
-                        <AddToPhotosIcon /> THÊM MỚI LỚP HỌC
+                    <NavLink to="/administrator/education/classes" activeClassName="active">
+                        <CastForEducationIcon /> HỆ THỐNG LỚP HỌC
                     </NavLink>
                 </div>
                 <Switch>
-                    {/* Redirect the list years page if the url is "/administrator/class" */}
-                    <Route 
-                        exact 
-                        path="/administrator/class" 
-                        render={() => (
-                            <Redirect to="/administrator/class/years" />
-                        )}
-                    />
                     
-                    {/* Render the wrapper years page if the url is "/administrator/class" */}
+                    {/* Render the wrapper years page if the url is "/administrator/education/years" */}
                     <Route 
-                        path="/administrator/class/years" 
+                        path="/administrator/education/years" 
                         render={() => (
                             <LazyLoad>
                                 <TabContainer>
                                     <Suspense fallback={''}>
-                                        <EnhancedTableYear listName="DANH SÁCH TẤT CẢ CÁC NĂM HỌC" />
+                                        <Years />
                                     </Suspense>
                                 </TabContainer>
                             </LazyLoad>
                         )} 
                     />
-
-                    {/* Render the add new class page if the url is "/administrator/class/add-new" */}
+                    {/* Render the add new class page if the url is "/administrator/education/classes" */}
                     <Route 
                         exact 
-                        path="/administrator/class/add-new" 
+                        path="/administrator/education/classes" 
+                        render={() => (
+                            <LazyLoad>
+                                <TabContainer>
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        {/*<FormSign />*/}
+                                        <div>list class</div>
+                                    </Suspense>
+                                </TabContainer>
+                            </LazyLoad>
+                        )} 
+                    />
+                    {/* Render the add new class page if the url is "/administrator/education/classes/add-new" */}
+                    <Route 
+                        exact 
+                        path="/administrator/education/classes/add-new" 
                         render={() => (
                             <LazyLoad>
                                 <TabContainer>

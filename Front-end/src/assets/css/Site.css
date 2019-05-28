@@ -10360,7 +10360,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm input[type=email],
 .contentForm input[type=date],
 .contentForm input[type=number],
-.sex,
+.sex, textarea,
 .contentForm select {
     width: 100%;
     display: inline-block;
@@ -10376,7 +10376,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm input[type=email],
 .contentForm input[type=date],
 .contentForm input[type=number],
-.sex,
+.sex, textarea
 .contentForm select:focus {
     outline: none;
 }
@@ -10477,4 +10477,16 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     font-size: 13px;
 }
 /* END-ENHANCEDTABLE */
+
+/* ACTIVE LINK */
+.active {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    color: '#333 !important';
+}
+
+.reset-button {
+    box-shadow: none !important;
+    padding: 10px 20px !important;
+    border-radius: 40px !important;
+}
 

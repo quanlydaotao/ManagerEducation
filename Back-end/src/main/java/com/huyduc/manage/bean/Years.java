@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ public class Years implements Serializable {
     private String describe;
     private int maximumClasses;
     private boolean status;
-    private Set<Classes> classes;
+    private Set<Classes> classes = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,7 +79,6 @@ public class Years implements Serializable {
     }
 
     @Basic
-    @NotNull
     @Column(name = "open_day", nullable = false)
     public Date getOpenDay() {
         return openDay;
@@ -89,7 +89,6 @@ public class Years implements Serializable {
     }
 
     @Basic
-    @NotNull
     @Column(name = "close_day", nullable = false)
     public Date getCloseDay() {
         return closeDay;
@@ -100,7 +99,7 @@ public class Years implements Serializable {
     }
 
     @Basic
-    @Column(name = "describe")
+    @Column(name = "`describe`")
     public String getDescribe() {
         return describe;
     }

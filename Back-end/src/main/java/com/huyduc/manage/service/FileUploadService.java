@@ -1,4 +1,5 @@
 package com.huyduc.manage.service;
+
 import com.huyduc.manage.web.rest.errors.FileNotFoundException;
 import com.huyduc.manage.web.rest.errors.FileStorageException;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -10,6 +11,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -75,7 +77,7 @@ public class FileUploadService {
     public String updateFile(MultipartFile file, String locale, String fileDB) {
         String fileName = StringUtils.cleanPath(hashFileName(file.getOriginalFilename()));
         if (!checkExtensionFile(fileName)) throw new FileStorageException();
-        Path fd = Paths.get("" + ROOT_PATCH_UPLOAD.resolve(locale+"\\"+fileDB));
+        Path fd = Paths.get("" + ROOT_PATCH_UPLOAD.resolve(locale + "\\" + fileDB));
         try {
             Files.deleteIfExists(fd);
         } catch (IOException e) {

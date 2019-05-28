@@ -1,10 +1,13 @@
 package com.huyduc.manage.web.rest;
+
 import com.huyduc.manage.bean.User;
 import com.huyduc.manage.repository.UserRepository;
-import com.huyduc.manage.web.rest.errors.*;
 import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.service.UserService;
 import com.huyduc.manage.service.dto.UserDTO;
+import com.huyduc.manage.web.rest.errors.BadRequestAlertException;
+import com.huyduc.manage.web.rest.errors.EmailAlreadyUsedException;
+import com.huyduc.manage.web.rest.errors.LoginAlreadyUsedException;
 import com.huyduc.manage.web.rest.util.PaginationUtil;
 import com.huyduc.manage.web.rest.vm.RegisterUserAccountVM;
 import com.huyduc.manage.web.rest.vm.UpdateUserAccountVM;
@@ -16,9 +19,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -49,11 +55,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequestMapping("/api")
 public class UserResource {
 
-
     private final UserService userService;
-
     private final UserRepository userRepository;
-
 
     public UserResource(UserService userService, UserRepository userRepository) {
 
@@ -70,7 +73,7 @@ public class UserResource {
      *
      * @param registerUserAccountVM the user to create
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws URISyntaxException       if the Location URI syntax is incorrect
      * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
      */
     @PostMapping("/users")

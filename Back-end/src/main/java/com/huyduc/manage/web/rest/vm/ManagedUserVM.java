@@ -1,7 +1,6 @@
 package com.huyduc.manage.web.rest.vm;
 
 import com.huyduc.manage.service.dto.UserDTO;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Size;
 
@@ -32,6 +31,6 @@ public class ManagedUserVM extends UserDTO {
     @Override
     public String toString() {
         return "ManagedUserVM{" +
-            "} " + super.toString();
+                "} " + super.toString();
     }
 }

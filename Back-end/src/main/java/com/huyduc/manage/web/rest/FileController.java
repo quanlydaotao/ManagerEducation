@@ -1,6 +1,5 @@
 package com.huyduc.manage.web.rest;
 
-import com.huyduc.manage.bean.User;
 import com.huyduc.manage.repository.UserRepository;
 import com.huyduc.manage.service.FileUploadService;
 import com.huyduc.manage.service.dto.UserDTO;
@@ -39,7 +38,7 @@ public class FileController {
      * @param fileName,dir the path file image avatar
      */
     @GetMapping(value = "/file/{dir}/{fileName}")
-    public ResponseEntity<Resource> getFile(@PathVariable(name="dir") String dir, @PathVariable(name="fileName") String fileName, HttpServletRequest request) {
+    public ResponseEntity<Resource> getFile(@PathVariable(name = "dir") String dir, @PathVariable(name = "fileName") String fileName, HttpServletRequest request) {
         Resource resource = fileUploadService.loadFileAsResource(dir, fileName);
         String contentType = null;
         try {
@@ -47,7 +46,7 @@ public class FileController {
         } catch (IOException ex) {
             log.info("Could not determine file type.");
         }
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
         return ResponseEntity.ok()
@@ -81,7 +80,6 @@ public class FileController {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(user -> {
-
                     log.debug("Changed Information for User: {}", user);
                     return user;
                 }).map(UserDTO::new);

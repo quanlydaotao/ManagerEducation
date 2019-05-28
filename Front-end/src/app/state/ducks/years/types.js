@@ -1,0 +1,11 @@
+export const GET_ALL_YEARS = "account/GET_ALL_YEARS";
+export const GET_ALL_YEARS_COMPLETED = "account/GET_ALL_YEARS_COMPLETED";
+export const ADD_NEW_YEARS = "account/ADD_NEW_YEARS";
+export const ADD_NEW_YEARS_COMPLETED = "account/ADD_NEW_YEARS_COMPLETED";
+export const ADD_NEW_YEARS_FAILED = "account/ADD_NEW_YEARS_FAILED";
+export const UPDATE_YEARS = "account/UPDATE_YEARS";
+export const UPDATE_YEARS_COMPLETED = "account/UPDATE_YEARS_COMPLETED";
+export const UPDATE_YEARS_FAILED = "account/UPDATE_YEARS_FAILED";
+export const DELETE_YEARS = "account/DELETE_YEARS";
+export const DELETE_YEARS_COMPLETED = "account/DELETE_YEARS_COMPLETED";
+export const DELETE_YEARS_FAILED = "account/DELETE_YEARS_FAILED";

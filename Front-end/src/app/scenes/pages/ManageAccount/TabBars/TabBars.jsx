@@ -9,7 +9,7 @@ import ContactsIcon from '@material-ui/icons/Contacts';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import Typography from '@material-ui/core/Typography';
 import LazyLoad from 'react-lazyload';
-import { NavLink, Route } from 'react-router-dom';
+import { NavLink, Route, Switch } from 'react-router-dom';
 const FormSign = React.lazy(() => import('./FormSign/FormSign'));
 const EnhancedTableAccount = React.lazy(() => import('./EnhancedTableAccount/EnhancedTableAccount'));
 
@@ -39,31 +39,33 @@ class TabBars extends React.Component {
         return (
             <div className={classes.root}>
                 <div className={`${styles.appBar}`}>
-                    <NavLink to="/administrator/account">
+                    <NavLink to="/administrator/accounts/users" activeClassName="active">
                         <ContactsIcon /> DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP
                     </NavLink>
-                    <NavLink to="/administrator/account/add-new">
+                    <NavLink to="/administrator/accounts/add-new" activeClassName="active">
                         <HowToRegIcon /> THÊM MỚI TÀI KHOẢN
                     </NavLink>
                 </div>
-                <Route exact path="/administrator/account" render={() => (
-                    <LazyLoad>
-                        <TabContainer>
-                            <Suspense fallback={''}>
-                                <EnhancedTableAccount listName="DANH SÁCH QUẢN LÝ ĐĂNG NHẬP HỆ THỐNG" />
-                            </Suspense>
-                        </TabContainer>
-                    </LazyLoad>
-                )} />
-                <Route exact path="/administrator/account/add-new" render={() => (
-                    <LazyLoad>
-                        <TabContainer>
-                            <Suspense fallback={<div>Loading...</div>}>
-                                <FormSign />
-                            </Suspense>
-                        </TabContainer>
-                    </LazyLoad>
-                )} />
+                <Switch>
+                    <Route exact path="/administrator/accounts/users" render={() => (
+                        <LazyLoad>
+                            <TabContainer>
+                                <Suspense fallback={''}>
+                                    <EnhancedTableAccount listName="DANH SÁCH QUẢN LÝ ĐĂNG NHẬP HỆ THỐNG" />
+                                </Suspense>
+                            </TabContainer>
+                        </LazyLoad>
+                    )} />
+                    <Route exact path="/administrator/accounts/add-new" render={() => (
+                        <LazyLoad>
+                            <TabContainer>
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <FormSign />
+                                </Suspense>
+                            </TabContainer>
+                        </LazyLoad>
+                    )} />
+                </Switch>
             </div>
         );
     }

@@ -28,7 +28,6 @@ public class UpdateUserAccountVM extends UserDTO {
     }
 
 
-
     @Override
     public String toString() {
         return "UpdateUserAccountVM{" +

@@ -1,9 +1,9 @@
 package com.huyduc.manage.service.dto;
-import com.huyduc.manage.config.Constants;
+
 import com.huyduc.manage.bean.Authority;
 import com.huyduc.manage.bean.User;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import com.huyduc.manage.config.Constants;
+
 import javax.validation.constraints.*;
 import java.sql.Date;
 import java.util.Objects;
@@ -41,7 +41,7 @@ public class UserDTO {
 
     @NotNull
     @NotBlank
-    @Size(min=10, max = 20)
+    @Size(min = 10, max = 20)
     @Pattern(regexp = "^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$")
     private String phoneNumber;
 

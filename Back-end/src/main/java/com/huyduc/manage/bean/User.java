@@ -1,13 +1,12 @@
 package com.huyduc.manage.bean;
 
-import com.huyduc.manage.config.*;
-
-import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.huyduc.manage.config.Constants;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
-import javax.validation.constraints.*;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.HashSet;
@@ -108,9 +107,9 @@ public class User implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-        name = "user_authority",
-        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
 
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
@@ -318,7 +317,7 @@ public class User implements Serializable {
                 ", birthday=" + birthday +
                 ", sex=" + sex +
                 ", nations='" + nations + '\'' +
-                ", date_signed'" + dateSigned  +
+                ", date_signed'" + dateSigned +
                 ", address1='" + address1 + '\'' +
                 ", authorities=" + authorities +
                 '}';

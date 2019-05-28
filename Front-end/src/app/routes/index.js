@@ -7,12 +7,12 @@ const routes = [
         exact: true
     },
     {
-        path: '/administrator/class',
+        path: '/administrator/education',
         component: React.lazy(() => import('../scenes/pages/ManageClass/ManageClass')),
         exact: false
     },
     {
-        path: '/administrator/account',
+        path: '/administrator/accounts',
         component: React.lazy(() => import('../scenes/pages/ManageAccount/ManageAccount')),
         exact: false
     }

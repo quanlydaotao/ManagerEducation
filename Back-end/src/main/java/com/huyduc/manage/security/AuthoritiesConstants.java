@@ -1,4 +1,5 @@
 package com.huyduc.manage.security;
+
 /**
  * Constants for Spring Security authorities.
  */

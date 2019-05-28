@@ -1,13 +1,10 @@
 package com.huyduc.manage.security.jwt;
-import java.security.Key;
-import java.util.*;
-import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 
 import com.huyduc.manage.repository.UserRepository;
-import com.huyduc.manage.security.*;
-
+import com.huyduc.manage.security.Constants;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,20 +14,23 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.*;
-
-import io.jsonwebtoken.security.Keys;
+import javax.annotation.PostConstruct;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
 
-    private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
     private static final String ACCOUNT_EXPIRED_KEY = "acExp";
+    private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
+    private final UserRepository userRepository;
     private Key key;
     private long tokenValidityInMilliseconds;
     private long tokenValidityInMillisecondsForRememberMe;
-    private final UserRepository userRepository;
 
     public TokenProvider(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -38,7 +38,7 @@ public class TokenProvider {
 
     @PostConstruct
     public void init() {
-        byte[] keyBytes = Decoders.BASE64.decode( Constants.SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(Constants.SECRET_KEY);
 
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.tokenValidityInMilliseconds = 1000 * Constants.TIME_LIFE;

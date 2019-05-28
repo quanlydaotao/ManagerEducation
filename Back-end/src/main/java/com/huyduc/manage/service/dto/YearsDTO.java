@@ -1,13 +1,10 @@
 package com.huyduc.manage.service.dto;
-import com.huyduc.manage.bean.Classes;
-import com.huyduc.manage.bean.Years;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * A DTO represents a school year.
@@ -32,10 +29,8 @@ public class YearsDTO {
     @Size(min = 4, max = 10)
     private String endYears;
 
-    @NotNull
     private Date openDay;
 
-    @NotNull
     private Date closeDay;
 
     private String describe;
@@ -47,23 +42,8 @@ public class YearsDTO {
     private boolean status;
 
 
-    private Set<Classes> classes;
-
     public YearsDTO() {
         // Empty constructor needed for Jackson.
-    }
-
-    public YearsDTO(Years years) {
-        this.id = years.getId();
-        this.name = years.getName();
-        this.startYears = years.getStartYears();
-        this.endYears = years.getEndYears();
-        this.openDay = years.getOpenDay();
-        this.closeDay = years.getCloseDay();
-        this.describe = this.getDescribe();
-        this.maximumClasses = this.getMaximumClasses();
-        this.status = this.isStatus();
-        this.classes = years.getClasses();
     }
 
     public long getId() {
@@ -138,14 +118,6 @@ public class YearsDTO {
         this.status = status;
     }
 
-    public Set<Classes> getClasses() {
-        return classes;
-    }
-
-    public void setClasses(Set<Classes> classes) {
-        this.classes = classes;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -179,7 +151,6 @@ public class YearsDTO {
                 ", describe='" + describe + '\'' +
                 ", maximumClasses=" + maximumClasses +
                 ", status=" + status +
-                ", classes=" + classes +
                 '}';
     }
 }

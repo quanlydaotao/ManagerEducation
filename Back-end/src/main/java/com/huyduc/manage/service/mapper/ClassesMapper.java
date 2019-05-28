@@ -2,53 +2,34 @@ package com.huyduc.manage.service.mapper;
 
 import com.huyduc.manage.bean.Classes;
 import com.huyduc.manage.service.dto.ClassesDTO;
-import org.springframework.stereotype.Service;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Mapper for the entity Classes and its DTO called ClassesDTO.
- *
- * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
- * support is still in beta, and requires a manual step with an IDE.
  */
-@Service
-public class ClassesMapper {
+@Mapper(componentModel = "spring", uses = {YearsMapper.class})
+public interface ClassesMapper {
 
-    public List<ClassesDTO> classesToClassDTOs(List<Classes> classes) {
-        return classes.stream()
-                .filter(Objects::nonNull)
-                .map(this::classToClassDTO)
-                .collect(Collectors.toList());
-    }
+    ClassesMapper INSTANCE = Mappers.getMapper(ClassesMapper.class);
 
-    public ClassesDTO classToClassDTO(Classes cls) {
-        return new ClassesDTO(cls);
-    }
+    @Mapping(source = "year.id", target = "idYear")
+    ClassesDTO toDto(Classes classes);
 
-    public List<Classes> classDTOsToClasses(List<ClassesDTO> classesDTOs) {
-        return classesDTOs.stream()
-                .filter(Objects::nonNull)
-                .map(this::classDTOToClass)
-                .collect(Collectors.toList());
-    }
+    List<ClassesDTO> toDto(List<Classes> classes);
 
-    public Classes classDTOToClass(ClassesDTO classDTO) {
-        if (classDTO == null) {
+    @Mapping(source = "idYear", target = "year")
+    Classes toEntity(ClassesDTO classesDTO);
+
+    default Classes fromId(Long id) {
+        if (id == null) {
             return null;
-        } else {
-            Classes cls = new Classes();
-            cls.setId(classDTO.getId());
-            cls.setName(classDTO.getName());
-            cls.setDescribe(classDTO.getDescribe());
-            cls.setOpenDay(classDTO.getOpenDay());
-            cls.setCloseDay(classDTO.getCloseDay());
-            cls.setStatus(classDTO.isStatus());
-            cls.setYear(classDTO.getYear());
-            cls.setUsers(classDTO.getUsers());
-            return cls;
         }
+        Classes classes = new Classes();
+        classes.setId(id);
+        return classes;
     }
 }

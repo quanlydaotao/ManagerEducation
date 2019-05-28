@@ -2,8 +2,6 @@ package com.huyduc.manage.security;
 
 import com.huyduc.manage.bean.User;
 import com.huyduc.manage.repository.UserRepository;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
-import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
  */
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
-
 
     private final UserRepository userRepository;
 

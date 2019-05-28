@@ -1,14 +1,19 @@
 package com.huyduc.manage.service;
 
-import com.huyduc.manage.config.Constants;
 import com.huyduc.manage.bean.Authority;
+import com.huyduc.manage.bean.Classes;
 import com.huyduc.manage.bean.User;
+import com.huyduc.manage.config.Constants;
 import com.huyduc.manage.repository.AuthorityRepository;
+import com.huyduc.manage.repository.ClassesRepository;
 import com.huyduc.manage.repository.UserRepository;
 import com.huyduc.manage.security.SecurityUtils;
 import com.huyduc.manage.service.dto.UserDTO;
 import com.huyduc.manage.service.util.RandomUtil;
-import com.huyduc.manage.web.rest.errors.*;
+import com.huyduc.manage.web.rest.errors.InvalidPasswordException;
+import com.huyduc.manage.web.rest.errors.LoginAlreadyUsedException;
+import com.huyduc.manage.web.rest.errors.PasswordNotMatchException;
+import com.huyduc.manage.web.rest.errors.PhoneNumberAlreadyUsedException;
 import com.huyduc.manage.web.rest.vm.ManagedUserVM;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -22,7 +27,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -37,42 +45,44 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthorityRepository authorityRepository;
+    private final ClassesRepository classesRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, ClassesRepository classesRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.classesRepository = classesRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
-            .map(user -> {
-                // activate given user for the registration key.
-                user.setActivated(true);
-                user.setActivationKey(null);
-                log.debug("Activated user: {}", user);
-                return user;
-            });
+                .map(user -> {
+                    // activate given user for the registration key.
+                    user.setActivated(true);
+                    user.setActivationKey(null);
+                    log.debug("Activated user: {}", user);
+                    return user;
+                });
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository.findOneByResetKey(key)
-            .map(user -> {
-                user.setPassword(passwordEncoder.encode(newPassword));
-                user.setResetKey(null);
-                return user;
-            });
+                .map(user -> {
+                    user.setPassword(passwordEncoder.encode(newPassword));
+                    user.setResetKey(null);
+                    return user;
+                });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail)
-            .filter(User::getActivated)
-            .map(user -> {
-                user.setResetKey(RandomUtil.generateResetKey());
-                return user;
-            });
+                .filter(User::getActivated)
+                .map(user -> {
+                    user.setResetKey(RandomUtil.generateResetKey());
+                    return user;
+                });
     }
 
 //    public User registerUser(UserDTO userDTO, String password) {
@@ -165,7 +175,7 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
-        userDTO.getAuthorities().forEach((item)->{
+        userDTO.getAuthorities().forEach((item) -> {
             authorityRepository.findById(item).ifPresent(authorities::add);
         });
         newUser.setAuthorities(authorities);
@@ -178,25 +188,25 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the current user.
      *
      * @param firstName first name of user
-     * @param lastName last name of user
-     * @param email email id of user
-     * @param langKey language key
-     * @param imageUrl image URL of user
+     * @param lastName  last name of user
+     * @param email     email id of user
+     * @param langKey   language key
+     * @param imageUrl  image URL of user
      */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String address, String phone_number, String identity_card_number) {
         SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setEmail(email.toLowerCase());
-                user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
-                user.setAddress(address);
-                user.setPhoneNumber(phone_number);
-                user.setIdentityCardNumber(identity_card_number);
-                log.debug("Changed Information for User: {}", user);
-            });
+                .flatMap(userRepository::findOneByLogin)
+                .ifPresent(user -> {
+                    user.setFirstName(firstName);
+                    user.setLastName(lastName);
+                    user.setEmail(email.toLowerCase());
+                    user.setLangKey(langKey);
+                    user.setImageUrl(imageUrl);
+                    user.setAddress(address);
+                    user.setPhoneNumber(phone_number);
+                    user.setIdentityCardNumber(identity_card_number);
+                    log.debug("Changed Information for User: {}", user);
+                });
     }
 
     /**
@@ -215,46 +225,46 @@ public class UserService {
             throw new PhoneNumberAlreadyUsedException();
         }
         return Optional.of(userRepository
-            .findById(userDTO.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(user -> {
-                user.setLogin(userDTO.getLogin().toLowerCase());
-                if (!password.isEmpty() && !rePassword.isEmpty()) {
-                    if (!checkPasswordLength(password)) {
-                        throw new InvalidPasswordException();
+                .findById(userDTO.getId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(user -> {
+                    user.setLogin(userDTO.getLogin().toLowerCase());
+                    if (!password.isEmpty() && !rePassword.isEmpty()) {
+                        if (!checkPasswordLength(password)) {
+                            throw new InvalidPasswordException();
+                        }
+                        if (!isIdenticalPassword(password, rePassword)) {
+                            throw new PasswordNotMatchException();
+                        }
+                        String encryptedPassword = passwordEncoder.encode(password);
+                        user.setPassword(encryptedPassword);
                     }
-                    if (!isIdenticalPassword(password, rePassword)) {
-                        throw new PasswordNotMatchException();
+                    user.setFirstName(userDTO.getFirstName());
+                    user.setLastName(userDTO.getLastName());
+                    user.setEmail(userDTO.getEmail().toLowerCase());
+                    if (!userDTO.getImageUrl().isEmpty() && !(userDTO.getImageUrl().equals(user.getImageUrl()))) {
+                        user.setImageUrl(hashFileName(userDTO.getImageUrl()));
                     }
-                    String encryptedPassword = passwordEncoder.encode(password);
-                    user.setPassword(encryptedPassword);
-                }
-                user.setFirstName(userDTO.getFirstName());
-                user.setLastName(userDTO.getLastName());
-                user.setEmail(userDTO.getEmail().toLowerCase());
-                if (!userDTO.getImageUrl().isEmpty() && !(userDTO.getImageUrl().equals(user.getImageUrl()))) {
-                    user.setImageUrl(hashFileName(userDTO.getImageUrl()));
-                }
-                user.setAddress(userDTO.getAddress());
-                user.setPhoneNumber(userDTO.getPhoneNumber());
-                user.setAddress1(userDTO.getAddress1());
-                user.setNations(userDTO.getNations());
-                user.setSex(userDTO.getSex());
-                user.setIdentityCardNumber(userDTO.getIdentityCardNumber());
-                user.setActivated(userDTO.isActivated());
-                user.setBirthday(userDTO.getBirthday());
-                Set<Authority> managedAuthorities = user.getAuthorities();
-                managedAuthorities.clear();
-                userDTO.getAuthorities().stream()
-                    .map(authorityRepository::findById)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .forEach(managedAuthorities::add);
-                log.debug("Changed Information for User: {}", user);
-                return user;
-            })
-            .map(UserDTO::new);
+                    user.setAddress(userDTO.getAddress());
+                    user.setPhoneNumber(userDTO.getPhoneNumber());
+                    user.setAddress1(userDTO.getAddress1());
+                    user.setNations(userDTO.getNations());
+                    user.setSex(userDTO.getSex());
+                    user.setIdentityCardNumber(userDTO.getIdentityCardNumber());
+                    user.setActivated(userDTO.isActivated());
+                    user.setBirthday(userDTO.getBirthday());
+                    Set<Authority> managedAuthorities = user.getAuthorities();
+                    managedAuthorities.clear();
+                    userDTO.getAuthorities().stream()
+                            .map(authorityRepository::findById)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .forEach(managedAuthorities::add);
+                    log.debug("Changed Information for User: {}", user);
+                    return user;
+                })
+                .map(UserDTO::new);
     }
 
     public AtomicInteger deleteUser(List<Long> ids) {
@@ -271,16 +281,16 @@ public class UserService {
 
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
-                String currentEncryptedPassword = user.getPassword();
-                if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
-                    throw new InvalidPasswordException();
-                }
-                String encryptedPassword = passwordEncoder.encode(newPassword);
-                user.setPassword(encryptedPassword);
-                log.debug("Changed password for User: {}", user);
-            });
+                .flatMap(userRepository::findOneByLogin)
+                .ifPresent(user -> {
+                    String currentEncryptedPassword = user.getPassword();
+                    if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                        throw new InvalidPasswordException();
+                    }
+                    String encryptedPassword = passwordEncoder.encode(newPassword);
+                    user.setPassword(encryptedPassword);
+                    log.debug("Changed password for User: {}", user);
+                });
     }
 
     @Transactional(readOnly = true)
@@ -315,13 +325,13 @@ public class UserService {
     private String hashFileName(String fileName) {
         if (!fileName.isEmpty()) {
             String ext = FilenameUtils.getExtension(fileName);
-            String[] body = fileName.split("."+ext);
-            return DigestUtils.md5Hex(body[0]) + '.'+ext;
+            String[] body = fileName.split("." + ext);
+            return DigestUtils.md5Hex(body[0]) + '.' + ext;
         }
         return "";
     }
 
-    private boolean removeNonActivatedUser(User existingUser){
+    private boolean removeNonActivatedUser(User existingUser) {
         if (existingUser.getActivated()) {
             return false;
         }
@@ -338,5 +348,9 @@ public class UserService {
 
     private static boolean isIdenticalPassword(String password, String re_password) {
         return password.equals(re_password);
+    }
+
+    public List<Classes> getTest() {
+        return classesRepository.findAll();
     }
 }
