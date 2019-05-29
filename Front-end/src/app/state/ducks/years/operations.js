@@ -1,6 +1,8 @@
-import { getAllYears, addNewYear } from "./actions";
+import { getAllYears, addNewYear, openFormEdit, closeFormEdit } from "./actions";
 
 export {
     getAllYears,
-    addNewYear
+    addNewYear,
+    openFormEdit,
+    closeFormEdit
 };

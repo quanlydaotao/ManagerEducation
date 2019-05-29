@@ -24,11 +24,6 @@ public class YearsDTO {
     @Size(min = 4, max = 10)
     private String startYears;
 
-    @NotNull
-    @NotBlank
-    @Size(min = 4, max = 10)
-    private String endYears;
-
     private Date openDay;
 
     private Date closeDay;
@@ -68,14 +63,6 @@ public class YearsDTO {
 
     public void setStartYears(String startYears) {
         this.startYears = startYears;
-    }
-
-    public String getEndYears() {
-        return endYears;
-    }
-
-    public void setEndYears(String endYears) {
-        this.endYears = endYears;
     }
 
     public Date getOpenDay() {
@@ -128,7 +115,6 @@ public class YearsDTO {
                 status == yearsDTO.status &&
                 Objects.equals(name, yearsDTO.name) &&
                 Objects.equals(startYears, yearsDTO.startYears) &&
-                Objects.equals(endYears, yearsDTO.endYears) &&
                 Objects.equals(openDay, yearsDTO.openDay) &&
                 Objects.equals(closeDay, yearsDTO.closeDay) &&
                 Objects.equals(describe, yearsDTO.describe);
@@ -136,7 +122,7 @@ public class YearsDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, startYears, endYears, openDay, closeDay, describe, maximumClasses, status);
+        return Objects.hash(id, name, startYears, openDay, closeDay, describe, maximumClasses, status);
     }
 
     @Override
@@ -145,7 +131,6 @@ public class YearsDTO {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", startYears='" + startYears + '\'' +
-                ", endYears='" + endYears + '\'' +
                 ", openDay=" + openDay +
                 ", closeDay=" + closeDay +
                 ", describe='" + describe + '\'' +

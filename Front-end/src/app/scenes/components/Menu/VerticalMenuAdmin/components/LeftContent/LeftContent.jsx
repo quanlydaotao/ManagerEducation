@@ -37,43 +37,43 @@ class LeftContent extends React.Component {
                 subheader={<ListSubheader component="div">TRUNG TÂM NGOẠI NGỮ ALOHA</ListSubheader>}
                 className={classes.root}
             >
-                <ListItem button component={NavLink} to="/administrator/home" activeClassName="active">
+                <ListItem button component={NavLink} to="/administrator/home" activeClassName="activeLink">
                     <ListItemIcon>
                        <HomeIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="Trang chủ" />
                 </ListItem>
-                <ListItem button component={NavLink} to="/administrator/education" activeClassName="active">
+                <ListItem button component={NavLink} to="/administrator/education" activeClassName="activeLink">
                     <ListItemIcon>
                         <ShopTwoIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="Quản lý đào tạo" />
                 </ListItem>
-                <ListItem button component={NavLink} to="/administrator/accounts" activeClassName="active">
+                <ListItem button component={NavLink} to="/administrator/accounts" activeClassName="activeLink">
                     <ListItemIcon>
                         <AccountBoxIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="Quản lý tài khoản" />
                 </ListItem>
-                <ListItem button component={NavLink} to="/administrator/change-password" activeClassName="active">
+                <ListItem button component={NavLink} to="/administrator/change-password" activeClassName="activeLink">
                     <ListItemIcon>
                         <FingerPrintIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="Thay đổi mật khẩu" />
                 </ListItem>
-                <ListItem button component={NavLink} to="/administrator/tuition" activeClassName="active">
+                <ListItem button component={NavLink} to="/administrator/tuition" activeClassName="activeLink">
                     <ListItemIcon>
                         <EuroSymbolIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="Quản lý học phí" />
                 </ListItem>
-                <ListItem button component={NavLink} to="/administrator/message" activeClassName="active">
+                <ListItem button component={NavLink} to="/administrator/message" activeClassName="activeLink">
                     <ListItemIcon>
                         <DraftsIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="Quản lý tin nhắn" />
                 </ListItem>
-                <ListItem button component={NavLink} to="/administrator/popup" activeClassName="active">
+                <ListItem button component={NavLink} to="/administrator/popup" activeClassName="activeLink">
                     <ListItemIcon>
                         <ImportantDevicesIcon />
                     </ListItemIcon>

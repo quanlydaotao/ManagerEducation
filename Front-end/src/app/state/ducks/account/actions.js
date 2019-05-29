@@ -32,11 +32,11 @@ export const addNewUserAccount = ( dataForm ) => ( {
 });
 
 export const openFormEdit = ( ) => ( {
-    type: types.OPEN_EDIT,
+    type: types.OPEN_EDIT_USER_ACCOUNT,
 });
 
 export const closeFormEdit = ( ) => ( {
-    type: types.CLOSE_EDIT,
+    type: types.CLOSE_EDIT_USER_ACCOUNT,
 });
 
 

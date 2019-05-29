@@ -10479,7 +10479,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 /* END-ENHANCEDTABLE */
 
 /* ACTIVE LINK */
-.active {
+.activeLink {
     background-color: rgba(0, 0, 0, 0.08) !important;
     color: '#333 !important';
 }
@@ -10489,4 +10489,5 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     padding: 10px 20px !important;
     border-radius: 40px !important;
 }
+
 

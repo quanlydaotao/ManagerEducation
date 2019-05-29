@@ -20,3 +20,11 @@ export const addNewYear = ( dataForm ) => ( {
         body: JSON.stringify(dataForm)
     }
 });
+
+export const openFormEdit = ( ) => ( {
+    type: types.OPEN_EDIT_YEARS,
+});
+
+export const closeFormEdit = ( ) => ( {
+    type: types.CLOSE_EDIT_YEARS,
+});

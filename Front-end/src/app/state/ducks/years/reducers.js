@@ -51,8 +51,20 @@ const actionReducer = createReducer( initialState )( {
     // }
 });
 
+const toggleEditYearsReducer = createReducer( false )( {
+    [ types.OPEN_EDIT_YEARS ]: ( state, action ) => {
+        state = true;
+        return state;
+    },
+    [ types.CLOSE_EDIT_YEARS ]: ( state, action ) => {
+        state = false;
+        return state;
+    }
+});
+
 
 export default combineReducers( {
     allYears: allYearsReducer,
-    actionYears: actionReducer
+    actionsYears: actionReducer,
+    toggleEditYears: toggleEditYearsReducer
 } );

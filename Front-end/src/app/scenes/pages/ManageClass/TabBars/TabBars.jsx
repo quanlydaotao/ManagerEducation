@@ -39,13 +39,13 @@ class TabBars extends React.Component {
         return (
             <div className={classes.root}>
                 <div className={`${styles.appBar}`}>
-                    <NavLink to="/administrator/education/years" activeClassName="active">
+                    <NavLink to="/administrator/education/years" activeClassName="activeLink">
                         <StyleIcon />  NĂM HỌC ĐÀO TẠO
                     </NavLink>
-                    <NavLink to="/administrator/education/timetables" activeClassName="active">
+                    <NavLink to="/administrator/education/timetables" activeClassName="activeLink">
                         <EventIcon /> THỜI KHÓA BIỂU/ LỊCH HỌC
                     </NavLink>
-                    <NavLink to="/administrator/education/classes" activeClassName="active">
+                    <NavLink to="/administrator/education/classes" activeClassName="activeLink">
                         <CastForEducationIcon /> HỆ THỐNG LỚP HỌC
                     </NavLink>
                 </div>

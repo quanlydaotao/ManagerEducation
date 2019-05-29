@@ -66,11 +66,11 @@ const actionReducer = createReducer( initialState )( {
 });
 
 const toggleEditAccountReducer = createReducer( false )( {
-    [ types.OPEN_EDIT ]: ( state, action ) => {
+    [ types.OPEN_EDIT_USER_ACCOUNT ]: ( state, action ) => {
         state = true;
         return state;
     },
-    [ types.CLOSE_EDIT ]: ( state, action ) => {
+    [ types.CLOSE_EDIT_USER_ACCOUNT ]: ( state, action ) => {
         state = false;
         return state;
     }

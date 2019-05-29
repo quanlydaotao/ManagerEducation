@@ -23,18 +23,16 @@ import { ImageAvatars } from '../../../../../components/ImageAvatars';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import styles from './styles.css';
-import { PopupFormEdit } from '../../../../../components/Popup/PopupFormEdit';
+import { PopupFormEditYear } from '../../../../../components/Popup/PopupFormEditYear';
 import { PopupDelete } from '../../../../../components/Popup/PopupDelete';
 
 const rows = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
     { id: 'name', numeric: false, disablePadding: false, label: 'Tên năm học' },
-    { id: 'startYears', numeric: false, disablePadding: false, label: 'Năm học bắt đầu' },
-    { id: 'endYears', numeric: false, disablePadding: false, label: 'Năm học kết thúc' },
+    { id: 'startYears', numeric: false, disablePadding: false, label: 'Năm học' },
     { id: 'openDay', numeric: false, disablePadding: false, label: 'Ngày khai giảng' },
     { id: 'closeDay', numeric: false, disablePadding: false, label: 'Ngày bế giảng' },
-    { id: 'describe', numeric: false, disablePadding: false, label: 'Mô tả' },
-    { id: 'maximumClasses', numeric: false, disablePadding: false, label: 'Số lớp tối đa' },
+    { id: 'maximumClasses', numeric: false, disablePadding: false, label: 'Số khóa học tối đa' },
     { id: 'status', numeric: false, disablePadding: false, label: 'Trạng thái' },
     { id: 'edit', numeric: false, disablePadding: false, label: 'Tác vụ' }
 ]
@@ -138,6 +136,11 @@ class EnhancedTableYear extends React.Component {
         this.setState({ selected: newSelected });
     };
 
+    handleOpenForm = (id) => {
+        // this.props.findAccountById(id);
+        this.props.openForm();
+    }
+
     // handleChangePage = (event, page) => {
     //     this.setState({ page });
     // };
@@ -166,7 +169,9 @@ class EnhancedTableYear extends React.Component {
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
         return (
             <Paper className={classes.root}>
-                {/* {accountById.id ? <PopupFormEdit data={accountById} /> : ''} */}
+                {/* {accountById.id ?
+                 : ''} */}
+                <PopupFormEditYear />
                 <PopupDelete delete={this.deleteData} />
                 <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
                 <div style={{ padding: '10px 0 15px 24px' }} className="message">
@@ -223,20 +228,10 @@ class EnhancedTableYear extends React.Component {
                                                     /> || <Skeleton />}
                                                 </TableCell>
                                                 <TableCell className="cell">
-                                                    {<Chip
-                                                        label={<b>{n.endYears}</b>}
-                                                        color="inherit"
-                                                        title={<b>{n.endYears}</b>}
-                                                    /> || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
                                                     {n.openDay || <Skeleton />}
                                                 </TableCell>
                                                 <TableCell className="cell">
                                                     {n.closeDay || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.describe || <Skeleton />}
                                                 </TableCell>
                                                 <TableCell className="cell">
                                                     {n.maximumClasses || <Skeleton />}
@@ -267,8 +262,8 @@ class EnhancedTableYear extends React.Component {
                                 })}
                             {years.length <= 0 && (
                                 <TableRow>
-                                    <TableCell colSpan={11}>
-                                        <Skeleton count={5} height={50} duration={2} />
+                                    <TableCell colSpan={9}>
+                                        <Skeleton count={10} height={50} duration={2} />
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -299,7 +294,7 @@ EnhancedTableYear.propTypes = {
     classes: PropTypes.object.isRequired,
     years: PropTypes.arrayOf(yearsShape).isRequired,
     getAllYears: PropTypes.func.isRequired,
-
+    toggleEditYears: PropTypes.func.isRequired,
 };
 
 EnhancedTableYear.defaultProps = {
@@ -312,6 +307,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     getAllYears: yearsOperations.getAllYears,
+    openForm: yearsOperations.openFormEdit
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableYear));

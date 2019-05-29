@@ -8,13 +8,11 @@ import com.huyduc.manage.service.dto.UserDTO;
 import com.huyduc.manage.web.rest.errors.BadRequestAlertException;
 import com.huyduc.manage.web.rest.errors.EmailAlreadyUsedException;
 import com.huyduc.manage.web.rest.errors.LoginAlreadyUsedException;
-import com.huyduc.manage.web.rest.util.PaginationUtil;
 import com.huyduc.manage.web.rest.vm.RegisterUserAccountVM;
 import com.huyduc.manage.web.rest.vm.UpdateUserAccountVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -117,8 +115,7 @@ public class UserResource {
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         final Page<UserDTO> page = userService.getAllManagedUsers(PageRequest.of(0, 10000000, Sort.by("id").descending()));
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
     }
 
     /**

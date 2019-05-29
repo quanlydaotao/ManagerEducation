@@ -5,6 +5,8 @@ import com.huyduc.manage.repository.YearsRepository;
 import com.huyduc.manage.service.YearsService;
 import com.huyduc.manage.service.dto.YearsDTO;
 import com.huyduc.manage.service.mapper.YearsMapper;
+import com.huyduc.manage.web.rest.errors.InvalidPasswordException;
+import com.huyduc.manage.web.rest.errors.YearAlreadyExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -38,9 +40,33 @@ public class YearsServiceImpl implements YearsService {
     @Override
     public YearsDTO save(YearsDTO yearsDTO) {
         log.debug("Request to save Years : {}", yearsDTO);
+        Optional<Years> yearExits = yearsRepository.findOneByStartYears(yearsDTO.getStartYears());
+        if (yearExits.isPresent()) {
+            throw new YearAlreadyExistException();
+        }
         Years year = YearsMapper.INSTANCE.toEntity(yearsDTO);
-        year = yearsRepository.save(year);
-        return YearsMapper.INSTANCE.toDto(year);
+        return YearsMapper.INSTANCE.toDto(yearsRepository.save(year));
+    }
+
+
+    /**
+     * Update all information for year and return information after updated
+     *
+     * @param yearDTO year to update
+     * @return updated year
+     */
+    public Optional<YearsDTO> updateYear(YearsDTO yearDTO) {
+        return Optional.of(yearsRepository
+                .findById(yearDTO.getId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(years -> {
+                    if (years.getId() != yearDTO.getId()) {
+                        throw  new YearAlreadyExistException();
+                    }
+                    log.debug("Changed Information for Year: {}", yearDTO);
+                    return years;
+                }).map(years -> YearsMapper.INSTANCE.toDto(years));
     }
 
 
@@ -67,9 +93,10 @@ public class YearsServiceImpl implements YearsService {
      */
     @Override
     public Optional<YearsDTO> findOne(Long id) {
-        return Optional.empty();
+        log.debug("Request to get Year : {}", id);
+        return yearsRepository.findById(id)
+                .map(YearsMapper.INSTANCE::toDto);
     }
-
 
     /**
      * Delete the years by id.

@@ -19,7 +19,6 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import LockIcon from '@material-ui/icons/Lock';
-import { accountShape } from '../../../propTypes';
 import { fileOperations } from '../../../../state/ducks/file';
 import ScreenLockRotationIcon from '@material-ui/icons/ScreenLockRotation';
 import PhoneLinkRingIcon from '@material-ui/icons/PhonelinkRing';
@@ -83,7 +82,7 @@ function PaperComponent(props) {
     );
 }
 
-class PopupFormEdit extends React.Component {
+class PopupFormEditAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -266,7 +265,6 @@ class PopupFormEdit extends React.Component {
         var isShowMessageFailueAfterSubit = !actions.progress && actions.status === 'UPDATE_FAILED'
             && actions.data.status === 400 && actions.data.response;
         var isShowMessageSuccessAfterSubit = !actions.progress && actions.status === 'UPDATE_SUCCESS';
-        console.log(this.state);
         let alert = () => {
             if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
                 return (
@@ -563,10 +561,9 @@ class PopupFormEdit extends React.Component {
     }
 }
 
-PopupFormEdit.propTypes = {
+PopupFormEditAccount.propTypes = {
     closeForm: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
-    accounts: PropTypes.arrayOf(accountShape).isRequired,
     updateUserAccount: PropTypes.func.isRequired,
     updateAvatar: PropTypes.func.isRequired,
     actions: PropTypes.objectOf({
@@ -576,15 +573,13 @@ PopupFormEdit.propTypes = {
     }).isRequired
 };
 
-PopupFormEdit.defaultProps = {
+PopupFormEditAccount.defaultProps = {
     statusForm: false,
-    accounts: [],
     actions: { progress: false, status: '', data: {} },
 }
 
 const mapStateToProps = state => ({
     statusForm: state.account.toggleEditAccounts,
-    accounts: state.account.accounts,
     actions: state.account.actionsAccounts
 });
 
@@ -594,4 +589,4 @@ const mapDispatchToProps = {
     updateAvatar: fileOperations.updateFile
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(PopupFormEdit));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(PopupFormEditAccount));

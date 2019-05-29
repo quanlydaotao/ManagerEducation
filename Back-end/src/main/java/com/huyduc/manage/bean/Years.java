@@ -20,13 +20,12 @@ public class Years implements Serializable {
     private long id;
     private String name;
     private String startYears;
-    private String endYears;
     private Date openDay;
     private Date closeDay;
     private String describe;
     private int maximumClasses;
     private boolean status;
-    private Set<Classes> classes = new HashSet<>();
+    private Set<Course> courses = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,26 +55,13 @@ public class Years implements Serializable {
     @NotNull
     @NotBlank
     @Size(min = 4, max = 10)
-    @Column(name = "start_years", length = 10, nullable = false)
+    @Column(name = "start_years", length = 10, nullable = false, unique = true)
     public String getStartYears() {
         return startYears;
     }
 
     public void setStartYears(String startYears) {
         this.startYears = startYears;
-    }
-
-    @Basic
-    @NotNull
-    @NotBlank
-    @Size(min = 4, max = 10)
-    @Column(name = "end_years", length = 10, nullable = false)
-    public String getEndYears() {
-        return endYears;
-    }
-
-    public void setEndYears(String endYears) {
-        this.endYears = endYears;
     }
 
     @Basic
@@ -131,12 +117,12 @@ public class Years implements Serializable {
     }
 
     @OneToMany(mappedBy = "year")
-    public Set<Classes> getClasses() {
-        return classes;
+    public Set<Course> getCourses() {
+        return courses;
     }
 
-    public void setClasses(Set<Classes> classes) {
-        this.classes = classes;
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 
     @Override
@@ -149,7 +135,6 @@ public class Years implements Serializable {
                 status == years.status &&
                 Objects.equals(name, years.name) &&
                 Objects.equals(startYears, years.startYears) &&
-                Objects.equals(endYears, years.endYears) &&
                 Objects.equals(openDay, years.openDay) &&
                 Objects.equals(closeDay, years.closeDay) &&
                 Objects.equals(describe, years.describe);
@@ -157,7 +142,7 @@ public class Years implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, startYears, endYears, openDay, closeDay, describe, maximumClasses, status);
+        return Objects.hash(id, name, startYears, openDay, closeDay, describe, maximumClasses, status);
     }
 
     @Override
@@ -166,13 +151,12 @@ public class Years implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", startYears='" + startYears + '\'' +
-                ", endYears='" + endYears + '\'' +
                 ", openDay=" + openDay +
                 ", closeDay=" + closeDay +
                 ", describe='" + describe + '\'' +
                 ", maximumClasses=" + maximumClasses +
                 ", status=" + status +
-                ", classes=" + classes +
                 '}';
     }
+
 }

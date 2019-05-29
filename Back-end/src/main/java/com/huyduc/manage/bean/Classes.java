@@ -22,8 +22,8 @@ public class Classes implements Serializable {
     private Date openDay;
     private Date closeDay;
     private boolean status;
-    private Years year;
     private Set<User> users;
+    private Course course;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -92,18 +92,6 @@ public class Classes implements Serializable {
         this.status = status;
     }
 
-    @ManyToOne
-    @JoinTable(name = "years_classes",
-            joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "years_id", referencedColumnName = "id", nullable = false))
-    public Years getYear() {
-        return year;
-    }
-
-    public void setYear(Years year) {
-        this.year = year;
-    }
-
     @OneToMany
     public Set<User> getUsers() {
         return users;
@@ -111,6 +99,17 @@ public class Classes implements Serializable {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    @ManyToOne
+    @JoinTable(name = "course_classes", joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"))
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     @Override
@@ -140,8 +139,8 @@ public class Classes implements Serializable {
                 ", openDay=" + openDay +
                 ", closeDay=" + closeDay +
                 ", status=" + status +
-                ", year=" + year +
                 ", users=" + users +
                 '}';
     }
+
 }

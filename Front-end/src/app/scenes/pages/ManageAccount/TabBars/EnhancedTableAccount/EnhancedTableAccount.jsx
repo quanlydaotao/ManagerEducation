@@ -24,7 +24,7 @@ import { EnhancedTableToolBar } from './components/EnhancedTableToolBar';
 import { ImageAvatars } from '../../../../components/ImageAvatars';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
-import { PopupFormEdit } from '../../../../components/Popup/PopupFormEdit';
+import { PopupFormEditAccount } from '../../../../components/Popup/PopupFormEditAccount';
 import { PopupDelete } from '../../../../components/Popup/PopupDelete';
 
 const rows = [
@@ -167,7 +167,7 @@ class EnhancedTableAccount extends React.Component {
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
         return (
             <Paper className={classes.root}>
-                {accountById.id ? <PopupFormEdit data={accountById}/> : ''}
+                {accountById.id ? <PopupFormEditAccount data={accountById}/> : ''}
                 <PopupDelete delete={this.deleteData} />
                 <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete}/>
                 <div style={{padding: '10px 0 15px 24px'}} className="message">

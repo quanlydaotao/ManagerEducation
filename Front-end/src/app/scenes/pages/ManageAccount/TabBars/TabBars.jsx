@@ -39,10 +39,10 @@ class TabBars extends React.Component {
         return (
             <div className={classes.root}>
                 <div className={`${styles.appBar}`}>
-                    <NavLink to="/administrator/accounts/users" activeClassName="active">
+                    <NavLink to="/administrator/accounts/users" activeClassName="activeLink">
                         <ContactsIcon /> DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP
                     </NavLink>
-                    <NavLink to="/administrator/accounts/add-new" activeClassName="active">
+                    <NavLink to="/administrator/accounts/add-new" activeClassName="activeLink">
                         <HowToRegIcon /> THÊM MỚI TÀI KHOẢN
                     </NavLink>
                 </div>

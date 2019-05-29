@@ -50,13 +50,12 @@ class FormAddNewYears extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '', startYears: '', endYears: '',
+            name: '', startYears: '',
             openDay: null, closeDay: null, describe: '',
             maximumClasses: 0, status: true,
             errors: {
                 name: '',
                 startYears: '',
-                endYears: '',
                 maximumClasses: ''
             },
             open: false,
@@ -86,10 +85,10 @@ class FormAddNewYears extends Component {
         const check = this.isErrors(this.state);
         if (check) {
             const {
-                name, startYears, endYears, openDay, closeDay, describe, maximumClasses, status
+                name, startYears, openDay, closeDay, describe, maximumClasses, status
             } = this.state;
             const formData = {
-                name, startYears, endYears, openDay, closeDay, describe, maximumClasses, status
+                name, startYears, openDay, closeDay, describe, maximumClasses, status
             }
             this.props.addNewYear(formData);
         }
@@ -98,7 +97,6 @@ class FormAddNewYears extends Component {
     isErrors = datas => {
         let name = "";
         let startYears = "";
-        let endYears= "";
         let maximumClasses = "";
         if (datas.name === '') {
             name = "Tên năm học không được để trống!";
@@ -111,26 +109,15 @@ class FormAddNewYears extends Component {
         if (datas.startYears === '') {
             startYears = "Vui lòng chọn năm học bắt đầu!";
         } else {
-            startYears = "";
-        }
-
-        if (datas.endYears === '') {
-            endYears = "Vui lòng chọn năm học kết thúc!";
-        } else {
-            endYears = "";
-        }
-
-        if (datas.startYears !== '' && datas.endYears !== '') {
             try {
                 let stYear = parseInt(datas.startYears);
-                let edYear = parseInt(datas.endYears);
-                if (edYear - stYear < 0) {
-                    endYears = "Năm học kết thúc phải lớn hơn hoặc bằng năm học bắt đầu!";
+                if (startYears < 0) {
+                    startYears = "Năm học phải lớn hơn 0!";
                 } else {
-                    endYears = "";
+                    startYears= "";
                 }
             } catch (error) {
-                endYears = "Dữ liệu đầu vào không hợp lệ!";
+                startYears = "Dữ liệu đầu vào không hợp lệ!";
             }
         }
 
@@ -141,10 +128,9 @@ class FormAddNewYears extends Component {
         }
 
         
-        this.setState({ errors: { name, startYears, endYears, maximumClasses } });
+        this.setState({ errors: { name, startYears, maximumClasses } });
         if (name === '' 
             && startYears === '' 
-            && endYears=== '' 
             && maximumClasses === '') {
             return true;
         }
@@ -163,10 +149,21 @@ class FormAddNewYears extends Component {
     render() {
         const { classes, actions } = this.props;
         const { errors } = this.state;
-        var isShowMessageBeforeSubit = errors.name !== '' || errors.startYears !== '' || errors.endYears !== '' || errors.maximumClasses !== '';
-        var isShowMessageFailueAfterSubit = !actions.progress && actions.status === 'ADD_FAILED'
-            && actions.data.status === 400 && actions.data.response;
-        var isShowMessageSuccessAfterSubit = !actions.progress && actions.status === 'ADD_SUCCESS';
+        var isShowMessageBeforeSubit = errors.name !== '' 
+            || errors.startYears !== '' 
+            || errors.maximumClasses !== '';
+        var isShowMessageFailueAfterSubit = !actions.progress 
+            && actions.status === 'ADD_FAILED'
+            && actions.data.status === 400 
+            && actions.data.response;
+        var isShowMessageSuccessAfterSubit = !actions.progress 
+            && actions.status === 'ADD_SUCCESS';
+
+        const currentYear = new Date().getFullYear();
+        const allYears = [];
+        for (let i = currentYear; i<=(currentYear+100); i++) {
+            allYears.push(i);
+        }
         let alert = () => {
             if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
                 return (
@@ -191,7 +188,7 @@ class FormAddNewYears extends Component {
                                         {errors.endYears !== '' ? <li>{errors.endYears}</li> : ''}
                                         {errors.maximumClasses !== '' ? <li>{errors.maximumClasses}</li> : ''}
                                         {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
-                                            <li>{actions.data.response.createFailed ? actions.data.response.createFailed : 'Tạo năm học thất bại!'}</li> : ''}
+                                            <li>{actions.data.response.createYearFailed ? actions.data.response.createYearFailed : 'Tạo năm học thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -270,31 +267,24 @@ class FormAddNewYears extends Component {
                             <div className="row">
                                 <div className="col-md-6">
                                     <label htmlFor="name"><b>Tên năm học: (*)</b></label>
-                                    <input id="name" type="text" minLength="9" maxLength="100" onChange={this.handleChange} placeholder="VD: Năm học 2019-2020" name="name" required />
+                                    <input id="name" type="text" minLength="9" maxLength="100" onChange={this.handleChange} placeholder="VD: Năm học 2019" name="name" required />
                                 </div>
                                 <div className="col-md-6">
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <label htmlFor="startYears"><b>Năm học bắt đầu: (*)</b></label>
+                                            <label htmlFor="startYears"><b>Năm học: (*)</b></label>
                                             <select name="startYears" id="startYears" onChange={this.handleChange} required>
-                                                <option value="">--- CHỌN NĂM BẮT ĐẦU ---</option>
-                                                <option value="2019">2019</option>
-                                                <option value="2018">2018</option>
-                                                <option value="2017">2017</option>
-                                                <option value="2016">2016</option>
-                                                <option value="2015">2015</option>
+                                                <option value="">--- CHỌN NĂM HỌC ---</option>
+                                                { 
+                                                    allYears.map((value, index) => (
+                                                        <option key={index} value={value}>{value}</option>
+                                                    ))
+                                                }
                                             </select>
                                         </div>
                                         <div className="col-md-6">
-                                            <label htmlFor="endYears"><b>Năm học kết thúc: (*)</b></label>
-                                            <select name="endYears" id="endYears" onChange={this.handleChange} required>
-                                                <option value="">--- CHỌN NĂM KẾT THÚC ---</option>
-                                                <option value="2019">2019</option>
-                                                <option value="2018">2018</option>
-                                                <option value="2017">2017</option>
-                                                <option value="2016">2016</option>
-                                                <option value="2015">2015</option>
-                                            </select>
+                                            <label htmlFor="maximumClasses"><b>Số khóa học tối đa: (*)</b></label>
+                                            <input type="number" id="maximumClasses" pattern="^[0-9]+$" min={0} max={100} onChange={this.handleChange} placeholder="Số lớp học tối đa..." name="maximumClasses" required defaultValue={0} />
                                         </div>
                                     </div>
                                 </div>
@@ -303,14 +293,16 @@ class FormAddNewYears extends Component {
                             <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay"/>
                             <label htmlFor="closeDay"><b>Ngày bế giảng năm học:</b></label>
                             <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay"/>
-                            <label htmlFor="describe"><b>Mô tả thêm:</b></label>
+                            <label htmlFor="describe"><b>Bài viết:</b></label>
                             <CKEditor
                                 data={this.state.describe}
+                                type="classic"
                                 onChange={this.handleChangeTextArea}
+                                config={{
+                                    height: '420px'
+                                }}
                             />
                             <br />
-                            <label htmlFor="maximumClasses"><b>Số lớp học tối đa: (*)</b></label>
-                            <input type="number" id="maximumClasses" pattern="^[0-9]+$" min={0} max={100} onChange={this.handleChange} placeholder="Số lớp học tối đa..." name="maximumClasses" required defaultValue={0} />
                             <label htmlFor="status"><b>Trạng thái:</b></label>
                             <select name="status" id="status" onChange={this.handleChange} required>
                                 <option value={true}>--- KÍCH HOẠT ---</option>
@@ -326,7 +318,7 @@ class FormAddNewYears extends Component {
                                     THÊM MỚI
                                         <AddIcon className={classes.rightIcon} />
                                 </Button>
-                                {/* {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''} */}
+                                {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
                             </div>
                         </form>
                     </div>
@@ -348,7 +340,7 @@ FormAddNewYears.defaultProps = {
 }
 
 const mapStateToProps = state => ({
-    actions: state.years.actionYears
+    actions: state.years.actionsYears
 });
 
 const mapDispatchToProps = {
