@@ -42,6 +42,17 @@ export const updateYear = ( dataForm ) => ( {
     }
 });
 
+export const deleteYears = ( listId ) => ( {
+    type: types.DELETE_YEARS,
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/years",
+        method: "DELETE",
+        body: JSON.stringify(listId)
+    }
+});
+
 export const openFormEdit = ( ) => ( {
     type: types.OPEN_EDIT_YEARS,
 });

@@ -54,17 +54,17 @@ const actionReducer = createReducer( initialState )( {
         state = {progress: false, status: 'UPDATE_FAILED', data: action.payload}
         return state;
     },
-    // [ types.DELETE_USER_ACCOUNT ]: ( state, action ) => {
-    //     return state;
-    // },
-    // [ types.DELETE_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
-    //     state = {progress: false, status: 'DELETE_SUCCESS', data: {}}
-    //     return state;
-    // },
-    // [ types.DELETE_USER_ACCOUNT_FAILED ]: ( state, action ) => {
-    //     state = {progress: false, status: 'DELETE_FAILED', data: action.payload}
-    //     return state;
-    // }
+    [ types.DELETE_YEARS ]: ( state, action ) => {
+        return state;
+    },
+    [ types.DELETE_YEARS_COMPLETED ]: ( state, action ) => {
+        state = {progress: false, status: 'DELETE_SUCCESS', data: {}}
+        return state;
+    },
+    [ types.DELETE_YEARS_FAILED ]: ( state, action ) => {
+        state = {progress: false, status: 'DELETE_FAILED', data: action.payload}
+        return state;
+    }
 });
 
 const toggleEditYearsReducer = createReducer( false )( {

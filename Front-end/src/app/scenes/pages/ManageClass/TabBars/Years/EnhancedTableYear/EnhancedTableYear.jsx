@@ -150,19 +150,20 @@ class EnhancedTableYear extends React.Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
-    // handleDelete = (param) => {
-    //     this.props.openPopupDelete();
-    // }
+    handleDelete = (param) => {
+        this.props.openPopupDelete();
+    }
 
-    // deleteData = (param) => {
-    //     this.props.deleteUserAccount(this.state.selected);
-    // }
+    deleteData = (param) => {
+        this.props.deleteYears(this.state.selected);
+    }
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
         const { classes, listName, years, yearById } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
+        console.log(selected);
         return (
             <Paper className={classes.root}>
                 {yearById.id ? <PopupFormEditYear data={yearById} /> : ''} 
@@ -290,6 +291,8 @@ EnhancedTableYear.propTypes = {
     yearById: PropTypes.object.isRequired,
     getAllYears: PropTypes.func.isRequired,
     toggleEditYears: PropTypes.func.isRequired,
+    deleteYears: PropTypes.func.isRequired,
+    deleteUserAccount: PropTypes.func.isRequired,
     findYearById: PropTypes.func.isRequired,
 };
 
@@ -306,7 +309,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     getAllYears: yearsOperations.getAllYears,
     openForm: yearsOperations.openFormEdit,
-    findYearById: yearsOperations.getYearsById
+    openPopupDelete: popupOperations.openPopupDelete,
+    findYearById: yearsOperations.getYearsById,
+    deleteYears: yearsOperations.deleteYears
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableYear));
