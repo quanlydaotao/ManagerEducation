@@ -137,22 +137,18 @@ class EnhancedTableYear extends React.Component {
     };
 
     handleOpenForm = (id) => {
-        // this.props.findAccountById(id);
+        this.props.findYearById(id);
         this.props.openForm();
     }
 
-    // handleChangePage = (event, page) => {
-    //     this.setState({ page });
-    // };
+    handleChangePage = (event, page) => {
+        this.setState({ page });
+    };
 
-    // handleOpenForm = (id) => {
-    //     this.props.findAccountById(id);
-    //     this.props.openForm();
-    // }
 
-    // handleChangeRowsPerPage = event => {
-    //     this.setState({ rowsPerPage: event.target.value });
-    // };
+    handleChangeRowsPerPage = event => {
+        this.setState({ rowsPerPage: event.target.value });
+    };
 
     // handleDelete = (param) => {
     //     this.props.openPopupDelete();
@@ -165,13 +161,11 @@ class EnhancedTableYear extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes, listName, years, accountById } = this.props;
+        const { classes, listName, years, yearById } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
         return (
             <Paper className={classes.root}>
-                {/* {accountById.id ?
-                 : ''} */}
-                <PopupFormEditYear />
+                {yearById.id ? <PopupFormEditYear data={yearById} /> : ''} 
                 <PopupDelete delete={this.deleteData} />
                 <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
                 <div style={{ padding: '10px 0 15px 24px' }} className="message">
@@ -293,21 +287,26 @@ class EnhancedTableYear extends React.Component {
 EnhancedTableYear.propTypes = {
     classes: PropTypes.object.isRequired,
     years: PropTypes.arrayOf(yearsShape).isRequired,
+    yearById: PropTypes.object.isRequired,
     getAllYears: PropTypes.func.isRequired,
     toggleEditYears: PropTypes.func.isRequired,
+    findYearById: PropTypes.func.isRequired,
 };
 
 EnhancedTableYear.defaultProps = {
-    years: []
+    years: [],
+    yearById: {}
 }
 
 const mapStateToProps = state => ({
     years: state.years.allYears,
+    yearById: state.years.getYear
 });
 
 const mapDispatchToProps = {
     getAllYears: yearsOperations.getAllYears,
-    openForm: yearsOperations.openFormEdit
+    openForm: yearsOperations.openFormEdit,
+    findYearById: yearsOperations.getYearsById
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableYear));

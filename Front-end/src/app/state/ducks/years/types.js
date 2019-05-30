@@ -11,3 +11,6 @@ export const DELETE_YEARS_COMPLETED = "years/DELETE_YEARS_COMPLETED";
 export const DELETE_YEARS_FAILED = "years/DELETE_YEARS_FAILED";
 export const OPEN_EDIT_YEARS = "years/OPEN_EDIT_YEARS";
 export const CLOSE_EDIT_YEARS = "years/CLOSE_EDIT_YEARS";
+export const GET_YEARS_BY_ID = "years/GET_YEARS_BY_ID";
+export const GET_YEARS_BY_ID_COMPLETED = "years/GET_YEARS_BY_ID_COMPLETED";
+export const GET_YEARS_BY_ID_FAILED = "years/GET_YEARS_BY_ID_FAILED";

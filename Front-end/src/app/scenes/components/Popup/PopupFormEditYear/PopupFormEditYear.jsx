@@ -87,7 +87,7 @@ class PopupFormEditYear extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '', startYears: '',
+            id: 0, name: '', startYears: '',
             openDay: null, closeDay: null, describe: '',
             maximumClasses: 0, status: true,
             errors: {
@@ -100,18 +100,15 @@ class PopupFormEditYear extends React.Component {
     }
 
     componentDidMount() {
-        // const { data } = this.props;
-        // const {
-        //     id, login, phoneNumber, authorities,
-        //     imageUrl, firstName, lastName, email, birthday, sex, nations,
-        //     address, address1, identityCardNumber, activated
-        // } = data;
-        // this.setState({
-        //     id: id, login: login, phoneNumber: phoneNumber, authorities: authorities,
-        //     imageUrl: imageUrl, firstName: firstName, lastName: lastName, email: email,
-        //     birthday: birthday, sex: sex, nations: nations, address: address, address1: address1,
-        //     identityCardNumber: identityCardNumber, activated: activated
-        // });
+        const { data } = this.props;
+        const {
+            id, name, startYears, openDay,
+            closeDay, describe, status, maximumClasses
+        } = data;
+        this.setState({
+            id, name, startYears, openDay,
+            closeDay, maximumClasses, describe, status
+        });
     }
 
     handleOpen = panel => (event, expanded) => {
@@ -143,27 +140,12 @@ class PopupFormEditYear extends React.Component {
         const check = this.isErrors(this.state);
         if (check) {
             const {
-                name, startYears, openDay, closeDay, describe, maximumClasses, status
+                id, name, startYears, openDay, closeDay, describe, maximumClasses, status
             } = this.state;
             const formData = {
-                name, startYears, openDay, closeDay, describe, maximumClasses, status
+                id, name, startYears, openDay, closeDay, describe, maximumClasses, status
             }
-            this.props.addNewYear(formData);
-        }
-    }
-
-    handleSubmit = event => {
-        event.preventDefault();
-        this.setState({ open: true });
-        const check = this.isErrors(this.state);
-        if (check) {
-            const {
-                name, startYears, openDay, closeDay, describe, maximumClasses, status
-            } = this.state;
-            const formData = {
-                name, startYears, openDay, closeDay, describe, maximumClasses, status
-            }
-            this.props.addNewYear(formData);
+            this.props.updateYear(formData);
         }
     }
 
@@ -220,17 +202,17 @@ class PopupFormEditYear extends React.Component {
 
 
     render() {
-        const { classes, actions, statusForm } = this.props;
+        const { classes, actions, statusForm, data } = this.props;
         const { errors } = this.state;
         var isShowMessageBeforeSubit = errors.name !== '' 
             || errors.startYears !== '' 
             || errors.maximumClasses !== '';
         var isShowMessageFailueAfterSubit = !actions.progress 
-            && actions.status === 'ADD_FAILED'
+            && actions.status === 'UPDATE_FAILED'
             && actions.data.status === 400 
             && actions.data.response;
         var isShowMessageSuccessAfterSubit = !actions.progress 
-            && actions.status === 'ADD_SUCCESS';
+            && actions.status === 'UPDATE_SUCCESS';
 
         const currentYear = new Date().getFullYear();
         const allYears = [];
@@ -261,7 +243,7 @@ class PopupFormEditYear extends React.Component {
                                         {errors.endYears !== '' ? <li>{errors.endYears}</li> : ''}
                                         {errors.maximumClasses !== '' ? <li>{errors.maximumClasses}</li> : ''}
                                         {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
-                                            <li>{actions.data.response.createYearFailed ? actions.data.response.createYearFailed : 'Tạo năm học thất bại!'}</li> : ''}
+                                            <li>{actions.data.response.updateYearFailed ? actions.data.response.updateYearFailed : 'Tạo năm học thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -299,7 +281,7 @@ class PopupFormEditYear extends React.Component {
                             message={
                                 <span>
                                     <ul>
-                                        {(!isShowMessageBeforeSubit && isShowMessageSuccessAfterSubit) ? <li>Tạo năm học thành công!</li> : ''}
+                                        {(!isShowMessageBeforeSubit && isShowMessageSuccessAfterSubit) ? <li>Cập nhật năm học thành công!</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -352,10 +334,10 @@ class PopupFormEditYear extends React.Component {
                                         <div className="row">
                                              <div className="col-md-4">
                                                 <label htmlFor="name"><b>Tên năm học: (*)</b></label>
-                                                <input id="name" type="text" minLength="9" maxLength="100" onChange={this.handleChange} placeholder="VD: Năm học 2019" name="name" required />
+                                                <input id="name" type="text" minLength="9" maxLength="100" onChange={this.handleChange} placeholder="VD: Năm học 2019" name="name" defaultValue={this.state.name} required />
                                                 <label htmlFor="startYears"><b>Năm học: (*)</b></label>
                                                 <select name="startYears" id="startYears" onChange={this.handleChange} required>
-                                                    <option value="">--- CHỌN NĂM HỌC ---</option>
+                                                    { this.state.startYears ? <option value={this.state.startYears} selected>{this.state.startYears}</option> :  <option value="">--- CHỌN NĂM HỌC ---</option>}
                                                     { 
                                                         allYears.map((value, index) => (
                                                             <option key={index} value={value}>{value}</option>
@@ -363,15 +345,15 @@ class PopupFormEditYear extends React.Component {
                                                     }
                                                 </select>
                                                 <label htmlFor="maximumClasses"><b>Số khóa học tối đa: (*)</b></label>
-                                                <input type="number" id="maximumClasses" pattern="^[0-9]+$" min={0} max={100} onChange={this.handleChange} placeholder="Số lớp học tối đa..." name="maximumClasses" required defaultValue={0} />
+                                                <input type="number" id="maximumClasses" pattern="^[0-9]+$" min={0} max={100} onChange={this.handleChange} placeholder="Số khóa học tối đa..." name="maximumClasses" required defaultValue={this.state.maximumClasses}/>
                                                 <label htmlFor="openDay"><b>Ngày khai giảng năm học:</b></label>
-                                                <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay"/>
+                                                <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" defaultValue={this.state.openDay}/>
                                                 <label htmlFor="closeDay"><b>Ngày bế giảng năm học:</b></label>
-                                                <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay"/>
+                                                <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" defaultValue={this.state.closeDay}/>
                                                 <label htmlFor="status"><b>Trạng thái:</b></label>
                                                 <select name="status" id="status" onChange={this.handleChange} required>
-                                                    <option value={true}>--- KÍCH HOẠT ---</option>
-                                                    <option value={false}>--- CHƯA KÍCH HOẠT ---</option>
+                                                    <option value={true} selected={this.state.status ? true : false}>--- MỞ NĂM HỌC ---</option> 
+                                                    <option value={false} selected={!this.state.status ? true : false}>--- ĐÓNG NĂM HỌC ---</option>
                                                 </select>
                                             </div>
                                             <div className="col-md-8">
@@ -431,7 +413,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     closeForm: yearsOperations.closeFormEdit,
-    // updateUserAccount: accountOperations.updateUserAccount,
+    updateYear:  yearsOperations.updateYear,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(PopupFormEditYear));

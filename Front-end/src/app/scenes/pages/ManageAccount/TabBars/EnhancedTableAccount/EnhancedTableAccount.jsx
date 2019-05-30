@@ -298,6 +298,7 @@ EnhancedTableAccount.propTypes = {
     classes: PropTypes.object.isRequired,
     listName: PropTypes.string.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
+    accountById: PropTypes.object.isRequired,
     getAllUserAccount: PropTypes.func.isRequired,
     openForm: PropTypes.func.isRequired,
     findAccountById: PropTypes.func.isRequired,

@@ -27,6 +27,14 @@ public interface YearsService {
      */
     Page<YearsDTO> findAll(Pageable pageable);
 
+    /**
+     * Update the years.
+     *
+     * @param yearDTO the pagination information
+     * @return the entity after updated
+     */
+    Optional<YearsDTO> updateYear(YearsDTO yearDTO);
+
 
     /**
      * Get the "id" years.

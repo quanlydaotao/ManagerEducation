@@ -8,7 +8,17 @@ export const getAllYears = () => ( {
         path: "/years",
         method: "GET"
     }
-} )
+} );
+
+export const getYearsById = ( id ) => ( {
+    type: types.GET_YEARS_BY_ID,
+    meta: {
+        async: true,
+        blocking: true,
+        path: `/years/${id}`,
+        method: "GET"
+    }
+} );
 
 export const addNewYear = ( dataForm ) => ( {
     type: types.ADD_NEW_YEARS,
@@ -17,6 +27,17 @@ export const addNewYear = ( dataForm ) => ( {
         blocking: true,
         path: "/years",
         method: "POST",
+        body: JSON.stringify(dataForm)
+    }
+});
+
+export const updateYear = ( dataForm ) => ( {
+    type: types.UPDATE_YEARS,
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/years",
+        method: "PUT",
         body: JSON.stringify(dataForm)
     }
 });

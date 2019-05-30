@@ -23,6 +23,9 @@ const getAccountReducer = createReducer( {} )( {
         }
         return state;
     },
+    [ types.GET_USER_ACCOUNT_BY_ID_FAILED ]: ( state, action ) => {
+        return state;
+    },
 });
 
 const initialState = {progress: false, status: '',  data: {}}

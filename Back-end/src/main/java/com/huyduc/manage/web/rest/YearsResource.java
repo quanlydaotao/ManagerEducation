@@ -79,12 +79,12 @@ public class YearsResource {
     public ResponseEntity<YearsDTO> updateYears(@RequestBody YearsDTO yearsDTO) throws URISyntaxException {
         try {
             if (yearsDTO.getId() <= 0) {
-                throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+                return new ResponseEntity(Collections.singletonMap("updateYearFailed", "Năm học đào tạo không tồn tại!"), HttpStatus.BAD_REQUEST);
             }
-            YearsDTO result = yearsService.save(yearsDTO);
+            Optional<YearsDTO> result = yearsService.updateYear(yearsDTO);
             return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, yearsDTO.getId()+""))
-                    .body(result);
+                    .body(result.get());
         } catch (Exception e) {
             return new ResponseEntity(Collections.singletonMap("updateYearFailed",
                     e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);

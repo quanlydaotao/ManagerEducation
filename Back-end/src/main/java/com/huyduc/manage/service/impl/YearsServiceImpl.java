@@ -61,12 +61,14 @@ public class YearsServiceImpl implements YearsService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(years -> {
-                    if (years.getId() != yearDTO.getId()) {
-                        throw  new YearAlreadyExistException();
+                    Optional<Years> yearIsExist = yearsRepository.findOneByStartYears(yearDTO.getStartYears());
+                    if (yearIsExist.isPresent() && yearIsExist.get().getId() != yearDTO.getId()) {
+                        throw new YearAlreadyExistException();
                     }
+                    Years years1 = yearsRepository.save(YearsMapper.INSTANCE.toEntity(yearDTO));
                     log.debug("Changed Information for Year: {}", yearDTO);
-                    return years;
-                }).map(years -> YearsMapper.INSTANCE.toDto(years));
+                    return YearsMapper.INSTANCE.toDto(years1);
+                });
     }
 
 
