@@ -14,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -103,10 +105,19 @@ public class YearsServiceImpl implements YearsService {
     /**
      * Delete the years by id.
      *
-     * @param id the id of the entity
+     * @param ids the list id of the entity
+     * @return the count is total all id deleted
      */
     @Override
-    public void delete(Long id) {
-
+    public AtomicInteger delete(List<Long> ids) {
+        AtomicInteger count = new AtomicInteger();
+        ids.forEach(id -> {
+            yearsRepository.findById(id).ifPresent(year -> {
+                yearsRepository.delete(year);
+                count.getAndIncrement();
+                log.debug("Deleted Year: {}", year);
+            });
+        });
+        return count;
     }
 }

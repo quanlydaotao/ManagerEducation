@@ -140,7 +140,7 @@ public class UserResource {
     }
 
     /**
-     * DELETE /users/:login : delete the "login" User.
+     * DELETE /users: delete the "login" User.
      *
      * @param ids the list id of the user to delete
      * @return the ResponseEntity with status 200 (OK)
