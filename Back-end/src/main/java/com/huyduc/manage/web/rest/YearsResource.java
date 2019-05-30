@@ -3,7 +3,6 @@ package com.huyduc.manage.web.rest;
 import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.service.YearsService;
 import com.huyduc.manage.service.dto.YearsDTO;
-import com.huyduc.manage.web.rest.errors.BadRequestAlertException;
 import com.huyduc.manage.web.rest.errors.YearAlreadyExistException;
 import com.huyduc.manage.web.rest.util.HeaderUtil;
 import org.springframework.data.domain.Page;
@@ -18,6 +17,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * REST controller for managing the school years.
@@ -41,7 +41,8 @@ public class YearsResource {
     @GetMapping("/years")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<YearsDTO>> getAllYears() {
-        final Page<YearsDTO> page = yearsService.findAll(PageRequest.of(0, 10000000, Sort.by("id").descending()));
+        final Page<YearsDTO> page = yearsService.findAll(PageRequest
+                .of(0, 10000000, Sort.by("id").descending()));
         return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
     }
 
@@ -102,6 +103,21 @@ public class YearsResource {
     public ResponseEntity<YearsDTO> getYear(@PathVariable Long id) {
         Optional<YearsDTO> yearDTO = yearsService.findOne(id);
         return ResponseEntity.ok().body(yearDTO.get());
+    }
+
+    /**
+     * DELETE /years: delete the year by id
+     *
+     * @param ids the list id of the year to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/years")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<AtomicInteger> deleteYears(@RequestBody List<Long> ids) {
+        AtomicInteger count = yearsService.delete(ids);
+        if (count.get() <= 0)
+            return ResponseEntity.badRequest().body(count);
+        return ResponseEntity.ok().body(count);
     }
 
 }

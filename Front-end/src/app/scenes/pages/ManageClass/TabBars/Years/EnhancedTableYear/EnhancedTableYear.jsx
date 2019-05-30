@@ -163,6 +163,7 @@ class EnhancedTableYear extends React.Component {
     render() {
         const { classes, listName, years, yearById } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
+        console.log(selected);
         return (
             <Paper className={classes.root}>
                 {yearById.id ? <PopupFormEditYear data={yearById} /> : ''} 

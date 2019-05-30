@@ -4,7 +4,9 @@ import com.huyduc.manage.service.dto.YearsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Service Interface for managing Years
@@ -48,8 +50,9 @@ public interface YearsService {
     /**
      * Delete the "id" years.
      *
-     * @param id the id of the entity
+     * @param ids the id of the entity
+     * @return the count is total all id deleted
      */
-    void delete(Long id);
+    AtomicInteger delete(List<Long> ids);
 
 }
