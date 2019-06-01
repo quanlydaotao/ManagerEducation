@@ -25,6 +25,8 @@ import LazyLoad from 'react-lazyload';
 import styles from './styles.css';
 import { PopupFormEditYear } from '../../../../../components/Popup/PopupFormEditYear';
 import { PopupDelete } from '../../../../../components/Popup/PopupDelete';
+import { history } from '../../../../../../state/utils';
+const NotFoundSearch = React.lazy(() => import('../../../../../components/NotFoundSearch/NotFoundSearch'));
 
 const rows = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
@@ -64,9 +66,9 @@ function getSorting(order, orderBy) {
 const style = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing.unit * 3,
-        boxShadow: 'none',
-        padding: '0 24px'
+        boxShadow: '0 2px 4px 0 rgba(0,0,0,.05)',
+        padding: '0 24px',
+        borderRadius: '2px'
     },
     table: {
         minWidth: 1020,
@@ -161,126 +163,137 @@ class EnhancedTableYear extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes, listName, years, yearById } = this.props;
+        const { classes, listName, years, yearById, actionsYears } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        console.log(selected);
+        if (actionsYears && actionsYears.status === 'DELETE_SUCCESS' && actionsYears.data === selected.length) {
+            alert("Xóa thành công " + actionsYears.data + " trường dữ liệu năm học!");
+            history.push('/administrator/education/years');
+        } else if (actionsYears && actionsYears.status === 'DELETE_FAILED' && actionsYears.data !== selected.length) {
+            alert("Xóa dữ liệu năm học thất bại!");
+        }
         return (
-            <Paper className={classes.root}>
-                {yearById.id ? <PopupFormEditYear data={yearById} /> : ''} 
-                <PopupDelete delete={this.deleteData} />
-                <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
-                <div style={{ padding: '10px 0 15px 24px' }} className="message">
-                    <div>
-                        <b>Chú ý:</b>
-                    </div>
-                    <ul>
-                        <li>- Danh sách dưới bao gồm các năm học trong chương trình đào tạo.</li>
-                        <li>- Mỗi năm học sẽ có các lớp được mở tương ứng.</li>
-                        <li>- Khi kết thúc năm học bạn có thể đóng năm học đó lại thay vì xóa.</li>
-                        <li>- Trong trường hợp muốn xóa năm học, bạn hãy chắc chắn rằng muốn xóa tất cả dữ liệu trong năm học và không thể khôi phục.</li>
-                    </ul>
-                </div>
-                <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle">
-                        <EnhancedTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={this.handleSelectAllClick}
-                            onRequestSort={this.handleRequestSort}
-                            rowCount={years.length}
-                            rows={rows}
+            <React.Fragment>
+                { years.length > 0 ? (
+                    <Paper className={classes.root}>
+                        {yearById.id ? <PopupFormEditYear data={yearById} /> : ''} 
+                        <PopupDelete delete={this.deleteData} />
+                        <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
+                        <div style={{ padding: '10px 0 15px 24px' }} className="message">
+                            <div>
+                                <b>Chú ý:</b>
+                            </div>
+                            <ul>
+                                <li>- Danh sách dưới bao gồm các năm học trong chương trình đào tạo.</li>
+                                <li>- Mỗi năm học sẽ có các lớp được mở tương ứng.</li>
+                                <li>- Khi kết thúc năm học bạn có thể đóng năm học đó lại thay vì xóa.</li>
+                                <li>- Trong trường hợp muốn xóa năm học, bạn hãy chắc chắn rằng muốn xóa tất cả dữ liệu trong năm học và không thể khôi phục.</li>
+                            </ul>
+                        </div>
+                        <div className={classes.tableWrapper}>
+                            <Table className={classes.table} aria-labelledby="tableTitle">
+                                <EnhancedTableHead
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onSelectAllClick={this.handleSelectAllClick}
+                                    onRequestSort={this.handleRequestSort}
+                                    rowCount={years.length}
+                                    rows={rows}
+                                />
+                                <TableBody>
+                                    {stableSort(years, getSorting(order, orderBy))
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map(n => {
+                                            const isSelected = this.isSelected(n.id);
+                                            return (
+                                                <LazyLoad>
+                                                    <TableRow
+                                                        hover
+                                                        role="checkbox"
+                                                        aria-checked={isSelected}
+                                                        tabIndex={-1}
+                                                        key={n.id}
+                                                        selected={isSelected}
+                                                    >
+                                                        <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
+                                                            <Checkbox checked={isSelected} color="default" />
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            <b>{n.id || <Skeleton />}</b>
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.name || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {<Chip
+                                                                label={<b>{n.startYears}</b>}
+                                                                color="inherit"
+                                                                title={<b>{n.startYears}</b>}
+                                                            /> || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.openDay || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.closeDay || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.maximumClasses || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {(n.status ? <Chip
+                                                                icon={<CheckCircleIcon />}
+                                                                label="Mở năm học"
+                                                                color="primary"
+                                                                className={classes.chip}
+                                                                title="Mở năm học"
+                                                            /> : <Chip
+                                                                    icon={<RemoveCircleIcon />}
+                                                                    label="Đóng năm học"
+                                                                    color="inherit"
+                                                                    title="Đóng năm học"
+                                                            />) || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {<Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }}
+                                                                title="Chỉnh sửa thông tin tài khoản">
+                                                                <LaunchIcon />
+                                                            </Button> || <Skeleton />}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </LazyLoad>
+                                            );
+                                        })}
+                                    {years.length <= 0 && (
+                                        <TableRow>
+                                            <TableCell colSpan={9}>
+                                                <Skeleton count={10} height={50} duration={2} />
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </div>
+                        <TablePagination
+                            rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
+                            component="div"
+                            count={years.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            backIconButtonProps={{
+                                'aria-label': 'Previous Page',
+                            }}
+                            nextIconButtonProps={{
+                                'aria-label': 'Next Page',
+                            }}
+                            onChangePage={this.handleChangePage}
+                            onChangeRowsPerPage={this.handleChangeRowsPerPage}
                         />
-                        <TableBody>
-                            {stableSort(years, getSorting(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
-                                    const isSelected = this.isSelected(n.id);
-                                    return (
-                                        <LazyLoad>
-                                            <TableRow
-                                                hover
-                                                role="checkbox"
-                                                aria-checked={isSelected}
-                                                tabIndex={-1}
-                                                key={n.id}
-                                                selected={isSelected}
-                                            >
-                                                <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
-                                                    <Checkbox checked={isSelected} color="default" />
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    <b>{n.id || <Skeleton />}</b>
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.name || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {<Chip
-                                                        label={<b>{n.startYears}</b>}
-                                                        color="inherit"
-                                                        title={<b>{n.startYears}</b>}
-                                                    /> || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.openDay || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.closeDay || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.maximumClasses || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {(n.status ? <Chip
-                                                        icon={<CheckCircleIcon />}
-                                                        label="Kích hoạt"
-                                                        color="primary"
-                                                        className={classes.chip}
-                                                        title="Kích hoạt"
-                                                    /> : <Chip
-                                                            icon={<RemoveCircleIcon />}
-                                                            label="Chưa kích hoạt"
-                                                            color="inherit"
-                                                            title="Chưa kích hoạt"
-                                                    />) || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {<Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }}
-                                                        title="Chỉnh sửa thông tin tài khoản">
-                                                        <LaunchIcon />
-                                                    </Button> || <Skeleton />}
-                                                </TableCell>
-                                            </TableRow>
-                                        </LazyLoad>
-                                    );
-                                })}
-                            {years.length <= 0 && (
-                                <TableRow>
-                                    <TableCell colSpan={9}>
-                                        <Skeleton count={10} height={50} duration={2} />
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-                <TablePagination
-                    rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
-                    component="div"
-                    count={years.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page',
-                    }}
-                    onChangePage={this.handleChangePage}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
-            </Paper>
+                    </Paper>
+                ) : (
+                    <NotFoundSearch name="Không tìm thấy danh sách năm học."/>
+                )}
+            </React.Fragment>
         );
     }
 }
@@ -288,6 +301,7 @@ class EnhancedTableYear extends React.Component {
 EnhancedTableYear.propTypes = {
     classes: PropTypes.object.isRequired,
     years: PropTypes.arrayOf(yearsShape).isRequired,
+    actionsYears: PropTypes.object.isRequired,
     yearById: PropTypes.object.isRequired,
     getAllYears: PropTypes.func.isRequired,
     toggleEditYears: PropTypes.func.isRequired,
@@ -298,12 +312,14 @@ EnhancedTableYear.propTypes = {
 
 EnhancedTableYear.defaultProps = {
     years: [],
-    yearById: {}
+    yearById: {},
+    actionsYears: {}
 }
 
 const mapStateToProps = state => ({
     years: state.years.allYears,
-    yearById: state.years.getYear
+    yearById: state.years.getYear,
+    actionsYears: state.years.actionsYears
 });
 
 const mapDispatchToProps = {

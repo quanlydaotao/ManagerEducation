@@ -26,6 +26,8 @@ import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import { PopupFormEditAccount } from '../../../../components/Popup/PopupFormEditAccount';
 import { PopupDelete } from '../../../../components/Popup/PopupDelete';
+import { history } from '../../../../../state/utils';
+const NotFoundSearch = React.lazy(() => import('../../../../components/NotFoundSearch/NotFoundSearch'));
 
 const rows = [
     { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
@@ -36,7 +38,7 @@ const rows = [
     { id: 'phone_number', numeric: false, disablePadding: false, label: 'Số điện thoại' },
     { id: 'authorities', numeric: false, disablePadding: false, label: 'Loại tài khoản' },
     { id: 'activated', numeric: false, disablePadding: false, label: 'Trạng thái' },
-    { id: 'dateSigned', numeric: false, disablePadding: false, label: 'Ngày đăng ký' },
+    { id: 'dateSigned', numeric: false, disablePadding: false, label: 'Thời gian đăng ký' },
     { id: 'edit', numeric: false, disablePadding: false, label: 'Tác vụ' }
 ]
 
@@ -68,7 +70,7 @@ const style = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing.unit * 3,
-        boxShadow: 'none',
+        boxShadow: '0 2px 4px 0 rgba(0,0,0,.05)',
         padding: '0 24px'
     },
     table: {
@@ -163,133 +165,145 @@ class EnhancedTableAccount extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes, listName, accounts, accountById } = this.props;
+        const { classes, listName, accounts, accountById, actionsAccounts } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
+        if (actionsAccounts && actionsAccounts.status === 'DELETE_SUCCESS' && actionsAccounts.data === selected.length) {
+            alert("Xóa thành công " + actionsAccounts.data + " trường dữ liệu tài khoản!");
+            history.push('/administrator/accounts/users');
+        } else if (actionsAccounts && actionsAccounts.status === 'DELETE_FAILED' && actionsAccounts.data !== selected.length) {
+            alert("Xóa dữ liệu tài khoản thất bại!");
+        }
         return (
-            <Paper className={classes.root}>
-                {accountById.id ? <PopupFormEditAccount data={accountById}/> : ''}
-                <PopupDelete delete={this.deleteData} />
-                <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete}/>
-                <div style={{padding: '10px 0 15px 24px'}} className="message">
-                    <div>
-                        <b>Chú ý:</b>
-                    </div>
-                    <ul>
-                        <li>- Danh sách dưới bao gồm tất cả các tài khoản đăng nhập vào hệ thống quản lý đào tạo.</li>
-                        <li>- Tương ứng với mỗi tài khoản, chỉ hiển thị các thông tin cơ bản của các tài khoản đó.</li>
-                        <li>- Khi muốn thay đổi các thông tin hoặc xóa tài khoản, hãy chắc chắn rằng bạn muốn thực hiện điều đó và tất cả dữ liệu sẽ không thể khôi phục.</li>
-                    </ul>
-                </div>
-                <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle">
-                        <EnhancedTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={this.handleSelectAllClick}
-                            onRequestSort={this.handleRequestSort}
-                            rowCount={accounts.length}
-                            rows={rows}
+            <React.Fragment>
+                { accounts.length > 0 ? (
+                    <Paper className={classes.root}>
+                        {accountById.id ? <PopupFormEditAccount data={accountById}/> : ''}
+                        <PopupDelete delete={this.deleteData} />
+                        <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete}/>
+                        <div style={{padding: '10px 0 15px 24px'}} className="message">
+                            <div>
+                                <b>Chú ý:</b>
+                            </div>
+                            <ul>
+                                <li>- Danh sách dưới bao gồm tất cả các tài khoản đăng nhập vào hệ thống quản lý đào tạo.</li>
+                                <li>- Tương ứng với mỗi tài khoản, chỉ hiển thị các thông tin cơ bản của các tài khoản đó.</li>
+                                <li>- Khi muốn thay đổi các thông tin hoặc xóa tài khoản, hãy chắc chắn rằng bạn muốn thực hiện điều đó và tất cả dữ liệu sẽ không thể khôi phục.</li>
+                            </ul>
+                        </div>
+                        <div className={classes.tableWrapper}>
+                            <Table className={classes.table} aria-labelledby="tableTitle">
+                                <EnhancedTableHead
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onSelectAllClick={this.handleSelectAllClick}
+                                    onRequestSort={this.handleRequestSort}
+                                    rowCount={accounts.length}
+                                    rows={rows}
+                                />
+                                <TableBody>
+                                    {stableSort(accounts, getSorting(order, orderBy))
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map(n => {
+                                            const isSelected = this.isSelected(n.id);
+                                            return (
+                                                <LazyLoad>
+                                                    <TableRow
+                                                        hover
+                                                        role="checkbox"
+                                                        aria-checked={isSelected}
+                                                        tabIndex={-1}
+                                                        key={n.id}
+                                                        selected={isSelected}
+                                                    >
+                                                        <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
+                                                            <Checkbox checked={isSelected} color="default" />
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            <LazyLoad height={40}>
+                                                                <ImageAvatars url={n.imageUrl !== '' ? `http://localhost:8080/api/file/avatar/${n.imageUrl}` : noavatar} />
+                                                            </LazyLoad>
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            <b>{n.firstName || <Skeleton />}</b>
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            <b>{n.lastName || <Skeleton />}</b>
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.login || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.email || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.phoneNumber || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.authorities.toString() === '' ? (<Skeleton />) : `
+                                                            ${n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : ''}
+                                                            ${n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : ''}
+                                                            ${n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : ''}
+                                                            ${n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : ''}
+                                                        `}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.activated ? <Chip
+                                                                icon={<CheckCircleIcon />}
+                                                                label="Đã kích hoạt"
+                                                                color="primary"
+                                                                className={classes.chip}
+                                                                title="Đã kích hoạt"
+                                                            /> : <Chip
+                                                                    icon={<RemoveCircleIcon />}
+                                                                    label="Chưa kích hoạt"
+                                                                    color="inherit"
+                                                                    title="Chưa kích hoạt"
+                                                                />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.dateSigned || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            <Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }} 
+                                                                    title="Chỉnh sửa thông tin tài khoản">
+                                                                <LaunchIcon />
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </LazyLoad>
+                                            );
+                                        })}
+                                    {accounts.length <= 0 && (
+                                        <TableRow>
+                                            <TableCell colSpan={11}>
+                                                <Skeleton count={10} height={60} duration={2} />
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </div>
+                        <TablePagination
+                            rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
+                            component="div"
+                            count={accounts.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            backIconButtonProps={{
+                                'aria-label': 'Previous Page',
+                            }}
+                            nextIconButtonProps={{
+                                'aria-label': 'Next Page',
+                            }}
+                            onChangePage={this.handleChangePage}
+                            onChangeRowsPerPage={this.handleChangeRowsPerPage}
                         />
-                        <TableBody>
-                            {stableSort(accounts, getSorting(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
-                                    const isSelected = this.isSelected(n.id);
-                                    return (
-                                        <LazyLoad>
-                                            <TableRow
-                                                hover
-                                                role="checkbox"
-                                                aria-checked={isSelected}
-                                                tabIndex={-1}
-                                                key={n.id}
-                                                selected={isSelected}
-                                            >
-                                                <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
-                                                    <Checkbox checked={isSelected} color="default" />
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    <LazyLoad height={40}>
-                                                        <ImageAvatars url={n.imageUrl !== '' ? `http://localhost:8080/api/file/avatar/${n.imageUrl}` : noavatar} />
-                                                    </LazyLoad>
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    <b>{n.firstName || <Skeleton />}</b>
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    <b>{n.lastName || <Skeleton />}</b>
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.login || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.email || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.phoneNumber || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.authorities.toString() === '' ? (<Skeleton />) : `
-                                                    ${n.authorities.toString() === 'ROLE_ADMIN' ? 'ADMIN' : ''}
-                                                    ${n.authorities.toString() === 'ROLE_TEACHER' ? 'GIẢNG VIÊN' : ''}
-                                                    ${n.authorities.toString() === 'ROLE_PARENTS' ? 'PHỤ HUYNH' : ''}
-                                                    ${n.authorities.toString() === 'ROLE_STUDENT' ? 'HỌC VIÊN' : ''}
-                                                `}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.activated ? <Chip
-                                                        icon={<CheckCircleIcon />}
-                                                        label="Đã kích hoạt"
-                                                        color="primary"
-                                                        className={classes.chip}
-                                                        title="Đã kích hoạt"
-                                                    /> : <Chip
-                                                            icon={<RemoveCircleIcon />}
-                                                            label="Chưa kích hoạt"
-                                                            color="inherit"
-                                                            title="Chưa kích hoạt"
-                                                        />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    {n.dateSigned || <Skeleton />}
-                                                </TableCell>
-                                                <TableCell className="cell">
-                                                    <Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }} 
-                                                            title="Chỉnh sửa thông tin tài khoản">
-                                                        <LaunchIcon />
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        </LazyLoad>
-                                    );
-                                })}
-                            {accounts.length <= 0 && (
-                                <TableRow>
-                                    <TableCell colSpan={11}>
-                                        <Skeleton count={10} height={60} duration={2} />
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-                <TablePagination
-                    rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
-                    component="div"
-                    count={accounts.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page',
-                    }}
-                    onChangePage={this.handleChangePage}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
-            </Paper>
+                    </Paper>
+                ) : (
+                    <NotFoundSearch name="Không tìm thấy danh sách tài khoản."/>
+                )}
+            </React.Fragment>
         );
     }
 }
@@ -297,6 +311,7 @@ class EnhancedTableAccount extends React.Component {
 EnhancedTableAccount.propTypes = {
     classes: PropTypes.object.isRequired,
     listName: PropTypes.string.isRequired,
+    actionsAccounts: PropTypes.object.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
     accountById: PropTypes.object.isRequired,
     getAllUserAccount: PropTypes.func.isRequired,
@@ -306,12 +321,14 @@ EnhancedTableAccount.propTypes = {
 };
 
 EnhancedTableAccount.defaultProps = {
-    accounts: []
+    accounts: [],
+    actionsAccounts: {}
 }
 
 const mapStateToProps = state => ({
     accounts: state.account.accounts,
-    accountById: state.account.getAccounts
+    accountById: state.account.getAccounts,
+    actionsAccounts: state.account.actionsAccounts
 });
 
 const mapDispatchToProps = {

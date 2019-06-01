@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -152,8 +153,8 @@ public class UserService {
         // new user gets initially a generated password
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encryptedPassword);
-
-        newUser.setDateSigned(new Date((new java.util.Date()).getTime()));
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        newUser.setDateSigned(timestamp);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());

@@ -73,11 +73,11 @@ class EnhancedTableToolBar extends React.Component {
             >
                 <div className={classes.title} >
                     {numSelected > 0 ? (
-                        <Typography style={{ fontSize: 17, color: 'rgb(69, 94, 107)' }} variant="subtitle1">
+                        <Typography style={{ fontSize: 15, color: 'rgb(69, 94, 107)' }} variant="subtitle1">
                             {numSelected} ( rows ) selected.
                 </Typography>
                     ) : (
-                            <Typography variant="h6" style={{ fontSize: 17, color: 'rgb(69, 94, 107)' }} id="tableTitle">
+                            <Typography variant="h6" style={{ fontSize: 15, color: 'rgb(69, 94, 107)' }} id="tableTitle">
                                 <BallotIcon /> {listName}
                 </Typography>
                         )}

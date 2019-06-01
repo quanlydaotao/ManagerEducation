@@ -1,0 +1,30 @@
+.ToolBar button {
+    margin: 0 5px;
+    box-shadow: none;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 5px 20px;
+    text-transform: none;
+    background-color: #ffffff;
+    color: #405e6f;
+    border-radius: 2px;
+    border: 1px solid #dadada;
+}
+
+.ToolBar button svg {
+    font-size: 18px;
+}
+
+.count {
+    display: flex;
+}
+
+.count span {
+    padding: 5px 20px;
+    border: 1px solid #dadada;
+    border-radius: 2px;
+    color: #405e6f;
+    font-size: 13px;
+    background-color: #ffffff;
+    font-weight: 400;
+}

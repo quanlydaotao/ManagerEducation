@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
@@ -102,7 +103,7 @@ public class User implements Serializable {
     private String address1;
 
     @Column(name = "date_signed")
-    private Date dateSigned;
+    private Timestamp dateSigned;
 
     @JsonIgnore
     @ManyToMany
@@ -271,11 +272,11 @@ public class User implements Serializable {
         this.address1 = address1;
     }
 
-    public Date getDateSigned() {
+    public Timestamp getDateSigned() {
         return dateSigned;
     }
 
-    public void setDateSigned(Date dateSigned) {
+    public void setDateSigned(Timestamp dateSigned) {
         this.dateSigned = dateSigned;
     }
 

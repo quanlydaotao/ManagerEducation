@@ -59,7 +59,7 @@ const actionReducer = createReducer( initialState )( {
         return state;
     },
     [ types.DELETE_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
-        state = {progress: false, status: 'DELETE_SUCCESS', data: {}}
+        state = {progress: false, status: 'DELETE_SUCCESS', data: action.payload}
         return state;
     },
     [ types.DELETE_USER_ACCOUNT_FAILED ]: ( state, action ) => {

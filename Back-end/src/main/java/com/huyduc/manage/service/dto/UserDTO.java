@@ -6,6 +6,7 @@ import com.huyduc.manage.config.Constants;
 
 import javax.validation.constraints.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,7 +51,7 @@ public class UserDTO {
 
     private Date birthday;
 
-    private Date dateSigned;
+    private Timestamp dateSigned;
 
     private Boolean sex;
 
@@ -221,14 +222,13 @@ public class UserDTO {
         this.imageUrl = imageUrl;
     }
 
-    public Date getDateSigned() {
+    public Timestamp getDateSigned() {
         return dateSigned;
     }
 
-    public void setDateSigned(Date dateSigned) {
+    public void setDateSigned(Timestamp dateSigned) {
         this.dateSigned = dateSigned;
     }
-
 
     @Override
     public boolean equals(Object o) {

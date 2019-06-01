@@ -34,6 +34,7 @@ const style = theme => ({
     },
     button: {
         margin: theme.spacing.unit,
+        fontSize: 13
     },
     leftIcon: {
         marginRight: theme.spacing.unit,
@@ -289,10 +290,16 @@ class FormAddNewYears extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <label htmlFor="openDay"><b>Ngày khai giảng năm học:</b></label>
-                            <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay"/>
-                            <label htmlFor="closeDay"><b>Ngày bế giảng năm học:</b></label>
-                            <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay"/>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <label htmlFor="openDay"><b>Ngày khai giảng năm học:</b></label>
+                                    <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay"/>
+                                </div>
+                                <div className="col-md-6">
+                                    <label htmlFor="closeDay"><b>Ngày bế giảng năm học:</b></label>
+                                    <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay"/>
+                                </div>
+                            </div>
                             <label htmlFor="describe"><b>Bài viết:</b></label>
                             <CKEditor
                                 data={this.state.describe}
@@ -305,20 +312,19 @@ class FormAddNewYears extends Component {
                             <br />
                             <label htmlFor="status"><b>Trạng thái:</b></label>
                             <select name="status" id="status" onChange={this.handleChange} required>
-                                <option value={true}>--- KÍCH HOẠT ---</option>
-                                <option value={false}>--- CHƯA KÍCH HOẠT ---</option>
+                                <option value={true}>--- MỞ NĂM HỌC ---</option>
+                                <option value={false}>--- ĐÓNG NĂM HỌC ---</option>
                             </select>
-                            <p>By creating an account you agree to our <a href="#" style={{ color: 'dodgerblue' }}>Terms &amp; Privacy</a>.</p>
                             <div className="clearfix">
-                                <Button variant="contained" type="reset" color="secondary" className={`reset-button ${classes.button}`} onClick={this.handleClear}>
-                                    XÓA THÔNG TIN
-                                            <DeleteIcon className={classes.rightIcon} />
-                                </Button>
                                 <Button variant="contained" type="submit" color="primary" className={`reset-button ${classes.button}`}>
                                     THÊM MỚI
                                         <AddIcon className={classes.rightIcon} />
                                 </Button>
                                 {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
+                                <Button type="reset" color="secondary" className={`reset-button ${classes.button}`} onClick={this.handleClear}>
+                                    XÓA THÔNG TIN
+                                    <DeleteIcon className={classes.rightIcon} />
+                                </Button>
                             </div>
                         </form>
                     </div>

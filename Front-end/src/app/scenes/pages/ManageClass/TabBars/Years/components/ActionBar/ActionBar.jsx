@@ -16,14 +16,13 @@ const style = theme => ({
     root: {
         width: '100%',
         backgroundColor: theme.palette.background.paper,
-        marginTop: 24,
     },
     nested: {
         paddingLeft: theme.spacing.unit * 4,
     },
     conf: {
         fontSize: 13,
-        fontWeight: 'bold',
+        fontWeight: '500',
         color: '#455e6b'
     }
 });

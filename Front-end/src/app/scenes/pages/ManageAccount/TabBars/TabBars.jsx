@@ -30,6 +30,9 @@ const style = theme => ({
     root: {
         flexGrow: 1
     },
+    leftIcon: {
+        marginRight: theme.spacing.unit,
+    },
 });
 
 class TabBars extends React.Component {
@@ -38,12 +41,12 @@ class TabBars extends React.Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-                <div className={`${styles.appBar}`}>
+                <div className="appBar">
                     <NavLink to="/administrator/accounts/users" activeClassName="activeLink">
-                        <ContactsIcon /> DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP
+                        <ContactsIcon className={classes.leftIcon}/> DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP
                     </NavLink>
                     <NavLink to="/administrator/accounts/add-new" activeClassName="activeLink">
-                        <HowToRegIcon /> THÊM MỚI TÀI KHOẢN
+                        <HowToRegIcon className={classes.leftIcon}/> THÊM MỚI TÀI KHOẢN
                     </NavLink>
                 </div>
                 <Switch>

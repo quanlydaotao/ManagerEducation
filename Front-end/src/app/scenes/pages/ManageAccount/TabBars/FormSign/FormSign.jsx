@@ -34,6 +34,7 @@ const style = theme => ({
     },
     button: {
         margin: theme.spacing.unit,
+        fontSize: 13
     },
     leftIcon: {
         marginRight: theme.spacing.unit,
@@ -343,15 +344,15 @@ class FormSign extends Component {
                                     </div>
                                     <p>By creating an account you agree to our <a href="#" style={{ color: 'dodgerblue' }}>Terms &amp; Privacy</a>.</p>
                                     <div className="clearfix">
-                                        <Button variant="contained" type="reset" color="secondary" className={`reset-button ${classes.button}`} onClick={this.clearData}>
-                                            Xóa thông tin
-                                            <DeleteIcon className={classes.rightIcon} />
-                                        </Button>
                                         <Button variant="contained" type="submit" color="primary" className={`reset-button ${classes.button}`}>
                                             ĐĂNG KÝ
                                             <PersonAddIcon className={classes.rightIcon} />
                                         </Button>
                                         {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
+                                         <Button type="reset" color="secondary" className={`reset-button ${classes.button}`} onClick={this.clearData}>
+                                            Xóa thông tin
+                                            <DeleteIcon className={classes.rightIcon} />
+                                        </Button>
                                     </div>
                                 </div>
                                 <div className="col-md-8">

@@ -13,6 +13,7 @@
 
 
 .leftContent a span {
+    font-weight: 300;
     color: rgb(86, 110, 122);
     font-size: 13px;
 }

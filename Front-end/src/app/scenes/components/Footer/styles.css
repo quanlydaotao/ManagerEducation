@@ -1,5 +1,5 @@
 .footerWrap {
-    background: url(http://hassandesigns.top/html/classified/images/footer-bg.jpg) no-repeat top;
+    background-image: linear-gradient(to right, rgb(69, 94, 107), rgb(58, 94, 118), rgb(52, 92, 129), rgb(56, 89, 139), rgb(21, 52, 72));
     padding-top: 30px;
     background-size: cover;
     margin-top: 40px;

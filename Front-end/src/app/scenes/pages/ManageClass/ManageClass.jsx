@@ -13,7 +13,7 @@ class ManageClass extends Component {
                         <Redirect to="/administrator/education/years" />
                     )} />  
                 </Switch>
-                <DocumentTitle title='.:Quản lý lớp học:.'>
+                <DocumentTitle title='.:Năm học đào tạo:.'>
                     <React.Fragment>
                         <div className={`${styles.mainManageClass}`}>
                             <TabBars />

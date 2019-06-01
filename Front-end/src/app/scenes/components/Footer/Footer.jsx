@@ -43,7 +43,7 @@ class Footer extends Component {
                             <div className="mapouter"><div className="gmap_canvas"><iframe width={300} height={200} id="gmap_canvas" src="https://maps.google.com/maps?q=Hoc%20vien%20k%E1%BB%B9%20thu%E1%BA%ADt%20m%E1%BA%ADt%20m%C3%A3&t=&z=15&ie=UTF8&iwloc=&output=embed" frameBorder={0} scrolling="no" marginHeight={0} marginWidth={0} />Google Maps Generator by <a href="https://www.embedgooglemap.net">embedgooglemap.net</a></div><style dangerouslySetInnerHTML={{ __html: ".mapouter{position:relative;text-align:right;height:200px;width:300px;}.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}" }} /></div>
                         </div>
                     </div>
-                    <div className="copyright">Copyright © 2017 Classify - All Rights Reserved.</div>
+                    <div className="copyright" style={{color: '#fff', paddingBottom: '5px'}}>Bản quyền thuộc về Đào Huy Đức - AT130913-ACTVN</div>
                 </div>
             </footer>
         );
