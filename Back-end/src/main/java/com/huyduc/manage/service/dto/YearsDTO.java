@@ -1,10 +1,13 @@
 package com.huyduc.manage.service.dto;
 
+import com.huyduc.manage.bean.Course;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO represents a school year.
@@ -35,7 +38,6 @@ public class YearsDTO {
 
     @NotNull
     private boolean status;
-
 
     public YearsDTO() {
         // Empty constructor needed for Jackson.

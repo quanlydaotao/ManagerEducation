@@ -15,6 +15,11 @@ public class ClassesDTO {
 
     @NotNull
     @NotBlank
+    @Size(min = 5, max = 50)
+    private String classCode;
+
+    @NotNull
+    @NotBlank
     @Size(min = 5, max = 100)
     private String name;
 
@@ -101,6 +106,14 @@ public class ClassesDTO {
         this.idYear = idYear;
     }
 
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,6 +121,7 @@ public class ClassesDTO {
         ClassesDTO classesDTO = (ClassesDTO) o;
         return id == classesDTO.id &&
                 status == classesDTO.status &&
+                Objects.equals(classCode, classesDTO.classCode) &&
                 Objects.equals(name, classesDTO.name) &&
                 Objects.equals(describe, classesDTO.describe) &&
                 Objects.equals(openDay, classesDTO.openDay) &&
@@ -116,13 +130,14 @@ public class ClassesDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, describe, openDay, closeDay, status);
+        return Objects.hash(id, classCode, name, describe, openDay, closeDay, status);
     }
 
     @Override
     public String toString() {
         return "ClassesDTO{" +
                 "id=" + id +
+                ", classCode='" + classCode + '\'' +
                 ", name='" + name + '\'' +
                 ", describe='" + describe + '\'' +
                 ", openDay=" + openDay +

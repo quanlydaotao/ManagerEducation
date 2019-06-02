@@ -14,19 +14,19 @@ import Chip from '@material-ui/core/Chip';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { connect } from 'react-redux';
-import { yearsShape } from '../../../../../propTypes';
-import { yearsOperations } from '../../../../../../state/ducks/years';
-import { popupOperations } from '../../../../../../state/ducks/popup';
-import { EnhancedTableHead } from '../../../../../components/Table/EnhancedTableHead';
+import { yearsShape } from '../../../../../../../propTypes';
+import { yearsOperations } from '../../../../../../../../state/ducks/years';
+import { popupOperations } from '../../../../../../../../state/ducks/popup';
+import { EnhancedTableHead } from '../../../../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from './components/EnhancedTableToolBar';
-import { ImageAvatars } from '../../../../../components/ImageAvatars';
+import { ImageAvatars } from '../../../../../../../components/ImageAvatars';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import styles from './styles.css';
-import { PopupFormEditYear } from '../../../../../components/Popup/PopupFormEditYear';
-import { PopupDelete } from '../../../../../components/Popup/PopupDelete';
-import { history } from '../../../../../../state/utils';
-const NotFoundSearch = React.lazy(() => import('../../../../../components/NotFoundSearch/NotFoundSearch'));
+import { PopupFormEditYear } from '../../../../../../../components/Popup/PopupFormEditYear';
+import { PopupDelete } from '../../../../../../../components/Popup/PopupDelete';
+import { history } from '../../../../../../../../state/utils';
+const NotFoundSearch = React.lazy(() => import('../../../../../../../components/NotFoundSearch/NotFoundSearch'));
 
 const rows = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
@@ -66,10 +66,9 @@ function getSorting(order, orderBy) {
 const style = theme => ({
     root: {
         width: '100%',
-		boxShadow: '0 2px 4px 0 rgba(0,0,0,.05)',
-		marginTop: 20,
-        padding: '0 24px',
-        borderRadius: '2px'
+        borderRadius: '2px',
+        boxShadow: 'none',
+        margin: 0
     },
     table: {
         minWidth: 1020,
@@ -91,13 +90,14 @@ class EnhancedTableClass extends React.Component {
             orderBy: 'calories',
             selected: [],
             page: 0,
-            rowsPerPage: 10
+            rowsPerPage: 5
         }
     }
 
     componentDidMount() {
         this.props.getAllYears();
     }
+
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -179,17 +179,6 @@ class EnhancedTableClass extends React.Component {
                         {yearById.id ? <PopupFormEditYear data={yearById} /> : ''} 
                         <PopupDelete delete={this.deleteData} />
                         <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
-                        <div style={{ padding: '10px 0 15px 24px' }} className="message">
-                            <div>
-                                <b>Chú ý:</b>
-                            </div>
-                            <ul>
-                                <li>- Danh sách dưới bao gồm các năm học trong chương trình đào tạo.</li>
-                                <li>- Mỗi năm học sẽ có các lớp được mở tương ứng.</li>
-                                <li>- Khi kết thúc năm học bạn có thể đóng năm học đó lại thay vì xóa.</li>
-                                <li>- Trong trường hợp muốn xóa năm học, bạn hãy chắc chắn rằng muốn xóa tất cả dữ liệu trong năm học và không thể khôi phục.</li>
-                            </ul>
-                        </div>
                         <div className={classes.tableWrapper}>
                             <Table className={classes.table} aria-labelledby="tableTitle">
                                 <EnhancedTableHead
@@ -268,7 +257,7 @@ class EnhancedTableClass extends React.Component {
                                     {years.length <= 0 && (
                                         <TableRow>
                                             <TableCell colSpan={9}>
-                                                <Skeleton count={10} height={50} duration={2} />
+                                                <Skeleton count={5} height={50} duration={2} />
                                             </TableCell>
                                         </TableRow>
                                     )}
@@ -276,7 +265,7 @@ class EnhancedTableClass extends React.Component {
                             </Table>
                         </div>
                         <TablePagination
-                            rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
+                            rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
                             component="div"
                             count={years.length}
                             rowsPerPage={rowsPerPage}

@@ -17,6 +17,7 @@ import java.util.Set;
 public class Classes implements Serializable {
 
     private long id;
+    private String classCode;
     private String name;
     private String describe;
     private Date openDay;
@@ -34,6 +35,19 @@ public class Classes implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Basic
+    @NotNull
+    @NotBlank
+    @Size(min = 5, max = 50)
+    @Column(name = "class_code", length = 50, nullable = false, unique = true)
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
     }
 
     @Basic
@@ -119,6 +133,7 @@ public class Classes implements Serializable {
         Classes classes = (Classes) o;
         return id == classes.id &&
                 status == classes.status &&
+                Objects.equals(classCode, classes.classCode) &&
                 Objects.equals(name, classes.name) &&
                 Objects.equals(describe, classes.describe) &&
                 Objects.equals(openDay, classes.openDay) &&
@@ -127,20 +142,21 @@ public class Classes implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, describe, openDay, closeDay, status);
+        return Objects.hash(id, classCode, name, describe, openDay, closeDay, status);
     }
 
     @Override
     public String toString() {
         return "Classes{" +
                 "id=" + id +
+                ", classCode='" + classCode + '\'' +
                 ", name='" + name + '\'' +
                 ", describe='" + describe + '\'' +
                 ", openDay=" + openDay +
                 ", closeDay=" + closeDay +
                 ", status=" + status +
                 ", users=" + users +
+                ", course=" + course +
                 '}';
     }
-
 }

@@ -1,6 +1,11 @@
 package com.huyduc.manage.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
@@ -29,7 +34,10 @@ public class Course {
     }
 
     @Basic
-    @Column(name = "name")
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 100)
+    @Column(name = "name", length = 100, nullable = false, unique = true)
     public String getName() {
         return name;
     }
@@ -39,7 +47,8 @@ public class Course {
     }
 
     @Basic
-    @Column(name = "max_classes")
+    @NotNull
+    @Column(name = "max_classes", nullable = false)
     public int getMaxClasses() {
         return maxClasses;
     }
@@ -69,7 +78,8 @@ public class Course {
     }
 
     @Basic
-    @Column(name = "status")
+    @NotNull
+    @Column(name = "status", nullable = false)
     public boolean isStatus() {
         return status;
     }
@@ -78,7 +88,8 @@ public class Course {
         this.status = status;
     }
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "years_course", joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "years_id", referencedColumnName = "id"))
     public Years getYear() {
@@ -89,7 +100,8 @@ public class Course {
         this.year = year;
     }
 
-    @OneToMany(mappedBy = "course")
+    @JsonIgnore
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     public Set<Classes> getClasses() {
         return classes;
     }

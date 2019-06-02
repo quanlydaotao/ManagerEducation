@@ -8,6 +8,7 @@ import QueuePlayNextIcon from '@material-ui/icons/QueuePlayNext';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import TodayIcon from '@material-ui/icons/Today';
 import Icon from '@material-ui/core/Icon';
+import DevicesIcon from '@material-ui/icons/Devices';
 import SaveIcon from '@material-ui/icons/Save';
 
 const style = theme => ({
@@ -33,7 +34,7 @@ class ToolBar extends Component {
                 <div className="row">
                     <div className="col-md-4">
                         <div className={`text-left ${styles.count}`}>
-                            <span><b>Tổng số tất cả các lớp đào tạo: </b> 15 lớp</span>
+                            <span><DevicesIcon style={{marginRight: 10}}/>HỆ THỐNG QUẢN LÝ LỚP HỌC</span>
                         </div>
                     </div>
                     <div className="col-md-8">
@@ -42,7 +43,7 @@ class ToolBar extends Component {
                                 <QueuePlayNextIcon className={classes.leftIcon} />
                                 Thêm khóa đào tạo
                             </Button>
-                            <Button variant="outlined" className={classes.button} style={{ backgroundColor: '#385a89', color: 'white' }} className={classes.button}>
+                            <Button variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
                                 <PlaylistAddIcon className={classes.leftIcon} />
                                 Thêm mới lớp học
                             </Button>

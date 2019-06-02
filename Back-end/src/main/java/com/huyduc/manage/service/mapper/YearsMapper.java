@@ -3,7 +3,10 @@ package com.huyduc.manage.service.mapper;
 import com.huyduc.manage.bean.Years;
 import com.huyduc.manage.service.dto.YearsDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * Mapper for the entity Years and its DTO called YearsDTO.

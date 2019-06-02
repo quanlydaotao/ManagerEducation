@@ -1,7 +1,6 @@
 import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
-const ToolBar = React.lazy(() => import('./ToolBar/ToolBar'));
-const EnhancedTableClass = React.lazy(() => import('./EnhancedTableClass/EnhancedTableClass'));
+const TableSearch = React.lazy(() => import('./TableSearch/TableSearch'));
 import DocumentTitle from 'react-document-title';
 
 class Class extends Component {
@@ -10,8 +9,7 @@ class Class extends Component {
 			<DocumentTitle title=".:Hệ thống lớp học:.">
 				<div className={`${styles.Class}`}>
 					<Suspense fallback={''}>
-						<ToolBar />
-						<EnhancedTableClass listName="DANH SÁCH CÁC LỚP HỌC ĐÀO TẠO"/>
+						<TableSearch />
 					</Suspense>
 				</div>
 			</DocumentTitle>

@@ -8,7 +8,6 @@
     background-color: #ffffff;
     color: #405e6f;
     border-radius: 2px;
-    border: 1px solid #dadada;
 }
 
 .ToolBar button svg {
@@ -20,11 +19,7 @@
 }
 
 .count span {
-    padding: 5px 20px;
-    border: 1px solid #dadada;
-    border-radius: 2px;
-    color: #405e6f;
-    font-size: 13px;
-    background-color: #ffffff;
-    font-weight: 400;
+    color: #445e6c;
+    font-size: 15px;
+    font-weight: 500;
 }

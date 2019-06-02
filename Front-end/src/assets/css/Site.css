@@ -10524,3 +10524,8 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 }
 
 
+
+.item-list:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
