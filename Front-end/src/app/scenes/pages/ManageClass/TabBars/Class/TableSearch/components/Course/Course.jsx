@@ -9,6 +9,8 @@ import DvrIcon from '@material-ui/icons/Dvr';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import { selectionOperations } from '../../../../../../../../state/ducks/selection';
 import { courseOperations } from '../../../../../../../../state/ducks/course';
+import { courseShape } from '../../../../../../../propTypes';
+
 import { connect } from 'react-redux';
 
 const style = theme => ({
@@ -48,7 +50,7 @@ class Course extends React.Component {
         const { classes, courses, dataSelect } = this.props;
         return (
             <List className={classes.root} subheader={<li />}>
-                <ListSubheader><DvrIcon /> DANH SÁCH KHÓA ĐÀO TẠO</ListSubheader>
+                <ListSubheader style={{backgroundColor: '#cecece', color: 'white'}}><DvrIcon /> DANH SÁCH KHÓA ĐÀO TẠO</ListSubheader>
                 {courses.map((value, index) => (
                     <ListItem key={index} className={`item-list ${dataSelect.course == value.id ? 'activeLink' : ''}`} onClick={() => this.props.setDataCourseSelect(value.id)}>
                         <ListItemText primary={`KHÓA - ${value.name}`} classes={{ primary: classes.conf }}/>
@@ -64,6 +66,7 @@ class Course extends React.Component {
 Course.propTypes = {
     classes: PropTypes.object.isRequired,
     dataSelect: PropTypes.object.isRequired,
+    course: PropTypes.arrayOf(courseShape).isRequired,
     setDataCourse: PropTypes.func.isRequired
 };
 

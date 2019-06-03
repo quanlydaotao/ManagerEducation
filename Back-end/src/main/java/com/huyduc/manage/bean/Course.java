@@ -6,13 +6,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "course")
-public class Course {
+public class Course implements Serializable {
     private long id;
     private String name;
     private int maxClasses;
@@ -101,7 +102,7 @@ public class Course {
     }
 
     @JsonIgnore
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     public Set<Classes> getClasses() {
         return classes;
     }

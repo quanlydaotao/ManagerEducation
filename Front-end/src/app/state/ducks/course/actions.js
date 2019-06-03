@@ -5,7 +5,7 @@ export const getAllCourseByYearId = (id) => ( {
     meta: {
         async: true,
         blocking: true,
-        path: `/course/${id}`,
+        path: `/course/year/${id}`,
         method: "GET"
     }
 } );

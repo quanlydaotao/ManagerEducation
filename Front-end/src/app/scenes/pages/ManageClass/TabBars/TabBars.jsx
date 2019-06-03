@@ -9,6 +9,7 @@ import StyleIcon from '@material-ui/icons/Style';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SchoolIcon from '@material-ui/icons/School';
 import CastForEducationIcon from '@material-ui/icons/CastForEducation';
+import DevicesOtherIcon from '@material-ui/icons/DevicesOther';
 import Typography from '@material-ui/core/Typography';
 import LazyLoad from 'react-lazyload';
 import { NavLink, Route, Redirect, Switch } from 'react-router-dom';
@@ -45,6 +46,9 @@ class TabBars extends React.Component {
                 <div className="appBar">
                     <NavLink button to="/administrator/education/years" activeClassName="activeLink">
                         <StyleIcon className={classes.leftIcon}/>  NĂM HỌC ĐÀO TẠO
+                    </NavLink>
+                    <NavLink to="/administrator/education/course" activeClassName="activeLink">
+                        <DevicesOtherIcon className={classes.leftIcon}/> KHÓA ĐÀO TẠO
                     </NavLink>
                     <NavLink to="/administrator/education/classes" activeClassName="activeLink">
                         <CastForEducationIcon className={classes.leftIcon}/> HỆ THỐNG LỚP HỌC

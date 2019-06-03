@@ -9,16 +9,30 @@ import { yearsShape } from '../../../../../propTypes';
 import { yearsOperations } from '../../../../../../state/ducks/years';
 const ToolBar = React.lazy(() => import('./components/ToolBar/ToolBar'));
 const EnhancedTableClass = React.lazy(() => import('./components/EnhancedTableClass/EnhancedTableClass'));
+const FormAddClass = React.lazy(() => import('./components/FormAddClass/FormAddClass'));
 
 
 class TableSearch extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false
+        }
+    }
+    componentDidMount() {
+        this.props.getAllYears();
+    }       
+    handleAddNew = (param) => {
+        this.setState({ open: true });
+    }
     render() {
         const { dataSelect } = this.props;
+        const { open } = this.state;
         return (
             <div className={`${styles.TableSelector}`}>
                 <div className={`row ${styles.tbFix}`}>
                     <div className="col-md-12">
-                        <ToolBar />
+                        <ToolBar handleAddNew={this.handleAddNew}/>
                         <br />
                     </div>
                     <div className="col-md-12">
@@ -28,15 +42,15 @@ class TableSearch extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-2 pr-0">
+                    <div className="col-md-3 pr-0">
                         <ListYears data={this.props.years}/>
                     </div>
                     <div className={`col-md-2 pl-0 ${styles.wrapCourse}`}>
                         <Course />
                     </div>
-                    <div className="col-md-8">
+                    <div className="col-md-7">
                         <Suspense fallback={''} >
-                            <EnhancedTableClass listName="DANH SÁCH LỚP HỌC" />
+                            { open ? <FormAddClass /> : <EnhancedTableClass listName="DANH SÁCH LỚP HỌC ĐÀO TẠO CỦA ALOHA" /> }
                         </Suspense>
                     </div>
                 </div>
@@ -47,6 +61,7 @@ class TableSearch extends Component {
 
 TableSearch.propTypes = {
     years: PropTypes.arrayOf(yearsShape).isRequired,
+    getAllYears: PropTypes.func.isRequired
 };
 
 TableSearch.defaultProps = {
@@ -57,4 +72,9 @@ const mapStateToProps = state => ({
     years: state.years.allYears,
 });
 
-export default connect(mapStateToProps, null)(TableSearch);
+const mapDispatchToProps = {
+    getAllYears: yearsOperations.getAllYears,
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableSearch);

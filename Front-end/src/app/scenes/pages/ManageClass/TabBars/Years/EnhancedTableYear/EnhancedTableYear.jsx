@@ -256,7 +256,7 @@ class EnhancedTableYear extends React.Component {
                                                         </TableCell>
                                                         <TableCell className="cell">
                                                             {<Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }}
-                                                                title="Chỉnh sửa thông tin tài khoản">
+                                                                title="Chỉnh sửa thông tin năm học">
                                                                 <LaunchIcon />
                                                             </Button> || <Skeleton />}
                                                         </TableCell>

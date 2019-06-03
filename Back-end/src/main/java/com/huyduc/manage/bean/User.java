@@ -113,7 +113,7 @@ public class User implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
 
     @BatchSize(size = 20)
-    private Set<Authority> authorities = new HashSet<>();
+    private Set<Authority>  authorities = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -323,4 +323,5 @@ public class User implements Serializable {
                 ", authorities=" + authorities +
                 '}';
     }
+
 }

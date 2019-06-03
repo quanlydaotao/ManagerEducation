@@ -1,5 +1,7 @@
 package com.huyduc.manage.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,7 @@ public class Classes implements Serializable {
     private String describe;
     private Date openDay;
     private Date closeDay;
+    private String classRoom;
     private boolean status;
     private Set<User> users;
     private Course course;
@@ -106,7 +109,19 @@ public class Classes implements Serializable {
         this.status = status;
     }
 
-    @OneToMany
+    @Basic
+    @Size(min = 0, max = 50)
+    @Column(name = "class_room", length = 50)
+    public String getClassRoom() {
+        return classRoom;
+    }
+
+    public void setClassRoom(String classRoom) {
+        this.classRoom = classRoom;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "classes_users", joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false))
     public Set<User> getUsers() {
         return users;
     }
@@ -115,8 +130,11 @@ public class Classes implements Serializable {
         this.users = users;
     }
 
-    @ManyToOne
-    @JoinTable(name = "course_classes", joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "course_classes",
+            joinColumns = @JoinColumn(name = "class_id",
+            referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"))
     public Course getCourse() {
         return course;
@@ -136,13 +154,14 @@ public class Classes implements Serializable {
                 Objects.equals(classCode, classes.classCode) &&
                 Objects.equals(name, classes.name) &&
                 Objects.equals(describe, classes.describe) &&
+                Objects.equals(classRoom, classes.classRoom) &&
                 Objects.equals(openDay, classes.openDay) &&
                 Objects.equals(closeDay, classes.closeDay);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classCode, name, describe, openDay, closeDay, status);
+        return Objects.hash(id, classCode, name, describe, openDay, closeDay, classRoom, status);
     }
 
     @Override
@@ -154,6 +173,7 @@ public class Classes implements Serializable {
                 ", describe='" + describe + '\'' +
                 ", openDay=" + openDay +
                 ", closeDay=" + closeDay +
+                ", classRoom=" + classRoom +
                 ", status=" + status +
                 ", users=" + users +
                 ", course=" + course +

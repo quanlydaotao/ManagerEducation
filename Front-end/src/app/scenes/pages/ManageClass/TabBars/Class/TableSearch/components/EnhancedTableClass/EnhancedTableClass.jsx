@@ -14,8 +14,8 @@ import Chip from '@material-ui/core/Chip';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { connect } from 'react-redux';
-import { yearsShape } from '../../../../../../../propTypes';
-import { yearsOperations } from '../../../../../../../../state/ducks/years';
+import { classShape } from '../../../../../../../propTypes';
+import { classOperations } from '../../../../../../../../state/ducks/class';
 import { popupOperations } from '../../../../../../../../state/ducks/popup';
 import { EnhancedTableHead } from '../../../../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from './components/EnhancedTableToolBar';
@@ -29,12 +29,12 @@ import { history } from '../../../../../../../../state/utils';
 const NotFoundSearch = React.lazy(() => import('../../../../../../../components/NotFoundSearch/NotFoundSearch'));
 
 const rows = [
-    { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
-    { id: 'name', numeric: false, disablePadding: false, label: 'Tên năm học' },
-    { id: 'startYears', numeric: false, disablePadding: false, label: 'Năm học' },
-    { id: 'openDay', numeric: false, disablePadding: false, label: 'Ngày khai giảng' },
-    { id: 'closeDay', numeric: false, disablePadding: false, label: 'Ngày bế giảng' },
-    { id: 'maximumClasses', numeric: false, disablePadding: false, label: 'Số khóa học tối đa' },
+    { id: 'classCode', numeric: false, disablePadding: false, label: 'Mã lớp' },
+    { id: 'name', numeric: false, disablePadding: false, label: 'Tên lớp' },
+    { id: 'classRoom', numeric: false, disablePadding: false, label: 'Phòng học' },
+    { id: 'describe', numeric: false, disablePadding: false, label: 'Mô tả' },
+    { id: 'openDay', numeric: false, disablePadding: false, label: 'Ngày mở lớp' },
+    { id: 'closeDay', numeric: false, disablePadding: false, label: 'Ngày đóng lớp' },
     { id: 'status', numeric: false, disablePadding: false, label: 'Trạng thái' },
     { id: 'edit', numeric: false, disablePadding: false, label: 'Tác vụ' }
 ]
@@ -94,8 +94,11 @@ class EnhancedTableClass extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.props.getAllYears();
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.dataSelect !== prevProps.dataSelect) {
+            const { dataSelect } = this.props;
+            this.props.getAllClassByCourseId(dataSelect.course);
+        }
     }
 
 
@@ -112,7 +115,7 @@ class EnhancedTableClass extends React.Component {
 
     handleSelectAllClick = event => {
         if (event.target.checked) {
-            this.setState({ selected: this.props.years.map(n => n.id) });
+            this.setState({ selected: this.props.listClass.map(n => n.id) });
             return;
         }
         this.setState({ selected: [] });
@@ -140,7 +143,7 @@ class EnhancedTableClass extends React.Component {
     };
 
     handleOpenForm = (id) => {
-        this.props.findYearById(id);
+        this.props.findClassById(id);
         this.props.openForm();
     }
 
@@ -153,31 +156,31 @@ class EnhancedTableClass extends React.Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
-    handleDelete = (param) => {
-        this.props.openPopupDelete();
-    }
+    // handleDelete = (param) => {
+    //     this.props.openPopupDelete();
+    // }
 
-    deleteData = (param) => {
-        this.props.deleteYears(this.state.selected);
-    }
+    // deleteData = (param) => {
+    //     this.props.deleteYears(this.state.selected);
+    // }
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes, listName, years, yearById, actionsYears } = this.props;
+        const { classes, listName, listClass, classById, actionsYears } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        if (actionsYears && actionsYears.status === 'DELETE_SUCCESS' && actionsYears.data === selected.length) {
-            alert("Xóa thành công " + actionsYears.data + " trường dữ liệu năm học!");
-            history.push('/administrator/education/years');
-        } else if (actionsYears && actionsYears.status === 'DELETE_FAILED' && actionsYears.data !== selected.length) {
-            alert("Xóa dữ liệu năm học thất bại!");
-        }
+        // if (actionsYears && actionsYears.status === 'DELETE_SUCCESS' && actionsYears.data === selected.length) {
+        //     alert("Xóa thành công " + actionsYears.data + " trường dữ liệu năm học!");
+        //     history.push('/administrator/education/years');
+        // } else if (actionsYears && actionsYears.status === 'DELETE_FAILED' && actionsYears.data !== selected.length) {
+        //     alert("Xóa dữ liệu năm học thất bại!");
+        // }
         return (
             <React.Fragment>
-                { years.length > 0 ? (
+                { listClass.length > 0 ? (
                     <Paper className={classes.root}>
-                        {yearById.id ? <PopupFormEditYear data={yearById} /> : ''} 
-                        <PopupDelete delete={this.deleteData} />
+                        {classById.id ? <PopupFormEditYear data={classById} /> : ''} 
+                        {/*<PopupDelete delete={this.deleteData} /> */}
                         <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
                         <div className={classes.tableWrapper}>
                             <Table className={classes.table} aria-labelledby="tableTitle">
@@ -187,11 +190,11 @@ class EnhancedTableClass extends React.Component {
                                     orderBy={orderBy}
                                     onSelectAllClick={this.handleSelectAllClick}
                                     onRequestSort={this.handleRequestSort}
-                                    rowCount={years.length}
+                                    rowCount={listClass.length}
                                     rows={rows}
                                 />
                                 <TableBody>
-                                    {stableSort(years, getSorting(order, orderBy))
+                                    {stableSort(listClass, getSorting(order, orderBy))
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map(n => {
                                             const isSelected = this.isSelected(n.id);
@@ -209,17 +212,20 @@ class EnhancedTableClass extends React.Component {
                                                             <Checkbox checked={isSelected} color="default" />
                                                         </TableCell>
                                                         <TableCell className="cell">
-                                                            <b>{n.id || <Skeleton />}</b>
+                                                            <b>{n.classCode || <Skeleton />}</b>
                                                         </TableCell>
                                                         <TableCell className="cell">
-                                                            {n.name || <Skeleton />}
+                                                            <b>{n.name || <Skeleton />}</b>
                                                         </TableCell>
                                                         <TableCell className="cell">
                                                             {<Chip
-                                                                label={<b>{n.startYears}</b>}
+                                                                label={<b>{n.classRoom}</b>}
                                                                 color="inherit"
-                                                                title={<b>{n.startYears}</b>}
+                                                                title={<b>{n.classRoom}</b>}
                                                             /> || <Skeleton />}
+                                                        </TableCell>
+                                                        <TableCell className="cell">
+                                                            {n.describe || <Skeleton />}
                                                         </TableCell>
                                                         <TableCell className="cell">
                                                             {n.openDay || <Skeleton />}
@@ -228,25 +234,22 @@ class EnhancedTableClass extends React.Component {
                                                             {n.closeDay || <Skeleton />}
                                                         </TableCell>
                                                         <TableCell className="cell">
-                                                            {n.maximumClasses || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
                                                             {(n.status ? <Chip
                                                                 icon={<CheckCircleIcon />}
-                                                                label="Mở năm học"
+                                                                label="Mở lớp"
                                                                 color="primary"
                                                                 className={classes.chip}
-                                                                title="Mở năm học"
+                                                                title="Mở lớp"
                                                             /> : <Chip
                                                                     icon={<RemoveCircleIcon />}
-                                                                    label="Đóng năm học"
+                                                                    label="Đóng lớp"
                                                                     color="inherit"
-                                                                    title="Đóng năm học"
+                                                                    title="Đóng lớp"
                                                             />) || <Skeleton />}
                                                         </TableCell>
                                                         <TableCell className="cell">
                                                             {<Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }}
-                                                                title="Chỉnh sửa thông tin tài khoản">
+                                                                title="Chỉnh sửa thông tin lớp học">
                                                                 <LaunchIcon />
                                                             </Button> || <Skeleton />}
                                                         </TableCell>
@@ -254,9 +257,9 @@ class EnhancedTableClass extends React.Component {
                                                 </LazyLoad>
                                             );
                                         })}
-                                    {years.length <= 0 && (
+                                    {listClass.length <= 0 && (
                                         <TableRow>
-                                            <TableCell colSpan={9}>
+                                            <TableCell colSpan={8}>
                                                 <Skeleton count={5} height={50} duration={2} />
                                             </TableCell>
                                         </TableRow>
@@ -267,7 +270,7 @@ class EnhancedTableClass extends React.Component {
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
                             component="div"
-                            count={years.length}
+                            count={listClass.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             backIconButtonProps={{
@@ -281,7 +284,7 @@ class EnhancedTableClass extends React.Component {
                         />
                     </Paper>
                 ) : (
-                    <NotFoundSearch name="Không tìm thấy danh sách năm học."/>
+                    <NotFoundSearch name="Không tìm thấy danh sách lớp học."/>
                 )}
             </React.Fragment>
         );
@@ -290,34 +293,29 @@ class EnhancedTableClass extends React.Component {
 
 EnhancedTableClass.propTypes = {
     classes: PropTypes.object.isRequired,
-    years: PropTypes.arrayOf(yearsShape).isRequired,
-    actionsYears: PropTypes.object.isRequired,
-    yearById: PropTypes.object.isRequired,
-    getAllYears: PropTypes.func.isRequired,
-    toggleEditYears: PropTypes.func.isRequired,
-    deleteYears: PropTypes.func.isRequired,
-    deleteUserAccount: PropTypes.func.isRequired,
-    findYearById: PropTypes.func.isRequired,
+    listClass: PropTypes.arrayOf(classShape).isRequired,
+    classById: PropTypes.object.isRequired,
+    dataSelect: PropTypes.object.isRequired,
+    findClassById: PropTypes.func.isRequired,
+    openForm: PropTypes.func.isRequired
 };
 
 EnhancedTableClass.defaultProps = {
-    years: [],
-    yearById: {},
-    actionsYears: {}
+    listClass: [],
+    dataSelect: {year: 0, course: 0},
+    classById: {}
 }
 
 const mapStateToProps = state => ({
-    years: state.years.allYears,
-    yearById: state.years.getYear,
-    actionsYears: state.years.actionsYears
+    listClass: state.class.allClasses,
+    dataSelect: state.selection.select,
+    classById: state.class.getClass,
 });
 
 const mapDispatchToProps = {
-    getAllYears: yearsOperations.getAllYears,
-    openForm: yearsOperations.openFormEdit,
-    openPopupDelete: popupOperations.openPopupDelete,
-    findYearById: yearsOperations.getYearsById,
-    deleteYears: yearsOperations.deleteYears
+    getAllClassByCourseId: classOperations.getAllClassByCourseId,
+    findClassById: classOperations.getClassById,
+    openForm: classOperations.openFormEdit,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableClass));

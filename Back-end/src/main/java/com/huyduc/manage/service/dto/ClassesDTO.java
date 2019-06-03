@@ -31,12 +31,10 @@ public class ClassesDTO {
     @NotNull
     private Date closeDay;
 
+    private String classRoom;
+
     @NotNull
     private boolean status;
-
-    private YearsDTO yearDTO;
-
-    private Long idYear;
 
     public ClassesDTO() {
         // Empty constructor needed for Jackson.
@@ -90,28 +88,20 @@ public class ClassesDTO {
         this.status = status;
     }
 
-    public YearsDTO getYearDTO() {
-        return yearDTO;
-    }
-
-    public void setYearDTO(YearsDTO yearDTO) {
-        this.yearDTO = yearDTO;
-    }
-
-    public Long getIdYear() {
-        return idYear;
-    }
-
-    public void setIdYear(Long idYear) {
-        this.idYear = idYear;
-    }
-
     public String getClassCode() {
         return classCode;
     }
 
     public void setClassCode(String classCode) {
         this.classCode = classCode;
+    }
+
+    public String getClassRoom() {
+        return classRoom;
+    }
+
+    public void setClassRoom(String classRoom) {
+        this.classRoom = classRoom;
     }
 
     @Override
@@ -123,6 +113,7 @@ public class ClassesDTO {
                 status == classesDTO.status &&
                 Objects.equals(classCode, classesDTO.classCode) &&
                 Objects.equals(name, classesDTO.name) &&
+                Objects.equals(classRoom, classesDTO.classRoom) &&
                 Objects.equals(describe, classesDTO.describe) &&
                 Objects.equals(openDay, classesDTO.openDay) &&
                 Objects.equals(closeDay, classesDTO.closeDay);
@@ -130,7 +121,7 @@ public class ClassesDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classCode, name, describe, openDay, closeDay, status);
+        return Objects.hash(id, classCode, name, describe, openDay, closeDay, classRoom, status);
     }
 
     @Override
@@ -142,9 +133,8 @@ public class ClassesDTO {
                 ", describe='" + describe + '\'' +
                 ", openDay=" + openDay +
                 ", closeDay=" + closeDay +
+                ", classRoom=" + classRoom +
                 ", status=" + status +
-                ", yearDTO=" + yearDTO +
-                ", idYear=" + idYear +
                 '}';
     }
 }

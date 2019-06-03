@@ -9,6 +9,7 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import TodayIcon from '@material-ui/icons/Today';
 import Icon from '@material-ui/core/Icon';
 import DevicesIcon from '@material-ui/icons/Devices';
+import DateRangeIcon from '@material-ui/icons/DateRange';
 import SaveIcon from '@material-ui/icons/Save';
 
 const style = theme => ({
@@ -27,6 +28,9 @@ const style = theme => ({
 });
 
 class ToolBar extends Component {
+    addNew = () => {
+        this.props.handleAddNew();
+    }
     render() {
         const { classes } = this.props;
         return (
@@ -40,12 +44,16 @@ class ToolBar extends Component {
                     <div className="col-md-8">
                         <div className="text-right">
                             <Button variant="outlined" className={classes.button}>
-                                <QueuePlayNextIcon className={classes.leftIcon} />
-                                Thêm khóa đào tạo
+                                <DateRangeIcon className={classes.leftIcon} />
+                                THÊM NĂM HỌC ĐÀO TẠO MỚI
                             </Button>
-                            <Button variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
+                            <Button variant="outlined" className={classes.button}>
+                                <QueuePlayNextIcon className={classes.leftIcon} />
+                                THÊM KHÓA MỚI
+                            </Button>
+                            <Button onClick={this.addNew} variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
                                 <PlaylistAddIcon className={classes.leftIcon} />
-                                Thêm mới lớp học
+                                THÊM LỚP HỌC
                             </Button>
                         </div>
                     </div>
