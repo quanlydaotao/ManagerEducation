@@ -11,10 +11,13 @@ import Icon from '@material-ui/core/Icon';
 import DevicesIcon from '@material-ui/icons/Devices';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import SaveIcon from '@material-ui/icons/Save';
+import { Link } from 'react-router-dom';
 
 const style = theme => ({
     button: {
         margin: theme.spacing.unit,
+        fontSize: 13,
+        fontWeight: '300'
     },
     leftIcon: {
         marginRight: theme.spacing.unit,
@@ -28,9 +31,6 @@ const style = theme => ({
 });
 
 class ToolBar extends Component {
-    addNew = () => {
-        this.props.handleAddNew();
-    }
     render() {
         const { classes } = this.props;
         return (
@@ -51,7 +51,7 @@ class ToolBar extends Component {
                                 <QueuePlayNextIcon className={classes.leftIcon} />
                                 THÊM KHÓA MỚI
                             </Button>
-                            <Button onClick={this.addNew} variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
+                            <Button component={Link} to="/administrator/education/classes/add-new" variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
                                 <PlaylistAddIcon className={classes.leftIcon} />
                                 THÊM LỚP HỌC
                             </Button>

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import styles from './styles.css';
 import Button from '@material-ui/core/Button';
 
-class Search extends Component {
+class SearchYearAndCourse extends Component {
     render() {
         return (
             <div className={`${styles.Search}`}>
-                <form className="card card-sm">
+                <div className="card card-sm">
                     <div className={`row no-gutters align-items-center ${styles.cardBodyFix}`}>
                         <div className="col-auto">
                             <i className="fa fa-search h6 text-body" />
@@ -23,10 +23,10 @@ class Search extends Component {
                             <Button className={`${styles.buttonSearch}`}  type="submit">Tìm kiếm</Button>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         )
     }
 }
 
-export default Search;
+export default SearchYearAndCourse;

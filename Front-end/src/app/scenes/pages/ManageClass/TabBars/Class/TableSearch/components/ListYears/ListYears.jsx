@@ -15,7 +15,7 @@ const style = theme => ({
     root: {
         width: '100%',
         maxWidth: '100%',
-        marginTop: 10,
+        margin: '10px 0',
         backgroundColor: theme.palette.background.paper,
         position: 'relative',
         overflowY: 'scroll',
@@ -45,7 +45,7 @@ class ListYears extends React.Component {
                 <ListSubheader style={{backgroundColor: '#ececec', color: '#445e6c', fontWeight: '700'}}><RateReviewIcon /> DANH SÁCH NĂM HỌC ĐÀO TẠO</ListSubheader>
                 {data.map((value, index) => (
                     <ListItem key={index} className={`item-list ${dataSelect.year == value.id ? 'activeLink' : ''}`} onClick={() => this.props.setDataYearSelect(value.id)}>
-                        <ListItemText primary={`NĂM HỌC ĐÀO TẠO : [ ${value.startYears} ]`} classes={{ primary: classes.conf }}/>
+                        <ListItemText primary={`Năm học đào tạo [ ${value.startYears} ]`} classes={{ primary: classes.conf }}/>
                         <KeyboardArrowRightIcon />
                     </ListItem>
                 ))}

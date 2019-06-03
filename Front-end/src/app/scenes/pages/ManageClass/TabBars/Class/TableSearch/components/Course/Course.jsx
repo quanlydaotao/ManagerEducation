@@ -17,7 +17,7 @@ const style = theme => ({
     root: {
         width: '100%',
         maxWidth: '100%',
-        marginTop: 10,
+        margin: '10px 0',
         backgroundColor: theme.palette.background.paper,
         position: 'relative',
         overflowY: 'scroll',
@@ -53,7 +53,7 @@ class Course extends React.Component {
                 <ListSubheader style={{backgroundColor: '#cecece', color: 'white'}}><DvrIcon /> DANH SÁCH KHÓA ĐÀO TẠO</ListSubheader>
                 {courses.map((value, index) => (
                     <ListItem key={index} className={`item-list ${dataSelect.course == value.id ? 'activeLink' : ''}`} onClick={() => this.props.setDataCourseSelect(value.id)}>
-                        <ListItemText primary={`KHÓA - ${value.name}`} classes={{ primary: classes.conf }}/>
+                        <ListItemText primary={`Khóa - ${value.name}`} classes={{ primary: classes.conf }}/>
                         <KeyboardArrowRightIcon />
                     </ListItem>
                 ))}

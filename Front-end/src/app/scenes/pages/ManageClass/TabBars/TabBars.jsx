@@ -74,7 +74,6 @@ class TabBars extends React.Component {
                     />
                     {/* Render the add new class page if the url is "/administrator/education/classes" */}
                     <Route 
-                        exact 
                         path="/administrator/education/classes" 
                         render={() => (
                             <LazyLoad>
@@ -86,7 +85,7 @@ class TabBars extends React.Component {
                             </LazyLoad>
                         )} 
                     />
-                    {/* Render the add new class page if the url is "/administrator/education/classes/add-new" */}
+                    {/* Render the add new class page if the url is "/administrator/education/classes/add-new" 
                     <Route 
                         exact 
                         path="/administrator/education/classes/add-new" 
@@ -94,13 +93,13 @@ class TabBars extends React.Component {
                             <LazyLoad>
                                 <TabContainer>
                                     <Suspense fallback={<div>Loading...</div>}>
-                                        {/*<FormSign />*/}
+
                                         <div>Add new class</div>
                                     </Suspense>
                                 </TabContainer>
                             </LazyLoad>
                         )} 
-                    />
+                    />*/}
                 </Switch>
             </div>
         );
