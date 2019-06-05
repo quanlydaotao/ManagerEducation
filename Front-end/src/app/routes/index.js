@@ -2,17 +2,17 @@ import React from 'react';
 
 const routes = [
     {
-        path: '/administrator/home',
+        path: '/admin/home',
         component: React.lazy(() => import('../scenes/pages/HomeAdmin/HomeAdmin')),
         exact: true
     },
     {
-        path: '/administrator/education',
+        path: '/admin/edu',
         component: React.lazy(() => import('../scenes/pages/ManageClass/ManageClass')),
         exact: false
     },
     {
-        path: '/administrator/accounts',
+        path: '/admin/account',
         component: React.lazy(() => import('../scenes/pages/ManageAccount/ManageAccount')),
         exact: false
     }

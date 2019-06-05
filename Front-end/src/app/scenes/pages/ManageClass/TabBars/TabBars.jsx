@@ -44,16 +44,16 @@ class TabBars extends React.Component {
         return (
             <div className={classes.root}>
                 <div className="appBar">
-                    <NavLink button to="/administrator/education/years" activeClassName="activeLink">
+                    <NavLink to="/admin/edu/years" activeClassName="activeLink">
                         <StyleIcon className={classes.leftIcon}/>  NĂM HỌC ĐÀO TẠO
                     </NavLink>
-                    <NavLink to="/administrator/education/course" activeClassName="activeLink">
+                    <NavLink to="/admin/edu/courses" activeClassName="activeLink">
                         <DevicesOtherIcon className={classes.leftIcon}/> KHÓA ĐÀO TẠO
                     </NavLink>
-                    <NavLink to="/administrator/education/classes" activeClassName="activeLink">
+                    <NavLink to="/admin/edu/classes" activeClassName="activeLink">
                         <CastForEducationIcon className={classes.leftIcon}/> HỆ THỐNG LỚP HỌC
                     </NavLink>
-                    <NavLink to="/administrator/education/timetables" activeClassName="activeLink">
+                    <NavLink to="/admin/edu/timetables" activeClassName="activeLink">
                         <SchoolIcon className={classes.leftIcon}/> QUẢN LÝ ĐÀO TẠO/ THỐNG KÊ DỮ LIỆU
                     </NavLink>
                 </div>
@@ -61,7 +61,8 @@ class TabBars extends React.Component {
                     
                     {/* Render the wrapper years page if the url is "/administrator/education/years" */}
                     <Route 
-                        path="/administrator/education/years" 
+                        exact
+                        path="/admin/edu/years" 
                         render={() => (
                             <LazyLoad>
                                 <TabContainer>
@@ -74,7 +75,7 @@ class TabBars extends React.Component {
                     />
                     {/* Render the add new class page if the url is "/administrator/education/classes" */}
                     <Route 
-                        path="/administrator/education/classes" 
+                        path="/admin/edu/classes" 
                         render={() => (
                             <LazyLoad>
                                 <TabContainer>
@@ -85,21 +86,20 @@ class TabBars extends React.Component {
                             </LazyLoad>
                         )} 
                     />
-                    {/* Render the add new class page if the url is "/administrator/education/classes/add-new" 
+                    {/* Render the add new class page if the url is "/administrator/education/classes/add-new" */}
                     <Route 
                         exact 
-                        path="/administrator/education/classes/add-new" 
+                        path="/admin/edu/courses" 
                         render={() => (
                             <LazyLoad>
                                 <TabContainer>
                                     <Suspense fallback={<div>Loading...</div>}>
-
                                         <div>Add new class</div>
                                     </Suspense>
                                 </TabContainer>
                             </LazyLoad>
                         )} 
-                    />*/}
+                    />
                 </Switch>
             </div>
         );

@@ -19,7 +19,6 @@ import { classOperations } from '../../../../../../../../state/ducks/class';
 import { popupOperations } from '../../../../../../../../state/ducks/popup';
 import { EnhancedTableHead } from '../../../../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from './components/EnhancedTableToolBar';
-import { ImageAvatars } from '../../../../../../../components/ImageAvatars';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import styles from './styles.css';

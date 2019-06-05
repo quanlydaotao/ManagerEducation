@@ -50,7 +50,7 @@ class Course extends React.Component {
         const { classes, courses, dataSelect } = this.props;
         return (
             <List className={classes.root} subheader={<li />}>
-                <ListSubheader style={{backgroundColor: '#cecece', color: 'white'}}><DvrIcon /> DANH SÁCH KHÓA ĐÀO TẠO</ListSubheader>
+                <ListSubheader style={{backgroundColor: '#cecece', color: 'white', fontSize: '13px'}}><DvrIcon /> DANH SÁCH KHÓA HỌC</ListSubheader>
                 {courses.map((value, index) => (
                     <ListItem key={index} className={`item-list ${dataSelect.course == value.id ? 'activeLink' : ''}`} onClick={() => this.props.setDataCourseSelect(value.id)}>
                         <ListItemText primary={`Khóa - ${value.name}`} classes={{ primary: classes.conf }}/>

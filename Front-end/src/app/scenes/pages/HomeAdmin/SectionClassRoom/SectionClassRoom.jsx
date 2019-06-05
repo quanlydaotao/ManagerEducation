@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './styles.css';
 import { LabelYears } from './components/LabelYears';
 import { CardClass } from './components/CardClass';
-import { ButtonSeeMore } from '../../../components/ButtonSeeMore';
+import { ButtonSeeMore } from '../../../components/Buttons/ButtonSeeMore';
 
 class SectionClassRoom extends Component {
     render() {

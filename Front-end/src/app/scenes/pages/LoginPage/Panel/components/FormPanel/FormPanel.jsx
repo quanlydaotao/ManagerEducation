@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { formLoginShape } from '../../../../../propTypes';
 import { sessionOperations } from '../../../../../../state/ducks/session';
-
+import { withRouter } from 'react-router';
 let recaptchaInstance;
 class FormPanel extends Component {
     constructor(props) {
@@ -30,13 +30,10 @@ class FormPanel extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const { username, password, rememberMe, isVerifyCaptcha } = this.state;
-        // login if not errors
         if (isVerifyCaptcha)
             this.props.login(username, password, rememberMe);
         this.resetRecaptcha();
     }
-
-    // captcha config
     callback = () => {
     }
 

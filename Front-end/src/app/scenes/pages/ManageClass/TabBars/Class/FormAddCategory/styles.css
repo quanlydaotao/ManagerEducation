@@ -1,0 +1,32 @@
+.formAddClass {
+	width: 100%;
+    display: block !important;
+    padding: 40px 80px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.05);
+    border-radius: 2px;
+}
+
+.contentFormClass {
+    display: block !important;
+    padding:  0 !important;
+}
+
+.selection {
+	padding: 24px 100px;
+    background-color: #fafafa;
+}
+
+.wrapSelection {
+	background-color: white;
+}
+
+.wrapSelection > div > ul > li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+
+.message li {
+    color: #9c9a9a;
+}

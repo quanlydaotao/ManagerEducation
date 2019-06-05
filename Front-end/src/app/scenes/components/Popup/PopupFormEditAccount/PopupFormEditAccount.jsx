@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
@@ -7,7 +8,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
-import { accountOperations } from '../../../../state/ducks/account';
 import Draggable from 'react-draggable';
 import { connect } from 'react-redux';
 import styles from './styles.css';
@@ -19,7 +19,6 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import LockIcon from '@material-ui/icons/Lock';
-import { fileOperations } from '../../../../state/ducks/file';
 import ScreenLockRotationIcon from '@material-ui/icons/ScreenLockRotation';
 import PhoneLinkRingIcon from '@material-ui/icons/PhonelinkRing';
 import NaturePeopleIcon from '@material-ui/icons/NaturePeople';
@@ -29,6 +28,8 @@ import amber from '@material-ui/core/colors/amber';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import { accountOperations } from '../../../../state/ducks/account';
+import { fileOperations } from '../../../../state/ducks/file';
 
 
 const style = theme => ({
@@ -86,12 +87,24 @@ class PopupFormEditAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 0, login: '', password: '', re_password: '',
-            phoneNumber: '', authorities: [], imageUrl: '',
-            firstName: '', lastName: '', email: '',
-            image: null, birthday: null, sex: true,
-            nations: 'Kinh', address: '', address1: '',
-            langKey: 'vi', identityCardNumber: '', activated: true,
+            id: 0, login: '',
+            password: '', 
+            re_password: '',
+            phoneNumber: '', 
+            authorities: [], 
+            imageUrl: '',
+            firstName: '', 
+            lastName: '', 
+            email: '',
+            image: null, 
+            birthday: null, 
+            sex: true,
+            nations: 'Kinh', 
+            address: '', 
+            address1: '',
+            langKey: 'vi', 
+            identityCardNumber: '', 
+            activated: true,
             errors: {
                 login: '',
                 password: '',
@@ -107,15 +120,38 @@ class PopupFormEditAccount extends React.Component {
     componentDidMount() {
         const { data } = this.props;
         const {
-            id, login, phoneNumber, authorities,
-            imageUrl, firstName, lastName, email, birthday, sex, nations,
-            address, address1, identityCardNumber, activated
+            id, 
+            login,
+            phoneNumber, 
+            authorities,
+            imageUrl, 
+            firstName, 
+            lastName, 
+            email, 
+            birthday, 
+            sex, 
+            nations,
+            address, 
+            address1, 
+            identityCardNumber, 
+            activated
         } = data;
         this.setState({
-            id: id, login: login, phoneNumber: phoneNumber, authorities: authorities,
-            imageUrl: imageUrl, firstName: firstName, lastName: lastName, email: email,
-            birthday: birthday, sex: sex, nations: nations, address: address, address1: address1,
-            identityCardNumber: identityCardNumber, activated: activated
+            id,
+            login,
+            phoneNumber, 
+            authorities,
+            imageUrl, 
+            firstName, 
+            lastName, 
+            email,
+            birthday, 
+            sex, 
+            nations, 
+            address, 
+            address1,
+            identityCardNumber, 
+            activated
         });
     }
 
@@ -251,7 +287,11 @@ class PopupFormEditAccount extends React.Component {
             }
         }
         this.setState({ errors: { login, password, re_password, phone_number } });
-        if (login === '' && password === '' && re_password === '' && phone_number === '') {
+        if (login === '' 
+            && password === '' 
+            && re_password === '' 
+            && phone_number === ''
+        ) {
             return true;
         }
         return false;
@@ -261,12 +301,21 @@ class PopupFormEditAccount extends React.Component {
     render() {
         const { classes, statusForm, data, actions } = this.props;
         const { expanded, errors, imagePreview } = this.state;
-        var isShowMessageBeforeSubit = errors.login !== '' || errors.password !== '' || errors.re_password !== '' || errors.phone_number !== '';
-        var isShowMessageFailueAfterSubit = !actions.progress && actions.status === 'UPDATE_FAILED'
-            && actions.data.status === 400 && actions.data.response;
-        var isShowMessageSuccessAfterSubit = !actions.progress && actions.status === 'UPDATE_SUCCESS';
+        var isShowMessageBeforeSubit = errors.login !== '' 
+            || errors.password !== '' 
+            || errors.re_password !== '' 
+            || errors.phone_number !== '';
+        var isShowMessageFailueAfterSubit = !actions.progress 
+            && actions.status === 'UPDATE_FAILED'
+            && actions.data.status === 400 
+            && actions.data.response;
+        var isShowMessageSuccessAfterSubit = !actions.progress 
+            && actions.status === 'UPDATE_SUCCESS';
         let alert = () => {
-            if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
+            if (isShowMessageBeforeSubit 
+                || (!isShowMessageBeforeSubit 
+                && isShowMessageFailueAfterSubit)
+            ) {
                 return (
                     <Snackbar
                         anchorOrigin={{

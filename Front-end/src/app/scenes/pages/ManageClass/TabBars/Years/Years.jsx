@@ -12,12 +12,12 @@ class Years extends Component {
 				<div className="row">
 					<div className="col-md-9">
 						<Switch>
-							<Route exact path="/administrator/education/years" render={() => (
+							<Route exact path="/admin/edu/years" render={() => (
 								<Suspense fallback={'Loading...'}>
 									<EnhancedTableYears listName="DANH SÁCH CÁC NĂM HỌC ĐÀO TẠO" />
 								</Suspense>
 							)} />
-							<Route exact path="/administrator/education/years/add-new" render={() => (
+							<Route exact path="/admin/edu/years/add/new" render={() => (
 								<Suspense fallback={'Loading...'}>
 									<FormAddNewYears />
 								</Suspense>

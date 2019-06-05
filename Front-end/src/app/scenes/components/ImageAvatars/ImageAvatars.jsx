@@ -16,10 +16,10 @@ const styles = {
 };
 
 function ImageAvatars(props) {
-    const { classes, url } = props;
+    const { classes } = props;
     return (
         <Grid container>
-            <Avatar alt="Remy Sharp" src={url} className={classes.bigAvatar} />
+            <Avatar {...props} className={classes.bigAvatar} />
         </Grid>
     );
 }

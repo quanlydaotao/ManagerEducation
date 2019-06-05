@@ -15,7 +15,7 @@ class PopupDelete extends React.Component {
         this.props.delete();
         this.props.closePopupDelete();
     }
-    
+
     render() {
         return (
             <div>
@@ -47,20 +47,20 @@ class PopupDelete extends React.Component {
 }
 
 PopupDelete.propTypes = {
-  open: PropTypes.bool.isRequired,
-  closePopupDelete: PropTypes.func.isRequired
+    open: PropTypes.bool.isRequired,
+    closePopupDelete: PropTypes.func.isRequired
 }
 
 PopupDelete.defaultProps = {
-  open: false
+    open: false
 }
 
 const mapStatetoProps = state => ({
-  open: state.popup.popupDelete
+    open: state.popup.popupDelete
 });
 
 const mapDispatchToProps = {
-  closePopupDelete: popupOperations.closePopupDelete,
+    closePopupDelete: popupOperations.closePopupDelete,
 };
 
 export default connect(mapStatetoProps, mapDispatchToProps)(PopupDelete);

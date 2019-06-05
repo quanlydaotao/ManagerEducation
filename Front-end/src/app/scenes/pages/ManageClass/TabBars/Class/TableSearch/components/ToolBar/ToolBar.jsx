@@ -9,13 +9,14 @@ import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import TodayIcon from '@material-ui/icons/Today';
 import Icon from '@material-ui/core/Icon';
 import DevicesIcon from '@material-ui/icons/Devices';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import SaveIcon from '@material-ui/icons/Save';
 import { Link } from 'react-router-dom';
 
 const style = theme => ({
     button: {
-        margin: theme.spacing.unit,
         fontSize: 13,
         fontWeight: '300'
     },
@@ -43,18 +44,24 @@ class ToolBar extends Component {
                     </div>
                     <div className="col-md-8">
                         <div className="text-right">
-                            <Button variant="outlined" className={classes.button}>
-                                <DateRangeIcon className={classes.leftIcon} />
-                                THÊM NĂM HỌC ĐÀO TẠO MỚI
-                            </Button>
-                            <Button variant="outlined" className={classes.button}>
-                                <QueuePlayNextIcon className={classes.leftIcon} />
-                                THÊM KHÓA MỚI
-                            </Button>
-                            <Button component={Link} to="/administrator/education/classes/add-new" variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
-                                <PlaylistAddIcon className={classes.leftIcon} />
-                                THÊM LỚP HỌC
-                            </Button>
+                            <Tooltip title="Thêm năm học đào tạo mới">
+                                <Button variant="outlined" className={classes.button}>
+                                    <DateRangeIcon className={classes.leftIcon} />
+                                    THÊM NĂM HỌC ĐÀO TẠO MỚI
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Thêm khóa mới">
+                                <Button variant="outlined" className={classes.button}>
+                                    <QueuePlayNextIcon className={classes.leftIcon} />
+                                    THÊM KHÓA MỚI
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Thêm lớp học">
+                                <Button component={Link} to="/admin/edu/classes/add/category" variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
+                                    <PlaylistAddIcon className={classes.leftIcon} />
+                                    THÊM LỚP HỌC
+                                </Button>
+                            </Tooltip>
                         </div>
                     </div>
                 </div>

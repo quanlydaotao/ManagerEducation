@@ -25,7 +25,7 @@ const authReducer = createReducer( initialState )( {
             var i = 0;
             for (i=0; i<roles.length; i++) {
                 if (roles[i] === "ROLE_ADMIN") {
-                    history.push('/administrator/home');
+                    history.push('/admin/home');
                     break;
                 } else if(roles[i] === "ROLE_TEACHER") {
                     history.push('/teacher/home');

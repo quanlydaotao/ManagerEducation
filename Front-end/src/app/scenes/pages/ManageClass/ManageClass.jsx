@@ -9,9 +9,9 @@ class ManageClass extends Component {
         return (
         	<React.Fragment>
                 <Switch>
-                    <Route exact path="/administrator/education" render={() => (
-                        <Redirect to="/administrator/education/years" />
-                    )} />  
+                    <Route exact path="/admin/edu" render={() => (
+                        <Redirect to="/admin/edu/years" />
+                    )} />
                 </Switch>
                 <DocumentTitle title='.:Năm học đào tạo:.'>
                     <React.Fragment>
@@ -19,11 +19,10 @@ class ManageClass extends Component {
                             <TabBars />
                         </div>
                     </React.Fragment>
-                </DocumentTitle>   
+                </DocumentTitle>
             </React.Fragment>
         );
     }
 }
 
 export default ManageClass;
-

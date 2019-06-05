@@ -7,7 +7,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
-import { yearsOperations } from '../../../../state/ducks/years';
 import Draggable from 'react-draggable';
 import { connect } from 'react-redux';
 import styles from './styles.css';
@@ -30,7 +29,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CKEditor from 'ckeditor4-react';
-
+import { yearsOperations } from '../../../../state/ducks/years';
 
 const style = theme => ({
     root: {
@@ -87,9 +86,14 @@ class PopupFormEditYear extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 0, name: '', startYears: '',
-            openDay: null, closeDay: null, describe: '',
-            maximumClasses: 0, status: true,
+            id: 0, 
+            name: '', 
+            startYears: '',
+            openDay: null, 
+            closeDay: null, 
+            describe: '',
+            maximumClasses: 0, 
+            status: true,
             errors: {
                 name: '',
                 startYears: '',
@@ -102,12 +106,24 @@ class PopupFormEditYear extends React.Component {
     componentDidMount() {
         const { data } = this.props;
         const {
-            id, name, startYears, openDay,
-            closeDay, describe, status, maximumClasses
+            id, 
+            name, 
+            startYears, 
+            openDay,
+            closeDay, 
+            describe, 
+            status, 
+            maximumClasses
         } = data;
         this.setState({
-            id, name, startYears, openDay,
-            closeDay, maximumClasses, describe, status
+            id, 
+            name, 
+            startYears, 
+            openDay,
+            closeDay, 
+            maximumClasses, 
+            describe, 
+            status
         });
     }
 
@@ -140,10 +156,24 @@ class PopupFormEditYear extends React.Component {
         const check = this.isErrors(this.state);
         if (check) {
             const {
-                id, name, startYears, openDay, closeDay, describe, maximumClasses, status
+                id, 
+                name, 
+                startYears, 
+                openDay, 
+                closeDay, 
+                describe, 
+                maximumClasses, 
+                status
             } = this.state;
             const formData = {
-                id, name, startYears, openDay, closeDay, describe, maximumClasses, status
+                id, 
+                name, 
+                startYears, 
+                openDay, 
+                closeDay, 
+                describe, 
+                maximumClasses, 
+                status
             }
             this.props.updateYear(formData);
         }
@@ -199,7 +229,6 @@ class PopupFormEditYear extends React.Component {
     handleClear = () => {
         this.setState({ describe: '' });
     }
-
 
     render() {
         const { classes, actions, statusForm, data } = this.props;

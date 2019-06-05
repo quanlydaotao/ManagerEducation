@@ -10364,10 +10364,10 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm select {
     width: 100%;
     display: inline-block;
-    padding: 12px;
+    padding: 8px 12px;
     margin: 5px 0 18px 0;
-    background: #f1f1f1;
-    border: 1px solid #ffffff;
+    background: #ffffff;
+    border: 1px solid #cecece;
     border-radius: 4px;
 }
 
@@ -10395,8 +10395,8 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm input[type=email]:focus,
 .contentForm input[type=date]:focus,
 .contentForm input[type=number]:focus {
-    background-color: #ddd;
-    outline: none;
+    background-color: #fafafa;
+    outline: 1px solid orange;
 }
 
 .contentForm .avatarUpload {
@@ -10523,7 +10523,10 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     background-color: #fafafa;
 }
 
-
+.item-list {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
 
 .item-list:hover {
     background-color: #f3f3f3;

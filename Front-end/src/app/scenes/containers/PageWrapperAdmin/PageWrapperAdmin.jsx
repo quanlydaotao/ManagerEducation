@@ -26,12 +26,10 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { Footer } from '../../components/Footer';
-
-const VerticalMenuAdmin = React.lazy(() => import('../../components/Menu/VerticalMenuAdmin/VerticalMenuAdmin'));
+const VerticalMenuAdmin = React.lazy(() => import('./components/VerticalMenuAdmin/VerticalMenuAdmin'));
 const Breadcumbs = React.lazy(() => import('../../components/Breadcumbs/Breadcumbs'));
 
 const drawerWidth = 300;
-
 const style = theme => ({
     root: {
         display: 'flex',
@@ -154,12 +152,14 @@ const style = theme => ({
 });
 
 class PageWrapperAdmin extends React.Component {
-    state = {
-        open: false,
-        anchorEl: null,
-        mobileMoreAnchorEl: null,
-    };
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            anchorEl: null,
+            mobileMoreAnchorEl: null,
+        };
+    }
     handleProfileMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
     };
@@ -187,8 +187,7 @@ class PageWrapperAdmin extends React.Component {
 
     render() {
         const { classes, theme } = this.props;
-        const { open } = this.state;
-        const { anchorEl, mobileMoreAnchorEl } = this.state;
+        const { anchorEl, mobileMoreAnchorEl, open } = this.state;
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 

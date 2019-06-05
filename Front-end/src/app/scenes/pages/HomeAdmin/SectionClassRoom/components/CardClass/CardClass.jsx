@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './styles.css';
-import { ButtonSwitch } from '../../../../../components/ButtonSwitch';
+import { ButtonSwitch } from '../../../../../components/Buttons/ButtonSwitch';
 
 class CardClass extends Component {
     render() {

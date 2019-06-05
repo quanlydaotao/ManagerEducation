@@ -42,7 +42,7 @@ class ListYears extends React.Component {
         const { classes, data, dataSelect } = this.props;
         return (
             <List className={classes.root} subheader={<li />}>
-                <ListSubheader style={{backgroundColor: '#ececec', color: '#445e6c', fontWeight: '700'}}><RateReviewIcon /> DANH SÁCH NĂM HỌC ĐÀO TẠO</ListSubheader>
+                <ListSubheader style={{backgroundColor: '#ececec', color: '#445e6c', fontWeight: '700', fontSize: '13px'}}><RateReviewIcon /> DANH SÁCH NĂM HỌC ĐÀO TẠO</ListSubheader>
                 {data.map((value, index) => (
                     <ListItem key={index} className={`item-list ${dataSelect.year == value.id ? 'activeLink' : ''}`} onClick={() => this.props.setDataYearSelect(value.id)}>
                         <ListItemText primary={`Năm học đào tạo [ ${value.startYears} ]`} classes={{ primary: classes.conf }}/>

@@ -6,7 +6,7 @@ import { DescriptionPanel } from './components/DescriptionPanel';
 const Panel = () => {
     return (
         <div className={`${styles.panel}`}>
-            <div className={`row ${styles.loginPanel} clearfix`}>
+            <div className={`row ${styles.wrapPanel} clearfix`}>
                 <div className="col-md-5">
                     <FormPanel />
                 </div>
