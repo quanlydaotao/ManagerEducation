@@ -1,6 +1,9 @@
-import { openPopupDelete, closePopupDelete } from "./actions";
+import { 
+    doOpenPopupDelete, 
+    doClosePopupDelete 
+} from "./actions";
 
 export {
-    openPopupDelete,
-    closePopupDelete,
+    doOpenPopupDelete, 
+    doClosePopupDelete 
 };

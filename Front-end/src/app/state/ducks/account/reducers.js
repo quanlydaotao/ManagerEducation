@@ -1,45 +1,27 @@
 import { combineReducers } from "redux";
 import * as types from "./types";
-import * as utils from './utils';
 import { createReducer } from "../../utils";
 
-const accountReducer = createReducer( [] )( {
-    [ types.GET_ALL_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
-        if (action.payload) {
-            state = action.payload;
-        }
-        return state;
-    }
+const applyListReducer = createReducer( [] )( {
+    [ types.GET_ALL_USER_ACCOUNT_COMPLETED ]: ( state, action ) => action.payload,
 });
 
-const getAccountReducer = createReducer( {} )( {
-    [ types.GET_USER_ACCOUNT_BY_ID ]: ( state, action ) => {
-        state = {};
-        return state;
-    },
-    [ types.GET_USER_ACCOUNT_BY_ID_COMPLETED ]: ( state, action ) => {
-        if (action.payload) {
-            state = action.payload
-        }
-        return state;
-    },
-    [ types.GET_USER_ACCOUNT_BY_ID_FAILED ]: ( state, action ) => {
-        return state;
-    },
+const applyDetailReducer  = createReducer( {} )( {
+    [ types.GET_USER_ACCOUNT_BY_ID_COMPLETED ]: ( state, action ) => state = action.payload,
 });
 
 const initialState = {progress: false, status: '',  data: {}}
 
-const actionReducer = createReducer( initialState )( {
-    [ types.ADD_NEW_USER_ACCOUNT ]: ( state, action ) => {
+const applyStatusActReducer = createReducer( initialState )( {
+    [ types.CREATE_NEW_USER_ACCOUNT ]: ( state, action ) => {
         state = {progress: true, status: 'ADDING', data: {}}
         return state;
     },
-    [ types.ADD_NEW_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
+    [ types.CREATE_NEW_USER_ACCOUNT_COMPLETED ]: ( state, action ) => {
         state = {progress: false, status: 'ADD_SUCCESS', data: {}}
         return state;
     },
-    [ types.ADD_NEW_USER_ACCOUNT_FAILED ]: ( state, action ) => {
+    [ types.CREATE_NEW_USER_ACCOUNT_FAILED ]: ( state, action ) => {
         state = {progress: false, status: 'ADD_FAILED', data: action.payload}
         return state;
     },
@@ -68,21 +50,8 @@ const actionReducer = createReducer( initialState )( {
     }
 });
 
-const toggleEditAccountReducer = createReducer( false )( {
-    [ types.OPEN_EDIT_USER_ACCOUNT ]: ( state, action ) => {
-        state = true;
-        return state;
-    },
-    [ types.CLOSE_EDIT_USER_ACCOUNT ]: ( state, action ) => {
-        state = false;
-        return state;
-    }
-});
-
-
 export default combineReducers( {
-    accounts: accountReducer,
-    getAccounts: getAccountReducer,
-    actionsAccounts: actionReducer,
-    toggleEditAccounts: toggleEditAccountReducer
+    list: applyListReducer,
+    detail: applyDetailReducer,
+    status: applyStatusActReducer,
 } );

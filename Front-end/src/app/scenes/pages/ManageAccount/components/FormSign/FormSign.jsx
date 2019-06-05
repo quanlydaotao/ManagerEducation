@@ -157,7 +157,7 @@ class FormSign extends Component {
                 activated, 
                 image
             }
-            this.props.addNewUserAccount(formData);
+            this.props.createNewUserAccount(formData);
             if (status !== "ADD_FAILED") {
                 if (this.state.image) {
                     const fd = new FormData();
@@ -248,18 +248,18 @@ class FormSign extends Component {
     }
 
     render() {
-        const { classes, actions } = this.props;
+        const { classes, status } = this.props;
         const { errors, imagePreview } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' 
             || errors.password !== '' 
             || errors.re_password !== '' 
             || errors.phone_number !== '';
-        var isShowMessageFailueAfterSubit = !actions.progress 
-            && actions.status === 'ADD_FAILED'
-            && actions.data.status === 400 
-            && actions.data.response;
-        var isShowMessageSuccessAfterSubit = !actions.progress 
-            && actions.status === 'ADD_SUCCESS';
+        var isShowMessageFailueAfterSubit = !status.progress 
+            && status.status === 'ADD_FAILED'
+            && status.data.status === 400 
+            && status.data.response;
+        var isShowMessageSuccessAfterSubit = !status.progress 
+            && status.status === 'ADD_SUCCESS';
 
         let alert = () => {
             if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
@@ -286,8 +286,8 @@ class FormSign extends Component {
                                         {errors.password !== '' ? <li>{errors.password}</li> : ''}
                                         {errors.re_password !== '' ? <li>{errors.re_password}</li> : ''}
                                         {errors.phone_number !== '' ? <li>{errors.phone_number}</li> : ''}
-                                        {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
-                                            <li>{actions.data.response.createFailed ? actions.data.response.createFailed : 'Đăng ký thất bại!'}</li> : ''}
+                                        {(!isShowMessageBeforeSubit && status.data.status === 400 && status.data.response) ?
+                                            <li>{status.data.response.createFailed ? status.data.response.createFailed : 'Đăng ký thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -405,7 +405,7 @@ class FormSign extends Component {
                                             ĐĂNG KÝ
                                             <PersonAddIcon className={classes.rightIcon} />
                                         </Button>
-                                        {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
+                                        {status.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
                                          <Button type="reset" color="secondary" className={`reset-button ${classes.button}`} onClick={this.clearData}>
                                             Xóa thông tin
                                             <DeleteIcon className={classes.rightIcon} />
@@ -491,29 +491,26 @@ class FormSign extends Component {
 
 FormSign.propTypes = {
     classes: PropTypes.object.isRequired,
-    accounts: PropTypes.arrayOf(accountShape).isRequired,
-    addNewUserAccount: PropTypes.func.isRequired,
-    uploadAvatar: PropTypes.func.isRequired,
-    actions: PropTypes.objectOf({
+    status: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
         data: PropTypes.object.isRequired
-    }).isRequired
+    }).isRequired,
+    createNewUserAccount: PropTypes.func.isRequired,
+    uploadAvatar: PropTypes.func.isRequired,
 };
 
 FormSign.defaultProps = {
-    accounts: [],
-    actions: { progress: false, status: '', data: {} }
+    status: { progress: false, status: '', data: {} }
 }
 
 const mapStateToProps = state => ({
-    accounts: state.account.accounts,
-    actions: state.account.actionsAccounts
+    status: state.account.status
 });
 
 const mapDispatchToProps = {
-    addNewUserAccount: accountOperations.addNewUserAccount,
-    uploadAvatar: fileOperations.uploadFile
+    createNewUserAccount: accountOperations.doCreateNewAccount,
+    uploadAvatar: fileOperations.doUploadFile
 };
 
 

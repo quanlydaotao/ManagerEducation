@@ -60,7 +60,7 @@ const mapStatetoProps = state => ({
 });
 
 const mapDispatchToProps = {
-    closePopupDelete: popupOperations.closePopupDelete,
+    closePopupDelete: popupOperations.doClosePopupDelete,
 };
 
 export default connect(mapStatetoProps, mapDispatchToProps)(PopupDelete);

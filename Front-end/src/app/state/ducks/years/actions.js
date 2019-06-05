@@ -1,6 +1,6 @@
 import * as types from "./types";
 
-export const getAllYears = () => ( {
+export const doGetAllYears = () => ( {
     type: types.GET_ALL_YEARS,
     meta: {
         async: true,
@@ -10,7 +10,7 @@ export const getAllYears = () => ( {
     }
 } );
 
-export const getYearsById = ( id ) => ( {
+export const doGetYearById = ( id ) => ( {
     type: types.GET_YEARS_BY_ID,
     meta: {
         async: true,
@@ -20,7 +20,7 @@ export const getYearsById = ( id ) => ( {
     }
 } );
 
-export const addNewYear = ( dataForm ) => ( {
+export const doCreateNewYear = ( dataForm ) => ( {
     type: types.ADD_NEW_YEARS,
     meta: {
         async: true,
@@ -31,7 +31,7 @@ export const addNewYear = ( dataForm ) => ( {
     }
 });
 
-export const updateYear = ( dataForm ) => ( {
+export const doUpdateYear = ( dataForm ) => ( {
     type: types.UPDATE_YEARS,
     meta: {
         async: true,
@@ -42,21 +42,14 @@ export const updateYear = ( dataForm ) => ( {
     }
 });
 
-export const deleteYears = ( listId ) => ( {
+export const doDeleteYearByIds = ( ids ) => ( {
     type: types.DELETE_YEARS,
     meta: {
         async: true,
         blocking: true,
         path: "/years",
         method: "DELETE",
-        body: JSON.stringify(listId)
+        body: JSON.stringify(ids)
     }
 });
 
-export const openFormEdit = ( ) => ( {
-    type: types.OPEN_EDIT_YEARS,
-});
-
-export const closeFormEdit = ( ) => ( {
-    type: types.CLOSE_EDIT_YEARS,
-});

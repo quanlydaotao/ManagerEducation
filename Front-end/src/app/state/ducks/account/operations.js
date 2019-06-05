@@ -1,12 +1,15 @@
-import { getAllUserAccount, addNewUserAccount, updateUserAccount, 
-    deleteUserAccount, openFormEdit, closeFormEdit, getUserAccountById } from "./actions";
+import { 
+    doCreateNewAccount,
+    doDeleteAccountByIds,
+    doGetAccountById,
+    doGetAllAccounts,
+    doUpdateAccount,
+} from "./actions";
 
 export {
-    getAllUserAccount,
-    addNewUserAccount,
-    updateUserAccount,
-    deleteUserAccount,
-    openFormEdit,
-    closeFormEdit,
-    getUserAccountById
+    doCreateNewAccount,
+    doDeleteAccountByIds,
+    doGetAccountById,
+    doGetAllAccounts,
+    doUpdateAccount,
 };

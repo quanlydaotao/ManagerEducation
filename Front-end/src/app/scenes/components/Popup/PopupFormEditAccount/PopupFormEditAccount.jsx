@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
@@ -29,6 +28,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import { accountOperations } from '../../../../state/ducks/account';
+import { toggleOperations } from '../../../../state/ducks/toggle';
 import { fileOperations } from '../../../../state/ducks/file';
 
 
@@ -87,7 +87,8 @@ class PopupFormEditAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 0, login: '',
+            id: 0, 
+            login: '',
             password: '', 
             re_password: '',
             phoneNumber: '', 
@@ -198,7 +199,7 @@ class PopupFormEditAccount extends React.Component {
                 imageUrl, firstName, lastName, email, birthday, sex, nations,
                 address, address1, langKey, identityCardNumber, activated, image
             }
-            this.props.updateUserAccount(formData);
+            this.props.updateAccount(formData);
             if (this.props.actions.status !== "UPDATE_FAILED") {
                 if (this.state.image) {
                     const fd = new FormData();
@@ -299,18 +300,18 @@ class PopupFormEditAccount extends React.Component {
 
 
     render() {
-        const { classes, statusForm, data, actions } = this.props;
+        const { classes, statusForm, status } = this.props;
         const { expanded, errors, imagePreview } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' 
             || errors.password !== '' 
             || errors.re_password !== '' 
             || errors.phone_number !== '';
-        var isShowMessageFailueAfterSubit = !actions.progress 
-            && actions.status === 'UPDATE_FAILED'
-            && actions.data.status === 400 
-            && actions.data.response;
-        var isShowMessageSuccessAfterSubit = !actions.progress 
-            && actions.status === 'UPDATE_SUCCESS';
+        var isShowMessageFailueAfterSubit = status.progress 
+            && status.status === 'UPDATE_FAILED'
+            && status.data.status === 400 
+            && status.data.response;
+        var isShowMessageSuccessAfterSubit = !status.progress 
+            && status.status === 'UPDATE_SUCCESS';
         let alert = () => {
             if (isShowMessageBeforeSubit 
                 || (!isShowMessageBeforeSubit 
@@ -337,8 +338,8 @@ class PopupFormEditAccount extends React.Component {
                                         {errors.password !== '' ? <li>{errors.password}</li> : ''}
                                         {errors.re_password !== '' ? <li>{errors.re_password}</li> : ''}
                                         {errors.phone_number !== '' ? <li>{errors.phone_number}</li> : ''}
-                                        {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
-                                            <li>{actions.data.response.updateFailed ? actions.data.response.updateFailed : 'Cập nhật thông tin thất bại!'}</li> : ''}
+                                        {(!isShowMessageBeforeSubit && status.data.status === 400 && status.data.response) ?
+                                            <li>{status.data.response.updateFailed ? status.data.response.updateFailed : 'Cập nhật thông tin thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -405,7 +406,7 @@ class PopupFormEditAccount extends React.Component {
                     fullWidth={true}
                     maxWidth="lg"
                     open={statusForm}
-                    onClose={this.props.closeForm}
+                    onClose={this.props.closeFormEdit}
                     aria-labelledby="draggable-dialog-title"
                 >
                     <form onSubmit={this.handleSubmit}>
@@ -595,13 +596,18 @@ class PopupFormEditAccount extends React.Component {
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.props.closeForm} color="primary">
+                            <Button onClick={this.props.closeFormEdit} color="primary">
                                 Thoát
                             </Button>
                             <Button type="submit" color="primary">
                                 Lưu
                             </Button>
-                            {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
+                            {status.progress ? 
+                                <span style={{ marginLeft: 5, marginTop: 3 }}>
+                                    <i class="fa fa-spinner fa-pulse fa-3x fa-fw" 
+                                       style={{ fontSize: 30 }}>
+                                    </i>
+                                </span> : ''}
                         </DialogActions>
                     </form>
                 </Dialog>
@@ -611,31 +617,32 @@ class PopupFormEditAccount extends React.Component {
 }
 
 PopupFormEditAccount.propTypes = {
-    closeForm: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
-    updateUserAccount: PropTypes.func.isRequired,
-    updateAvatar: PropTypes.func.isRequired,
-    actions: PropTypes.objectOf({
+    status: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
         data: PropTypes.object.isRequired
-    }).isRequired
+    }).isRequired,
+
+    updateAccount: PropTypes.func.isRequired,
+    updateAvatar: PropTypes.func.isRequired,
+    closeFormEdit: PropTypes.func.isRequired,
 };
 
 PopupFormEditAccount.defaultProps = {
     statusForm: false,
-    actions: { progress: false, status: '', data: {} },
+    status: { progress: false, status: '', data: {} },
 }
 
 const mapStateToProps = state => ({
-    statusForm: state.account.toggleEditAccounts,
-    actions: state.account.actionsAccounts
+    statusForm: state.toggle.toggleFormEdit,
+    status: state.account.status
 });
 
 const mapDispatchToProps = {
-    closeForm: accountOperations.closeFormEdit,
-    updateUserAccount: accountOperations.updateUserAccount,
-    updateAvatar: fileOperations.updateFile
+    closeFormEdit: toggleOperations.doCloseFormEditAccount,
+    updateAccount: accountOperations.doUpdateAccount,
+    updateAvatar: fileOperations.doUpdateFile
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(PopupFormEditAccount));

@@ -7,8 +7,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import LaunchIcon from '@material-ui/icons/Launch';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -17,13 +15,15 @@ import { connect } from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import { yearsShape } from '../../../../../../propTypes';
-import { yearsOperations } from '../../../../../../../state/ducks/Years';
+import { yearsOperations } from '../../../../../../../state/ducks/years';
 import { popupOperations } from '../../../../../../../state/ducks/popup';
+import { toggleOperations } from '../../../../../../../state/ducks/toggle';
 import { EnhancedTableHead } from '../../../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../../../components/Table/EnhancedTableToolBar';
 import { PopupFormEditYear } from '../../../../../../components/Popup/PopupFormEditYear';
 import { PopupDelete } from '../../../../../../components/Popup/PopupDelete';
 import { history } from '../../../../../../../state/utils';
+import { ButtonEdit } from '../../../../../../components/Buttons/ButtonEdit';
 const NotFoundSearch = React.lazy(() => import('../../../../../../components/NotFoundSearch/NotFoundSearch'));
 
 const rows = [
@@ -138,7 +138,7 @@ class EnhancedTableYear extends React.Component {
 
     handleOpenForm = (id) => {
         this.props.findYearById(id);
-        this.props.openForm();
+        this.props.openFormEdit();
     }
 
     handleChangePage = (event, page) => {
@@ -155,27 +155,39 @@ class EnhancedTableYear extends React.Component {
     }
 
     deleteData = (param) => {
-        this.props.deleteYears(this.state.selected);
+        this.props.deleteYearByIds(this.state.selected);
     }
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes, listName, years, yearById, actionsYears } = this.props;
+        const { classes, listName, years, detail, status } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        if (actionsYears && actionsYears.status === 'DELETE_SUCCESS' && actionsYears.data === selected.length) {
-            alert("Xóa thành công " + actionsYears.data + " trường dữ liệu năm học!");
-            history.push('/administrator/education/years');
-        } else if (actionsYears && actionsYears.status === 'DELETE_FAILED' && actionsYears.data !== selected.length) {
-            alert("Xóa dữ liệu năm học thất bại!");
+        if (
+            status 
+            && status.status === 'DELETE_SUCCESS' 
+            && status.data === selected.length
+        ) {
+            alert("Xóa thành công " + status.data + " trường dữ liệu năm học!");
+            history.push('/admin/edu/years');
+        } else if (
+            status 
+            && status.status === 'DELETE_FAILED' 
+            && status.data !== selected.length) {
+            alert("Xóa dữ liệu năm học thất bại!"
+        );
         }
         return (
             <React.Fragment>
                 { years.length > 0 ? (
                     <Paper className={classes.root}>
-                        {yearById.id ? <PopupFormEditYear data={yearById} /> : ''} 
+                        {detail.id ? <PopupFormEditYear data={detail} /> : ''} 
                         <PopupDelete delete={this.deleteData} />
-                        <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
+                        <EnhancedTableToolBar 
+                            numSelected={selected.length} 
+                            listName={listName} 
+                            actionDelete={this.handleDelete} 
+                        />
                         <div style={{ padding: '10px 0 15px 24px' }} className="message">
                             <div>
                                 <b>Chú ý:</b>
@@ -213,7 +225,10 @@ class EnhancedTableYear extends React.Component {
                                                         key={n.id}
                                                         selected={isSelected}
                                                     >
-                                                        <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
+                                                        <TableCell 
+                                                            padding="checkbox" 
+                                                            onClick={event => this.handleClick(event, n.id)}
+                                                        >
                                                             <Checkbox checked={isSelected} color="default" />
                                                         </TableCell>
                                                         <TableCell className="cell">
@@ -253,10 +268,11 @@ class EnhancedTableYear extends React.Component {
                                                             />) || <Skeleton />}
                                                         </TableCell>
                                                         <TableCell className="cell">
-                                                            {<Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }}
-                                                                title="Chỉnh sửa thông tin năm học">
-                                                                <LaunchIcon />
-                                                            </Button> || <Skeleton />}
+                                                            <ButtonEdit 
+                                                                title="Chỉnh sửa thông tin năm học" 
+                                                                id={n.id} 
+                                                                handleOpenForm={this.handleOpenForm} 
+                                                            />
                                                         </TableCell>
                                                     </TableRow>
                                                 </LazyLoad>
@@ -299,33 +315,39 @@ class EnhancedTableYear extends React.Component {
 EnhancedTableYear.propTypes = {
     classes: PropTypes.object.isRequired,
     years: PropTypes.arrayOf(yearsShape).isRequired,
-    actionsYears: PropTypes.object.isRequired,
-    yearById: PropTypes.object.isRequired,
+    status: PropTypes.objectOf({
+        progress: PropTypes.bool.isRequired,
+        status: PropTypes.string.isRequired,
+        data: PropTypes.object.isRequired
+    }).isRequired,
+    detail: PropTypes.object.isRequired,
+    listName: PropTypes.string.isRequired,
+
     getAllYears: PropTypes.func.isRequired,
-    toggleEditYears: PropTypes.func.isRequired,
-    deleteYears: PropTypes.func.isRequired,
-    deleteUserAccount: PropTypes.func.isRequired,
+    openFormEdit: PropTypes.func.isRequired,
+    openPopupDelete: PropTypes.func.isRequired,
+    deleteYearByIds: PropTypes.func.isRequired,
     findYearById: PropTypes.func.isRequired,
 };
 
 EnhancedTableYear.defaultProps = {
     years: [],
-    yearById: {},
-    actionsYears: {}
+    detail: {},
+    status: { progress: false, status: '', data: {} }
 }
 
 const mapStateToProps = state => ({
-    years: state.years.allYears,
-    yearById: state.years.getYear,
-    actionsYears: state.years.actionsYears
+    years: state.years.list,
+    detail: state.years.detail,
+    status: state.years.status
 });
 
 const mapDispatchToProps = {
-    getAllYears: yearsOperations.getAllYears,
-    openForm: yearsOperations.openFormEdit,
-    openPopupDelete: popupOperations.openPopupDelete,
-    findYearById: yearsOperations.getYearsById,
-    deleteYears: yearsOperations.deleteYears
+    getAllYears: yearsOperations.doGetAllYears,
+    openFormEdit: toggleOperations.doOpenFormEditYear,
+    openPopupDelete: popupOperations.doOpenPopupDelete,
+    findYearById: yearsOperations.doGetYearById,
+    deleteYearByIds: yearsOperations.doDeleteYearByIds
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableYear));

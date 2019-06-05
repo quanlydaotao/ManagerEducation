@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { connect } from 'react-redux';
-import { yearsOperations } from '../../../../../../state/ducks/years';
+import { yearsOperations } from '../../../../../../../state/ducks/years';
 
 const style = theme => ({
     snackbar: {
@@ -51,9 +51,13 @@ class FormAddNewYears extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '', startYears: '',
-            openDay: null, closeDay: null, describe: '',
-            maximumClasses: 0, status: true,
+            name: '', 
+            startYears: '',
+            openDay: null, 
+            closeDay: null, 
+            describe: '',
+            maximumClasses: 0, 
+            status: true,
             errors: {
                 name: '',
                 startYears: '',
@@ -91,7 +95,7 @@ class FormAddNewYears extends Component {
             const formData = {
                 name, startYears, openDay, closeDay, describe, maximumClasses, status
             }
-            this.props.addNewYear(formData);
+            this.props.createNewYear(formData);
         }
     }
 
@@ -148,17 +152,17 @@ class FormAddNewYears extends Component {
 
 
     render() {
-        const { classes, actions } = this.props;
+        const { classes, status } = this.props;
         const { errors } = this.state;
         var isShowMessageBeforeSubit = errors.name !== '' 
             || errors.startYears !== '' 
             || errors.maximumClasses !== '';
-        var isShowMessageFailueAfterSubit = !actions.progress 
-            && actions.status === 'ADD_FAILED'
-            && actions.data.status === 400 
-            && actions.data.response;
-        var isShowMessageSuccessAfterSubit = !actions.progress 
-            && actions.status === 'ADD_SUCCESS';
+        var isShowMessageFailueAfterSubit = !status.progress 
+            && status.status === 'ADD_FAILED'
+            && status.data.status === 400 
+            && status.data.response;
+        var isShowMessageSuccessAfterSubit = !status.progress 
+            && status.status === 'ADD_SUCCESS';
 
         const currentYear = new Date().getFullYear();
         const allYears = [];
@@ -166,14 +170,19 @@ class FormAddNewYears extends Component {
             allYears.push(i);
         }
         let alert = () => {
-            if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
+            if (isShowMessageBeforeSubit 
+                || (!isShowMessageBeforeSubit 
+                && isShowMessageFailueAfterSubit)
+            ) {
                 return (
                     <Snackbar
                         anchorOrigin={{
                             vertical: 'top',
                             horizontal: 'right',
                         }}
-                        open={this.state.open && (isShowMessageBeforeSubit || isShowMessageFailueAfterSubit)}
+                        open={
+                            this.state.open && (isShowMessageBeforeSubit || isShowMessageFailueAfterSubit)
+                        }
                         autoHideDuration={6000}
                         ContentProps={{
                             'aria-describedby': 'message-id',
@@ -188,8 +197,8 @@ class FormAddNewYears extends Component {
                                         {errors.startYears !== '' ? <li>{errors.startYears}</li> : ''}
                                         {errors.endYears !== '' ? <li>{errors.endYears}</li> : ''}
                                         {errors.maximumClasses !== '' ? <li>{errors.maximumClasses}</li> : ''}
-                                        {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
-                                            <li>{actions.data.response.createYearFailed ? actions.data.response.createYearFailed : 'Tạo năm học thất bại!'}</li> : ''}
+                                        {(!isShowMessageBeforeSubit && status.data.status === 400 && status.data.response) ?
+                                            <li>{status.data.response.createYearFailed ? status.data.response.createYearFailed : 'Tạo năm học thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -320,7 +329,7 @@ class FormAddNewYears extends Component {
                                     THÊM MỚI
                                         <AddIcon className={classes.rightIcon} />
                                 </Button>
-                                {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
+                                {status.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
                                 <Button type="reset" color="secondary" className={`reset-button ${classes.button}`} onClick={this.handleClear}>
                                     XÓA THÔNG TIN
                                     <DeleteIcon className={classes.rightIcon} />
@@ -337,20 +346,20 @@ class FormAddNewYears extends Component {
 
 FormAddNewYears.propTypes = {
     classes: PropTypes.object.isRequired,
-    addNewYear: PropTypes.func.isRequired,
-
+    createNewYear: PropTypes.func.isRequired,
+    status: PropTypes.object.isRequired
 };
 
 FormAddNewYears.defaultProps = {
-    actions: { progress: false, status: '', data: {} }
+    status: { progress: false, status: '', data: {} }
 }
 
 const mapStateToProps = state => ({
-    actions: state.years.actionsYears
+    status: state.years.status
 });
 
 const mapDispatchToProps = {
-    addNewYear: yearsOperations.addNewYear,
+    createNewYear: yearsOperations.doCreateNewYear,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(FormAddNewYears));

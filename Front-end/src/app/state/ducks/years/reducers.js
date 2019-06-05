@@ -2,34 +2,17 @@ import { combineReducers } from "redux";
 import * as types from "./types";
 import { createReducer } from "../../utils";
 
-const allYearsReducer = createReducer( [] )( {
-    [ types.GET_ALL_YEARS_COMPLETED ]: ( state, action ) => {
-        if (action.payload) {
-            state = action.payload;
-        }
-        return state;
-    }
+const applyListReducer = createReducer( [] )( {
+    [ types.GET_ALL_YEARS_COMPLETED ]: ( state, action ) => state = action.payload,
 });
 
-const getYearReducer = createReducer( {} )( {
-    [ types.GET_YEARS_BY_ID ]: ( state, action ) => {
-        state = {};
-        return state;
-    },
-    [ types.GET_YEARS_BY_ID_COMPLETED ]: ( state, action ) => {
-        if (action.payload) {
-            state = action.payload
-        }
-        return state;
-    },
-    [ types.GET_YEARS_BY_ID_FAILED ]: ( state, action ) => {
-        return state;
-    },
+const applyDetailReducer = createReducer( {} )( {
+    [ types.GET_YEARS_BY_ID_COMPLETED ]: ( state, action ) => action.payload,
 });
 
 const initialState = {progress: false, status: '',  data: {}}
 
-const actionReducer = createReducer( initialState )( {
+const applyStatusActReducer = createReducer( initialState )( {
     [ types.ADD_NEW_YEARS ]: ( state, action ) => {
         state = {progress: true, status: 'ADDING', data: {}}
         return state;
@@ -67,21 +50,9 @@ const actionReducer = createReducer( initialState )( {
     }
 });
 
-const toggleEditYearsReducer = createReducer( false )( {
-    [ types.OPEN_EDIT_YEARS ]: ( state, action ) => {
-        state = true;
-        return state;
-    },
-    [ types.CLOSE_EDIT_YEARS ]: ( state, action ) => {
-        state = false;
-        return state;
-    }
-});
-
 
 export default combineReducers( {
-    allYears: allYearsReducer,
-    actionsYears: actionReducer,
-    toggleEditYears: toggleEditYearsReducer,
-    getYear: getYearReducer
+    list: applyListReducer,
+    detail: applyDetailReducer,
+    status: applyStatusActReducer
 } );

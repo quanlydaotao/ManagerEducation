@@ -1,7 +1,7 @@
-import { uploadFile, getFile, updateFile } from "./actions";
+import { doUploadFile, doGetFile, doUpdateFile } from "./actions";
 
 export {
-    uploadFile,
-    getFile,
-    updateFile
+    doUploadFile,
+    doGetFile, 
+    doUpdateFile
 };

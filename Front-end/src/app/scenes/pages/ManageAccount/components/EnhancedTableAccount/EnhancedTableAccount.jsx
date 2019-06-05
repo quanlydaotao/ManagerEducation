@@ -19,6 +19,7 @@ import noavatar from './images/no_avatar.jpg';
 import { accountShape } from '../../../../propTypes';
 import { accountOperations } from '../../../../../state/ducks/account';
 import { popupOperations } from '../../../../../state/ducks/popup';
+import { toggleOperations } from '../../../../../state/ducks/toggle';
 import { EnhancedTableHead } from '../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../components/Table/EnhancedTableToolBar';
 import { PopupFormEditAccount } from '../../../../components/Popup/PopupFormEditAccount';
@@ -145,7 +146,7 @@ class EnhancedTableAccount extends React.Component {
 
     handleOpenForm = (id) => {
         this.props.findAccountById(id);
-        this.props.openForm();
+        this.props.openFormEdit();
     }
 
     handleChangeRowsPerPage = event => {
@@ -157,32 +158,40 @@ class EnhancedTableAccount extends React.Component {
     }
 
     deleteData = (param) => {
-        this.props.deleteUserAccount(this.state.selected);
+        this.props.deleteAccountByIds(this.state.selected);
     }
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes, listName, accounts, accountById, actionsAccounts } = this.props;
+        const { classes, listName, accounts, detail, status } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        if (actionsAccounts
-            && actionsAccounts.status === 'DELETE_SUCCESS'
-            && actionsAccounts.data === selected.length) {
-            alert("Xóa thành công " + actionsAccounts.data + " trường dữ liệu tài khoản!");
-            history.push('/admin/account/list/all');
-        } else if (actionsAccounts
-            && actionsAccounts.status === 'DELETE_FAILED'
-            && actionsAccounts.data !== selected.length) {
-            alert("Xóa dữ liệu tài khoản thất bại!");
+        if (
+            status
+            && status.status === 'DELETE_SUCCESS'
+            && status.data === selected.length) {
+            alert("Xóa thành công " + status.data + " trường dữ liệu tài khoản!");
+            history.push('/admin/account/list/all'
+            );
+        } else if (
+            status
+            && status.status === 'DELETE_FAILED'
+            && status.data !== selected.length) {
+            alert("Xóa dữ liệu tài khoản thất bại!"
+            );
         }
         return (
             <React.Fragment>
                 <DocumentTitle title=".:Danh sách tài khoản:.">
                     {accounts.length > 0 ? (
                         <Paper className={classes.root}>
-                            {accountById.id ? <PopupFormEditAccount data={accountById} /> : ''}
+                            {detail.id ? <PopupFormEditAccount data={detail} /> : ''}
                             <PopupDelete delete={this.deleteData} />
-                            <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
+                            <EnhancedTableToolBar
+                                numSelected={selected.length}
+                                listName={listName}
+                                actionDelete={this.handleDelete}
+                            />
                             <div style={{ padding: '10px 0 15px 24px' }} className="message">
                                 <div>
                                     <b>Chú ý:</b>
@@ -223,7 +232,10 @@ class EnhancedTableAccount extends React.Component {
                                                         </TableCell>
                                                         <TableCell className="cell">
                                                             <LazyLoad height={40}>
-                                                                <ImageAvatars src={n.imageUrl !== '' ? `http://localhost:8080/api/file/avatar/${n.imageUrl}` : noavatar} title={`${n.firstName} ${n.lastName}`} />
+                                                                <ImageAvatars
+                                                                    src={n.imageUrl !== '' ? `http://localhost:8080/api/file/avatar/${n.imageUrl}` : noavatar}
+                                                                    title={`${n.firstName} ${n.lastName}`}
+                                                                />
                                                             </LazyLoad>
                                                         </TableCell>
                                                         <TableCell className="cell">
@@ -309,33 +321,40 @@ class EnhancedTableAccount extends React.Component {
 
 EnhancedTableAccount.propTypes = {
     classes: PropTypes.object.isRequired,
-    listName: PropTypes.string.isRequired,
-    actionsAccounts: PropTypes.object.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
-    accountById: PropTypes.object.isRequired,
+    detail: PropTypes.objectOf(accountShape).isRequired,
+    status: PropTypes.objectOf({
+        progress: PropTypes.bool.isRequired,
+        status: PropTypes.string.isRequired,
+        data: PropTypes.object.isRequired
+    }).isRequired,
+    listName: PropTypes.string.isRequired,
+
     getAllUserAccount: PropTypes.func.isRequired,
-    openForm: PropTypes.func.isRequired,
     findAccountById: PropTypes.func.isRequired,
-    deleteUserAccount: PropTypes.func.isRequired
+    deleteAccountByIds: PropTypes.func.isRequired,
+    openFormEdit: PropTypes.func.isRequired,
+    openPopupDelete: PropTypes.func.isRequired
 };
 
 EnhancedTableAccount.defaultProps = {
     accounts: [],
-    actionsAccounts: {}
+    detail: {},
+    status: { progress: false, status: '', data: {} }
 }
 
 const mapStateToProps = state => ({
-    accounts: state.account.accounts,
-    accountById: state.account.getAccounts,
-    actionsAccounts: state.account.actionsAccounts
+    accounts: state.account.list,
+    detail: state.account.detail,
+    status: state.account.status
 });
 
 const mapDispatchToProps = {
-    getAllUserAccount: accountOperations.getAllUserAccount,
-    openForm: accountOperations.openFormEdit,
-    findAccountById: accountOperations.getUserAccountById,
-    deleteUserAccount: accountOperations.deleteUserAccount,
-    openPopupDelete: popupOperations.openPopupDelete
+    getAllUserAccount: accountOperations.doGetAllAccounts,
+    findAccountById: accountOperations.doGetAccountById,
+    deleteAccountByIds: accountOperations.doDeleteAccountByIds,
+    openFormEdit: toggleOperations.doOpenFormEditAccount,
+    openPopupDelete: popupOperations.doOpenPopupDelete
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableAccount));

@@ -1,6 +1,6 @@
 import * as types from "./types";
 
-export const uploadFile = ( file ) => ({
+export const doUploadFile = ( file ) => ({
     type: types.UPLOAD_FILE,
     meta: {
         async: true,
@@ -14,7 +14,7 @@ export const uploadFile = ( file ) => ({
     }
 });
 
-export const getFile = ( dir , nameFile) => ({
+export const doGetFile = ( dir , nameFile) => ({
     type: types.GET_FILE,
     meta: {
         async: true,
@@ -28,7 +28,7 @@ export const getFile = ( dir , nameFile) => ({
     }
 });
 
-export const updateFile = ( file ) => ({
+export const doUpdateFile = ( file ) => ({
     type: types.UPDATE_FILE,
     meta: {
         async: true,

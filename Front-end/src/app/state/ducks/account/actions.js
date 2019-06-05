@@ -1,6 +1,6 @@
 import * as types from "./types";
 
-export const getAllUserAccount = () => ( {
+export const doGetAllAccounts = () => ( {
     type: types.GET_ALL_USER_ACCOUNT,
     meta: {
         async: true,
@@ -10,7 +10,7 @@ export const getAllUserAccount = () => ( {
     }
 } );
 
-export const getUserAccountById = ( id ) => ( {
+export const doGetAccountById = ( id ) => ( {
     type: types.GET_USER_ACCOUNT_BY_ID,
     meta: {
         async: true,
@@ -20,8 +20,8 @@ export const getUserAccountById = ( id ) => ( {
     }
 } );
 
-export const addNewUserAccount = ( dataForm ) => ( {
-    type: types.ADD_NEW_USER_ACCOUNT,
+export const doCreateNewAccount = ( dataForm ) => ( {
+    type: types.CREATE_NEW_USER_ACCOUNT,
     meta: {
         async: true,
         blocking: true,
@@ -31,16 +31,7 @@ export const addNewUserAccount = ( dataForm ) => ( {
     }
 });
 
-export const openFormEdit = ( ) => ( {
-    type: types.OPEN_EDIT_USER_ACCOUNT,
-});
-
-export const closeFormEdit = ( ) => ( {
-    type: types.CLOSE_EDIT_USER_ACCOUNT,
-});
-
-
-export const updateUserAccount = ( dataForm ) => ( {
+export const doUpdateAccount = ( dataForm ) => ( {
     type: types.UPDATE_USER_ACCOUNT,
     meta: {
         async: true,
@@ -51,14 +42,14 @@ export const updateUserAccount = ( dataForm ) => ( {
     }
 });
 
-export const deleteUserAccount = ( listId ) => ( {
+export const doDeleteAccountByIds = ( ids ) => ( {
     type: types.DELETE_USER_ACCOUNT,
     meta: {
         async: true,
         blocking: true,
         path: "/users",
         method: "DELETE",
-        body: JSON.stringify(listId)
+        body: JSON.stringify(ids)
     }
 });
 

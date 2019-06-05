@@ -30,6 +30,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CKEditor from 'ckeditor4-react';
 import { yearsOperations } from '../../../../state/ducks/years';
+import { toggleOperations } from '../../../../state/ducks/toggle';
 
 const style = theme => ({
     root: {
@@ -121,9 +122,9 @@ class PopupFormEditYear extends React.Component {
             startYears, 
             openDay,
             closeDay, 
-            maximumClasses, 
             describe, 
-            status
+            status, 
+            maximumClasses
         });
     }
 
@@ -231,17 +232,17 @@ class PopupFormEditYear extends React.Component {
     }
 
     render() {
-        const { classes, actions, statusForm, data } = this.props;
+        const { classes, status, statusForm } = this.props;
         const { errors } = this.state;
         var isShowMessageBeforeSubit = errors.name !== '' 
             || errors.startYears !== '' 
             || errors.maximumClasses !== '';
-        var isShowMessageFailueAfterSubit = !actions.progress 
-            && actions.status === 'UPDATE_FAILED'
-            && actions.data.status === 400 
-            && actions.data.response;
-        var isShowMessageSuccessAfterSubit = !actions.progress 
-            && actions.status === 'UPDATE_SUCCESS';
+        var isShowMessageFailueAfterSubit = !status.progress 
+            && status.status === 'UPDATE_FAILED'
+            && status.data.status === 400 
+            && status.data.response;
+        var isShowMessageSuccessAfterSubit = !status.progress 
+            && status.status === 'UPDATE_SUCCESS';
 
         const currentYear = new Date().getFullYear();
         const allYears = [];
@@ -271,8 +272,8 @@ class PopupFormEditYear extends React.Component {
                                         {errors.startYears !== '' ? <li>{errors.startYears}</li> : ''}
                                         {errors.endYears !== '' ? <li>{errors.endYears}</li> : ''}
                                         {errors.maximumClasses !== '' ? <li>{errors.maximumClasses}</li> : ''}
-                                        {(!isShowMessageBeforeSubit && actions.data.status === 400 && actions.data.response) ?
-                                            <li>{actions.data.response.updateYearFailed ? actions.data.response.updateYearFailed : 'Tạo năm học thất bại!'}</li> : ''}
+                                        {(!isShowMessageBeforeSubit && status.data.status === 400 && status.data.response) ?
+                                            <li>{status.data.response.updateYearFailed ? status.data.response.updateYearFailed : 'Tạo năm học thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -340,7 +341,7 @@ class PopupFormEditYear extends React.Component {
                     fullWidth={true}
                     maxWidth="lg"
                     open={statusForm}
-                    onClose={this.props.closeForm}
+                    onClose={this.props.closeFormEdit}
                     aria-labelledby="draggable-dialog-title"
                 >
                     <form onSubmit={this.handleSubmit}>
@@ -404,13 +405,13 @@ class PopupFormEditYear extends React.Component {
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.props.closeForm} color="primary">
+                            <Button onClick={this.props.closeFormEdit} color="primary">
                                 Thoát
                             </Button>
                             <Button type="submit" color="primary">
                                 Lưu
                             </Button>
-                            {actions.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
+                            {status.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
                         </DialogActions>
                     </form>
                 </Dialog>
@@ -420,29 +421,30 @@ class PopupFormEditYear extends React.Component {
 }
 
 PopupFormEditYear.propTypes = {
-    closeForm: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
-    updateUserAccount: PropTypes.func.isRequired,
     actions: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
         data: PropTypes.object.isRequired
-    }).isRequired
+    }).isRequired,
+
+    closeFormEdit: PropTypes.func.isRequired,
+    updateYear: PropTypes.func.isRequired,
 }
 
 PopupFormEditYear.defaultProps = {
     statusForm: false,
-    actions: { progress: false, status: '', data: {} },
+    status: { progress: false, status: '', data: {} },
 }
 
 const mapStateToProps = state => ({
-    statusForm: state.years.toggleEditYears,
-    actions: state.years.actionsYears
+    statusForm: state.toggle.toggleFormEdit,
+    status: state.years.status
 });
 
 const mapDispatchToProps = {
-    closeForm: yearsOperations.closeFormEdit,
-    updateYear:  yearsOperations.updateYear,
+    closeFormEdit: toggleOperations.doCloseFormEditYear,
+    updateYear:  yearsOperations.doUpdateYear,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(PopupFormEditYear));

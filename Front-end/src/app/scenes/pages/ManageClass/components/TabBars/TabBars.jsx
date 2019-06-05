@@ -22,9 +22,6 @@ class TabBars extends React.Component {
         return (
             <div className={classes.root}>
                 <div className="appBar">
-                    <NavLink to="/admin/edu" activeClassName="activeLink">
-                        <StyleIcon className={classes.leftIcon} />  QUẢN LÝ ĐÀO TẠO
-                    </NavLink>
                     <NavLink to="/admin/edu/years" activeClassName="activeLink">
                         <StyleIcon className={classes.leftIcon} />  NĂM HỌC ĐÀO TẠO
                     </NavLink>
