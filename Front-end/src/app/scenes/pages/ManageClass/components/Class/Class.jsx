@@ -1,8 +1,8 @@
 import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
-const TableSearch = React.lazy(() => import('./TableSearch/TableSearch'));
-const FormAddCategory = React.lazy(() => import('./FormAddCategory/FormAddCategory'));
-const FormAddDetail = React.lazy(() => import('./FormAddDetail/FormAddDetail'));
+const TableList = React.lazy(() => import('./components/TableList/TableList'));
+const FormAddCategory = React.lazy(() => import('./components/FormAddCategory/FormAddCategory'));
+const FormAddDetail = React.lazy(() => import('./components/FormAddDetail/FormAddDetail'));
 import { Switch, Route, Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 
@@ -24,7 +24,7 @@ class Class extends Component {
 					<Suspense fallback={''}>
 						<Switch>
                             <Route exact path="/admin/edu/classes" render={() => (
-                                <TableSearch />
+                                <TableList />
                             )} />
                             <Route exact path="/admin/edu/classes/add/category" render={() => {
 								if (dataSelector.year === 0 && dataSelector.course === 0) {

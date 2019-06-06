@@ -1,8 +1,9 @@
-import { getAllClassByCourseId, getClassById, openFormEdit, closeFormEdit } from "./actions";
+import { 
+    doGetClassById,
+    doGetClassesByCourseId,
+} from "./actions";
 
 export {
-    getAllClassByCourseId,
-    getClassById,
-    openFormEdit,
-    closeFormEdit
+    doGetClassById,
+    doGetClassesByCourseId,
 };

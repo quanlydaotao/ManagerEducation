@@ -1,6 +1,6 @@
 import * as types from "./types";
 
-export const getAllClassByCourseId = (id) => ( {
+export const doGetClassesByCourseId = (id) => ( {
     type: types.GET_ALL_CLASS_BY_ID_COURSE,
     meta: {
         async: true,
@@ -10,7 +10,7 @@ export const getAllClassByCourseId = (id) => ( {
     }
 } );
 
-export const getClassById = ( id ) => ( {
+export const doGetClassById = ( id ) => ( {
     type: types.GET_CLASS_BY_ID,
     meta: {
         async: true,
@@ -52,11 +52,3 @@ export const getClassById = ( id ) => ( {
 //         body: JSON.stringify(listId)
 //     }
 // });
-
-export const openFormEdit = ( ) => ( {
-    type: types.OPEN_EDIT_CLASS,
-});
-
-export const closeFormEdit = ( ) => ( {
-    type: types.CLOSE_EDIT_CLASS,
-});

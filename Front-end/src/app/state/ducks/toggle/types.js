@@ -1,4 +1,8 @@
 export const OPEN_FORM_EDIT_ACCOUNT = "toggle/OPEN_FORM_EDIT_ACCOUNT";
 export const CLOSE_FORM_EDIT_ACCOUNT = "toggle/CLOSE_FORM_EDIT_ACCOUNT";
+
 export const OPEN_FORM_EDIT_YEAR = "toggle/OPEN_FORM_EDIT_YEAR";
 export const CLOSE_FORM_EDIT_YEAR = "toggle/CLOSE_FORM_EDIT_YEAR";
+
+export const OPEN_FORM_EDIT_CLASS = "toggle/OPEN_FORM_EDIT_CLASS";
+export const CLOSE_FORM_EDIT_CLASS = "toggle/CLOSE_FORM_EDIT_CLASS";

@@ -1,6 +1,9 @@
-import { setDataYearSelection, setDataCourseSelection } from "./actions";
+import { 
+    doSetDataCourseSelection,
+    doSetDataYearSelection
+} from "./actions";
 
 export {
-    setDataYearSelection, 
-    setDataCourseSelection
+    doSetDataCourseSelection, 
+    doSetDataYearSelection
 };

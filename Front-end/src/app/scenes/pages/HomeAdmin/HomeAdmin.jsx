@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './styles.css';
-import { SectionClassRoom } from './SectionClassRoom';
+import { SectionClassRoom } from './components/SectionClassRoom';
 import DocumentTitle from 'react-document-title';
 import LazyLoad from 'react-lazyload';
 

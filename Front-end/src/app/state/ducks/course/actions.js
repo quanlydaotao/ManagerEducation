@@ -1,6 +1,6 @@
 import * as types from "./types";
 
-export const getAllCourseByYearId = (id) => ( {
+export const doGetAllCourseByYearId = (id) => ( {
     type: types.GET_ALL_COURSE_BY_ID_YEAR,
     meta: {
         async: true,

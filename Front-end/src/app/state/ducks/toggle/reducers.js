@@ -15,6 +15,12 @@ const toggleFormEditReducer = createReducer( false )( {
     [ types.CLOSE_FORM_EDIT_YEAR ]: ( state, action ) => {
         return false;
     },
+    [ types.OPEN_FORM_EDIT_CLASS]: ( state, action ) => {
+        return true;
+    },
+    [ types.CLOSE_FORM_EDIT_CLASS ]: ( state, action ) => {
+        return false;
+    },
 });
 
 export default combineReducers( {

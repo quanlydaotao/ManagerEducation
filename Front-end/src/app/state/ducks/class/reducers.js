@@ -2,28 +2,12 @@ import { combineReducers } from "redux";
 import * as types from "./types";
 import { createReducer } from "../../utils";
 
-const allClassesReducer = createReducer( [] )( {
-    [ types.GET_ALL_CLASS_BY_ID_COURSE_COMPLETED ]: ( state, action ) => {
-        if (action.payload) {
-            state = action.payload;
-        }
-        return state;
-    }
+const applyListReducer = createReducer( [] )( {
+    [ types.GET_ALL_CLASS_BY_ID_COURSE_COMPLETED ]: ( state, action ) => action.payload,
 });
 
-const getClassReducer = createReducer( {} )( {
-    [ types.GET_CLASS_BY_ID ]: ( state, action ) => {
-        return state;
-    },
-    [ types.GET_CLASS_BY_ID_COMPLETED ]: ( state, action ) => {
-        if (action.payload) {
-            state = action.payload
-        }
-        return state;
-    },
-    [ types.GET_CLASS_BY_ID_FAILED ]: ( state, action ) => {
-        return state;
-    },
+const applyDetailReducer = createReducer( {} )( {
+    [ types.GET_CLASS_BY_ID_COMPLETED ]: ( state, action ) => action.payload,
 });
 
 // const initialState = {progress: false, status: '',  data: {}}
@@ -66,21 +50,9 @@ const getClassReducer = createReducer( {} )( {
 //     }
 // });
 
-const toggleEditClassReducer = createReducer( false )( {
-    [ types.OPEN_EDIT_CLASS ]: ( state, action ) => {
-        state = true;
-        return state;
-    },
-    [ types.CLOSE_EDIT_CLASS ]: ( state, action ) => {
-        state = false;
-        return state;
-    }
-});
-
 
 
 export default combineReducers( {
-    allClasses: allClassesReducer,
-    getClass: getClassReducer,
-    toggleEditClass: toggleEditClassReducer,
-} );
+    list: applyListReducer,
+    status: applyDetailReducer,
+});

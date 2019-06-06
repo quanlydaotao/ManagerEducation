@@ -15,3 +15,11 @@ export const  doOpenFormEditYear = ( ) => ({
 export const doCloseFormEditYear = ( ) => ({
     type: types.CLOSE_FORM_EDIT_YEAR,
 });
+
+export const  doOpenFormEditClass = ( ) => ({
+    type: types.OPEN_FORM_EDIT_CLASS,
+});
+
+export const doCloseFormEditClass = ( ) => ({
+    type: types.CLOSE_FORM_EDIT_CLASS,
+});

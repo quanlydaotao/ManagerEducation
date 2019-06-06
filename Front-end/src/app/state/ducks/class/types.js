@@ -14,9 +14,6 @@ export const DELETE_CLASS = "class/DELETE_CLASS";
 export const DELETE_CLASS_COMPLETED = "class/DELETE_CLASS_COMPLETED";
 export const DELETE_CLASS_FAILED = "class/DELETE_CLASS_FAILED";
 
-export const OPEN_EDIT_CLASS = "class/OPEN_EDIT_CLASS";
-export const CLOSE_EDIT_CLASS = "class/CLOSE_EDIT_CLASS";
-
 export const GET_CLASS_BY_ID = "class/GET_CLASS_BY_ID";
 export const GET_CLASS_BY_ID_COMPLETED = "class/GET_CLASS_BY_ID_COMPLETED";
 export const GET_CLASS_BY_ID_FAILED = "class/GET_CLASS_BY_ID_FAILED";

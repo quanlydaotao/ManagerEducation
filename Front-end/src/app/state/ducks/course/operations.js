@@ -1,5 +1,5 @@
-import { getAllCourseByYearId } from "./actions";
+import { doGetAllCourseByYearId } from "./actions";
 
 export {
-    getAllCourseByYearId
+    doGetAllCourseByYearId
 };

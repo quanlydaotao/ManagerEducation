@@ -2,12 +2,16 @@ import {
     doCloseFormEditAccount,
     doCloseFormEditYear,
     doOpenFormEditAccount,
-    doOpenFormEditYear     
+    doOpenFormEditYear,
+    doCloseFormEditClass,
+    doOpenFormEditClass     
 } from "./actions";
 
 export {
     doCloseFormEditAccount,
     doCloseFormEditYear,
     doOpenFormEditAccount,
-    doOpenFormEditYear 
+    doOpenFormEditYear,
+    doCloseFormEditClass,
+    doOpenFormEditClass
 };

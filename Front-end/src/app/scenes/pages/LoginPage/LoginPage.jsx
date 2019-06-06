@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './styles.css';
-import { Top } from './Top';
-import { Panel } from './Panel';
+import { Top } from './components/Top';
+import { Panel } from './components/Panel';
 import DocumentTitle from 'react-document-title';
 
 class LoginPage extends Component {

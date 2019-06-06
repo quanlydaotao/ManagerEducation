@@ -2,13 +2,8 @@ import { combineReducers } from "redux";
 import * as types from "./types";
 import { createReducer } from "../../utils";
 
-const allCourseReducer = createReducer( [] )( {
-    [ types.GET_ALL_COURSE_BY_ID_YEAR_COMPLETED ]: ( state, action ) => {
-        if (action.payload) {
-            state = action.payload;
-        }
-        return state;
-    }
+const applyListReducer = createReducer( [] )( {
+    [ types.GET_ALL_COURSE_BY_ID_YEAR_COMPLETED ]: ( state, action ) => action.payload,
 });
 
 // const getAccountReducer = createReducer( {} )( {
@@ -80,5 +75,5 @@ const allCourseReducer = createReducer( [] )( {
 
 
 export default combineReducers( {
-    allCourses: allCourseReducer,
+    list: applyListReducer,
 } );
