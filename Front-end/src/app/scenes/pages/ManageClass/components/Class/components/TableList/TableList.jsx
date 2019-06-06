@@ -112,7 +112,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     getAllYears: yearsOperations.doGetAllYears,
     getAllCourseByYearId: courseOperations.doGetAllCourseByYearId,
-    getAllClassesByCourseId: classOperations.doGetClassesByCourseId
+    getAllClassesByCourseId: classOperations.doGetClassesByCourseId,
+
 };
 
 

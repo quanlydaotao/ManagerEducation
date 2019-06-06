@@ -10,7 +10,7 @@ class Class extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dataSelector: {year: 0, course: 0}
+			dataSelector: {name:'', year: 0, course: 0}
 		}
 	}
 	getYearAndCourse = (params) => {
@@ -28,7 +28,7 @@ class Class extends Component {
                             )} />
                             <Route exact path="/admin/edu/classes/add/category" render={() => {
 								if (dataSelector.year === 0 && dataSelector.course === 0) {
-									return <FormAddCategory getYearAndCourse={this.getYearAndCourse} />;
+									return <FormAddCategory setYearAndCourse={this.getYearAndCourse} />;
 								} else {
 									return <Redirect to="/admin/edu/classes/add/new" />
 								}

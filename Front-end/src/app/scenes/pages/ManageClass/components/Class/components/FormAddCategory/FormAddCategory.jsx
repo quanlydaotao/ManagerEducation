@@ -1,26 +1,25 @@
 import React, { Component } from 'react';
 import DocumentTitle from 'react-document-title';
 import styles from './styles.css';
-import { yearsShape } from '../../../../../../propTypes';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { yearsOperations } from '../../../../../../../state/ducks/years';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
+import Button from '@material-ui/core/Button';
+import { Prompt } from 'react-router-dom';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { SearchYearAndCourse } from '../../../../../../components/Search/SearchYearAndCourse';
 import DvrIcon from '@material-ui/icons/Dvr';
-import { ListSelection } from '../../../../../../components/ListSelection';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import { yearsShape } from '../../../../../../propTypes';
+import { SearchYearAndCourse } from '../../../../../../components/Search/SearchYearAndCourse';
+import { ListSelection } from '../../../../../../components/ListSelection';
 import { selectionOperations } from '../../../../../../../state/ducks/selection';
 import { courseOperations } from '../../../../../../../state/ducks/course';
 import { coursesShape } from '../../../../../../propTypes';
-import Button from '@material-ui/core/Button';
-import { Prompt } from 'react-router-dom';
-
+import { yearsOperations } from '../../../../../../../state/ducks/years';
 
 const style = theme => ({
     root: {
@@ -58,13 +57,14 @@ class FormAddCategory extends Component {
             nameYear: '',
             idCourse: 0,
             nameCourse: '',
-            course: [],
-            class: [],
-            isBlocking: false
+            isBlocking: false,
+            nameNewClass: '',
+            error: false
         }
     }
     componentDidMount() {
         this.props.getAllYears();
+        this.props.setYearAndCourse({ name: '', year: 0, course: 0 });
     }  
     componentWillUnmount() {
         this.props.getAllCourseByYearId(0);
@@ -72,7 +72,9 @@ class FormAddCategory extends Component {
     selectIdYear = (param) => {
         this.setState({
             idYear: param.id,
-            nameYear: param.name
+            nameYear: param.name,
+            idCourse: 0,
+            nameCourse: ''
         });
         this.props.getAllCourseByYearId(param.id);
     }  
@@ -81,9 +83,34 @@ class FormAddCategory extends Component {
             idCourse: param.id,
             nameCourse: param.name
         });
-    } 
+    }
+    handleChange = (event) => {
+        this.setState({ nameNewClass: event.target.value });
+    }
+    handleSubmit = (event) => {
+        event.preventDefault();
+        let name = event.target.name.value;
+        let year = this.state.idYear;
+        let course = this.state.idCourse;
+        if (this.isSelected()) {
+            this.setState({
+                error: true
+            });
+        } else {
+            this.props.setYearAndCourse({ name, year, course });
+        }
+        
+    }
+    isSelected = err => {
+        const { nameNewClass,idYear, idCourse} = this.state;
+        if (nameNewClass === '' || idYear === 0 || idCourse === 0) {
+            return true;
+        }
+        return false;
+    }
+
     render() {
-        const { years, courses, classes } = this.props;
+        const { classes, years, courses } = this.props;
         const { idYear, idCourse, isBlocking, nameYear, nameCourse } = this.state;
         return (
             <DocumentTitle title='.:Thêm mới lớp học:.'>
@@ -129,13 +156,11 @@ class FormAddCategory extends Component {
                                                         />
                                                     </div>
                                                     <div className="col-md-5 pl-0">
-                                                        <List className={classes.root} subheader={<li />}>
-                                                            <ListSelection 
-                                                                data={courses} 
-                                                                title="DANH SÁCH KHÓA HỌC" 
-                                                                getSelectId={this.selectIdCourse}
-                                                            />
-                                                        </List>
+                                                        <ListSelection 
+                                                            data={courses} 
+                                                            title="DANH SÁCH KHÓA HỌC" 
+                                                            getSelectId={this.selectIdCourse}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -157,6 +182,7 @@ class FormAddCategory extends Component {
 }
 
 FormAddCategory.propTypes = {
+    classes: PropTypes.object.isRequied,
     years: PropTypes.arrayOf(yearsShape).isRequired,
     courses: PropTypes.arrayOf(coursesShape).isRequired,
     getAllYears: PropTypes.func.isRequired,
@@ -175,7 +201,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     getAllYears: yearsOperations.doGetAllYears,
-    getAllCourseByYearId: courseOperations.doGetAllCourseByYearId,
+    getAllCourseByYearId: courseOperations.doGetAllCourseByYearId
 };
 
 

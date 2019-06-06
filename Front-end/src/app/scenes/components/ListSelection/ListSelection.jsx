@@ -42,6 +42,14 @@ class ListSelection extends React.Component {
             name: ''
         }
     }
+    componentDidUpdate(prevProps) {
+        if (this.props.data !== prevProps.data) {
+            this.setState({
+                id: 0,
+                name: ''
+            })
+        }
+    }
     setDataSelect = (param) => {
         this.setState({
             id: param.id,
@@ -55,7 +63,12 @@ class ListSelection extends React.Component {
         return (
             <List className={classes.root} subheader={<li />}>
                 <ListSubheader 
-                    style={{backgroundColor: '#ececec', color: '#445e6c', fontWeight: '700', fontSize: '13px'}}
+                    style={{
+                        backgroundColor: '#ececec',
+                        color: '#445e6c', 
+                        fontWeight: '700', 
+                        fontSize: '13px'
+                    }}
                 >
                     <RateReviewIcon /> 
                     {title}
