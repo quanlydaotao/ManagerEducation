@@ -1,11 +1,13 @@
 import { 
     doGetClassById,
     doGetClassesByCourseId,
-    doCreateNewClass
+    doCreateNewClass,
+    doUpdateClass,
 } from "./actions";
 
 export {
     doGetClassById,
     doGetClassesByCourseId,
-    doCreateNewClass
+    doCreateNewClass,
+    doUpdateClass
 };

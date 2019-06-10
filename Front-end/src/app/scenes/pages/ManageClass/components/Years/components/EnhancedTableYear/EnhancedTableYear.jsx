@@ -14,6 +14,7 @@ import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { connect } from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
+import DocumentTitle from 'react-document-title';
 import { withRouter } from 'react-router';
 import { yearsShape } from '../../../../../../propTypes';
 import { yearsOperations } from '../../../../../../../state/ducks/years';
@@ -164,144 +165,146 @@ class EnhancedTableYear extends React.Component {
         const { classes, listName, years, detail, status } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
         if (
-            status 
-            && status.status === 'DELETE_SUCCESS' 
+            status
+            && status.status === 'DELETE_SUCCESS'
             && status.data === selected.length
         ) {
             alert("Xóa thành công " + status.data + " trường dữ liệu năm học!");
             history.push('/admin/edu/years');
         } else if (
-            status 
-            && status.status === 'DELETE_FAILED' 
+            status
+            && status.status === 'DELETE_FAILED'
             && status.data !== selected.length) {
             alert("Xóa dữ liệu năm học thất bại!"
-        );
+            );
         }
         return (
             <React.Fragment>
-                { years.length > 0 ? (
-                    <Paper className={classes.root}>
-                        <PopupDelete delete={this.deleteData} />
-                        <EnhancedTableToolBar 
-                            numSelected={selected.length} 
-                            listName={listName} 
-                            actionDelete={this.handleDelete} 
-                        />
-                        <div style={{ padding: '10px 0 15px 24px' }} className="message">
-                            <div>
-                                <b>Chú ý:</b>
+                <DocumentTitle title=".:Danh sách năm học:.">
+                    {years.length > 0 ? (
+                        <Paper className={classes.root}>
+                            <PopupDelete delete={this.deleteData} />
+                            <EnhancedTableToolBar
+                                numSelected={selected.length}
+                                listName={listName}
+                                actionDelete={this.handleDelete}
+                            />
+                            <div style={{ padding: '10px 0 15px 24px' }} className="message">
+                                <div>
+                                    <b>Chú ý:</b>
+                                </div>
+                                <ul>
+                                    <li>- Danh sách dưới bao gồm các năm học trong chương trình đào tạo.</li>
+                                    <li>- Mỗi năm học sẽ có các lớp được mở tương ứng.</li>
+                                    <li>- Khi kết thúc năm học bạn có thể đóng năm học đó lại thay vì xóa.</li>
+                                    <li>- Trong trường hợp muốn xóa năm học, bạn hãy chắc chắn rằng muốn xóa tất cả dữ liệu trong năm học và không thể khôi phục.</li>
+                                </ul>
                             </div>
-                            <ul>
-                                <li>- Danh sách dưới bao gồm các năm học trong chương trình đào tạo.</li>
-                                <li>- Mỗi năm học sẽ có các lớp được mở tương ứng.</li>
-                                <li>- Khi kết thúc năm học bạn có thể đóng năm học đó lại thay vì xóa.</li>
-                                <li>- Trong trường hợp muốn xóa năm học, bạn hãy chắc chắn rằng muốn xóa tất cả dữ liệu trong năm học và không thể khôi phục.</li>
-                            </ul>
-                        </div>
-                        <div className={classes.tableWrapper}>
-                            <Table className={classes.table} aria-labelledby="tableTitle">
-                                <EnhancedTableHead
-                                    numSelected={selected.length}
-                                    order={order}
-                                    orderBy={orderBy}
-                                    onSelectAllClick={this.handleSelectAllClick}
-                                    onRequestSort={this.handleRequestSort}
-                                    rowCount={years.length}
-                                    rows={rows}
-                                />
-                                <TableBody>
-                                    {stableSort(years, getSorting(order, orderBy))
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map(n => {
-                                            const isSelected = this.isSelected(n.id);
-                                            return (
-                                                <LazyLoad>
-                                                    <TableRow
-                                                        hover
-                                                        role="checkbox"
-                                                        aria-checked={isSelected}
-                                                        tabIndex={-1}
-                                                        key={n.id}
-                                                        selected={isSelected}
-                                                    >
-                                                        <TableCell 
-                                                            padding="checkbox" 
-                                                            onClick={event => this.handleClick(event, n.id)}
+                            <div className={classes.tableWrapper}>
+                                <Table className={classes.table} aria-labelledby="tableTitle">
+                                    <EnhancedTableHead
+                                        numSelected={selected.length}
+                                        order={order}
+                                        orderBy={orderBy}
+                                        onSelectAllClick={this.handleSelectAllClick}
+                                        onRequestSort={this.handleRequestSort}
+                                        rowCount={years.length}
+                                        rows={rows}
+                                    />
+                                    <TableBody>
+                                        {stableSort(years, getSorting(order, orderBy))
+                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            .map(n => {
+                                                const isSelected = this.isSelected(n.id);
+                                                return (
+                                                    <LazyLoad>
+                                                        <TableRow
+                                                            hover
+                                                            role="checkbox"
+                                                            aria-checked={isSelected}
+                                                            tabIndex={-1}
+                                                            key={n.id}
+                                                            selected={isSelected}
                                                         >
-                                                            <Checkbox checked={isSelected} color="default" />
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            <b>{n.id || <Skeleton />}</b>
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {n.name || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {<Chip
-                                                                label={<b>{n.startYears}</b>}
-                                                                color="inherit"
-                                                                title={<b>{n.startYears}</b>}
-                                                            /> || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {n.openDay || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {n.closeDay || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {n.maximumClasses || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {(n.status ? <Chip
-                                                                icon={<CheckCircleIcon />}
-                                                                label="Mở năm học"
-                                                                color="primary"
-                                                                className={classes.chip}
-                                                                title="Mở năm học"
-                                                            /> : <Chip
-                                                                    icon={<RemoveCircleIcon />}
-                                                                    label="Đóng năm học"
+                                                            <TableCell
+                                                                padding="checkbox"
+                                                                onClick={event => this.handleClick(event, n.id)}
+                                                            >
+                                                                <Checkbox checked={isSelected} color="default" />
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                <b>{n.id || <Skeleton />}</b>
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {n.name || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {<Chip
+                                                                    label={<b>{n.startYears}</b>}
                                                                     color="inherit"
-                                                                    title="Đóng năm học"
-                                                            />) || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            <ButtonEdit title="Chỉnh sửa thông tin năm học" to={`/admin/edu/years/${n.id}`} />
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </LazyLoad>
-                                            );
-                                        })}
-                                    {years.length <= 0 && (
-                                        <TableRow>
-                                            <TableCell colSpan={9}>
-                                                <Skeleton count={10} height={50} duration={2} />
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </div>
-                        <TablePagination
-                            rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
-                            component="div"
-                            count={years.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            backIconButtonProps={{
-                                'aria-label': 'Previous Page',
-                            }}
-                            nextIconButtonProps={{
-                                'aria-label': 'Next Page',
-                            }}
-                            onChangePage={this.handleChangePage}
-                            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                        />
-                    </Paper>
-                ) : (
-                    <NotFoundSearch name="Không tìm thấy danh sách năm học."/>
-                )}
+                                                                    title={<b>{n.startYears}</b>}
+                                                                /> || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {n.openDay || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {n.closeDay || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {n.maximumClasses || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {(n.status ? <Chip
+                                                                    icon={<CheckCircleIcon />}
+                                                                    label="Mở năm học"
+                                                                    color="primary"
+                                                                    className={classes.chip}
+                                                                    title="Mở năm học"
+                                                                /> : <Chip
+                                                                        icon={<RemoveCircleIcon />}
+                                                                        label="Đóng năm học"
+                                                                        color="inherit"
+                                                                        title="Đóng năm học"
+                                                                    />) || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                <ButtonEdit title="Chỉnh sửa thông tin năm học" to={`/admin/edu/years/${n.id}`} />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    </LazyLoad>
+                                                );
+                                            })}
+                                        {years.length <= 0 && (
+                                            <TableRow>
+                                                <TableCell colSpan={9}>
+                                                    <Skeleton count={10} height={50} duration={2} />
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                            <TablePagination
+                                rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
+                                component="div"
+                                count={years.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                backIconButtonProps={{
+                                    'aria-label': 'Previous Page',
+                                }}
+                                nextIconButtonProps={{
+                                    'aria-label': 'Next Page',
+                                }}
+                                onChangePage={this.handleChangePage}
+                                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                            />
+                        </Paper>
+                    ) : (
+                            <NotFoundSearch name="Không tìm thấy danh sách năm học." />
+                        )}
+                </DocumentTitle>
             </React.Fragment>
         );
     }

@@ -271,7 +271,7 @@ class FormSign extends Component {
           this.setState({
              openExit: false
           }, () => {  
-             history.replace(lastLocation.pathname);
+             history.push(lastLocation.pathname);
           })
        }
      });
@@ -290,7 +290,9 @@ class FormSign extends Component {
             && status.data.response;
         var isShowMessageSuccessAfterSubit = !status.progress 
             && status.status === 'ADD_SUCCESS';
-
+        if (isShowMessageSuccessAfterSubit) {
+            history.push('/admin/account/users');
+        }
         let alert = () => {
             if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
                 return (
@@ -393,7 +395,7 @@ class FormSign extends Component {
                     <h3>Đăng ký tài khoản đăng nhập hệ thống</h3>
                     <div>
                         <div><b>Chú ý:</b></div>
-                        <ul>
+                        <ul className="attention">
                             <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
                             <li>- Mã đăng nhập tối thiểu 7 ký tự trong đó 2 ký tự đầu là mã chức vụ ứng với tài khoản. (<b>Admin</b>: 'ADxxxxx', <b>Giáo viên</b>: 'GVxxxxx', <b>Phụ huynh</b>: 'PHxxxxx' và <b>Học viên</b>: 'HVxxxxx').</li>
                             <li>- Mật khẩu tối thiểu 4 ký tự và tối đa 100 ký tự.</li>

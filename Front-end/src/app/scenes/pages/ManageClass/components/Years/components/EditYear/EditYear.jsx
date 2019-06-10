@@ -1,11 +1,6 @@
 import React, { Suspense } from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import { connect } from 'react-redux';
@@ -21,8 +16,6 @@ import CKEditor from 'ckeditor4-react';
 import { withRouter } from 'react-router';
 import { yearsOperations } from '../../../../../../../state/ducks/years';
 import DocumentTitle from 'react-document-title';
-import { toggleOperations } from '../../../../../../../state/ducks/toggle';
-import { fileOperations } from '../../../../../../../state/ducks/file';
 const PopupExitPage = React.lazy(() => import('../../../../../../components/Popup/PopupExitPage/PopupExitPage'));
 import { history } from '../../../../../../../state/utils';
 
@@ -113,37 +106,23 @@ class EditYear extends React.Component {
             const { detail } = this.props;
             const {
                 id, 
-                login,
-                phoneNumber, 
-                authorities,
-                imageUrl, 
-                firstName, 
-                lastName, 
-                email, 
-                birthday, 
-                sex, 
-                nations,
-                address, 
-                address1, 
-                identityCardNumber, 
-                activated
+                name, 
+                startYears,
+                openDay, 
+                closeDay, 
+                describe,
+                maximumClasses, 
+                status
             } = detail;
             this.setState({
-                id,
-                login,
-                phoneNumber, 
-                authorities,
-                imageUrl, 
-                firstName, 
-                lastName, 
-                email,
-                birthday, 
-                sex, 
-                nations, 
-                address, 
-                address1,
-                identityCardNumber, 
-                activated
+                id, 
+                name, 
+                startYears,
+                openDay, 
+                closeDay, 
+                describe,
+                maximumClasses, 
+                status
             });
         }
     }
@@ -266,6 +245,10 @@ class EditYear extends React.Component {
        }
      });
 
+    closeFormEdit = () => {
+        this.setState({ isBlocking: false });
+        history.replace('/admin/edu/years');
+    }
 
     render() {
         const { classes, status, statusForm } = this.props;
@@ -279,7 +262,9 @@ class EditYear extends React.Component {
             && status.data.response;
         var isShowMessageSuccessAfterSubit = !status.progress 
             && status.status === 'UPDATE_SUCCESS';
-
+        if (isShowMessageSuccessAfterSubit) {
+            history.replace('/admin/edu/years');
+        }
         const currentYear = new Date().getFullYear();
         const allYears = [];
         for (let i = currentYear; i<=(currentYear+100); i++) {
@@ -370,7 +355,7 @@ class EditYear extends React.Component {
             }
         }
         return (
-            <DocumentTitle title=".:Cập nhật tài khoản:.">
+            <DocumentTitle title=".:Cập nhật năm học:.">
                 <div>
                     {alert()}
                     <Prompt 
@@ -381,12 +366,11 @@ class EditYear extends React.Component {
                         <PopupExitPage isShow={openExit} handleClose={this.close} handleConfirm={this.confirm} />
                     </Suspense>
                     <form onSubmit={this.handleSubmit} className={`${styles.formEditYear}`}>
-                        <br />
                         <h4 className="label-title">Chỉnh sửa thông tin năm đào tạo</h4>
                         <br />
                         <div>
                             <div><b>Chú ý:</b></div>
-                            <ul>
+                            <ul className="attention">
                                 <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
                                 <li>- Tên năm học tối thiểu <b>9 ký tự</b> và tối đa <b>100 ký tự</b>.</li>
                                 <li>- Năm học bắt đầu phải <b>bé hơn hoặc bằng năm học kết thúc</b>.</li>
@@ -408,7 +392,7 @@ class EditYear extends React.Component {
                                         }
                                     </select>
                                     <label htmlFor="maximumClasses"><b>Số khóa học tối đa: (*)</b></label>
-                                    <input type="number" id="maximumClasses" pattern="^[0-9]+$" min={0} max={100} onChange={this.handleChange} placeholder="Số khóa học tối đa..." name="maximumClasses" required defaultValue={this.state.maximumClasses}/>
+                                    <input type="number" id="maximumClasses" pattern="^[0-9]+$" min={0} max={100} onChange={this.handleChange} placeholder="Số khóa học tối đa..." name="maximumClasses" value={this.state.maximumClasses} required/>
                                     <label htmlFor="openDay"><b>Ngày khai giảng năm học:</b></label>
                                     <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" defaultValue={this.state.openDay}/>
                                     <label htmlFor="closeDay"><b>Ngày bế giảng năm học:</b></label>
@@ -437,7 +421,7 @@ class EditYear extends React.Component {
                             <Button variant="contained" type="submit" color="primary" className="mr-3">
                                 Lưu
                             </Button>
-                            <Button onClick={this.props.closeFormEdit} color="secondary">
+                            <Button onClick={this.closeFormEdit} color="secondary">
                                 Hủy bỏ
                             </Button>
                             {status.progress ? 

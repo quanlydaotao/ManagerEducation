@@ -8,6 +8,7 @@ import com.huyduc.manage.service.ClassesService;
 import com.huyduc.manage.service.dto.ClassesDTO;
 import com.huyduc.manage.service.mapper.ClassesMapper;
 import com.huyduc.manage.web.rest.errors.ClassesAlreadyExistException;
+import com.huyduc.manage.web.rest.errors.CourseNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -40,19 +41,22 @@ public class ClassesServiceImpl implements ClassesService {
      * Save a class.
      *
      * @param classesDTO the entity to save
-     * @param courseId the id course
+     * @param courseId   the id course
      * @return the persisted entity
      */
     @Override
     public ClassesDTO save(ClassesDTO classesDTO, Long courseId) {
         log.debug("Request to save Class : {}", classesDTO);
-        Optional<Classes> classExits = classesRepository.findByName(classesDTO.getName());
+        Optional<Classes> classExits = classesRepository.findByClassCode(classesDTO.getClassCode());
         if (classExits.isPresent()) {
             throw new ClassesAlreadyExistException();
         }
         Classes classes = ClassesMapper.INSTANCE.toEntity(classesDTO);
-        Course course = courseRepository.findById(courseId).orElseGet(() -> new Course());
-        classes.setCourse(course);
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (!course.isPresent()) {
+            throw new CourseNotFoundException();
+        }
+        classes.setCourse(course.get());
         return ClassesMapper.INSTANCE.toDto(classesRepository.save(classes));
     }
 
@@ -77,9 +81,28 @@ public class ClassesServiceImpl implements ClassesService {
         return list;
     }
 
+    /**
+     * Update all information for class and return information after updated
+     *
+     * @param classesDTO year to update
+     * @return updated class
+     */
     @Override
     public Optional<ClassesDTO> updateClass(ClassesDTO classesDTO) {
-        return Optional.empty();
+        return Optional.of(classesRepository
+                .findById(classesDTO.getId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(classes -> {
+                    Optional<Classes> classIsExist = classesRepository.findByClassCode(classesDTO.getClassCode());
+                    if (classIsExist.isPresent() && classIsExist.get().getId() != classesDTO.getId()) {
+                        throw new ClassesAlreadyExistException();
+                    }
+                    Classes classes1 = ClassesMapper.INSTANCE.toEntity(classesDTO);
+                    classes1.setCourse(classes.getCourse());
+                    log.debug("Changed Information for Class: {}", classesDTO);
+                    return ClassesMapper.INSTANCE.toDto(classesRepository.save(classes1));
+                });
     }
 
     /**

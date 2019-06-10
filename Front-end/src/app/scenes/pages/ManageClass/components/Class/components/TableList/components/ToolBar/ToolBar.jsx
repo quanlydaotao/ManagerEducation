@@ -45,7 +45,7 @@ class ToolBar extends Component {
                     </div>
                     <div className="col-md-8">
                         <div className="text-right">
-                            <Tooltip title="Thêm năm học đào tạo mới">
+                            <Tooltip component={Link} to="/admin/edu/years/new" title="Thêm năm học đào tạo mới">
                                 <Button variant="outlined" className={classes.button}>
                                     <DateRangeIcon className={classes.leftIcon} />
                                     THÊM NĂM HỌC ĐÀO TẠO MỚI

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
 import DocumentTitle from 'react-document-title';
 import Button from '@material-ui/core/Button';
@@ -15,6 +15,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import { connect } from 'react-redux';
 import { yearsOperations } from '../../../../../../../state/ducks/years';
+const PopupExitPage = React.lazy(() => import('../../../../../../components/Popup/PopupExitPage/PopupExitPage'));
+import { history } from '../../../../../../../state/utils';
+import { Prompt } from 'react-router-dom';
 
 const style = theme => ({
     snackbar: {
@@ -64,10 +67,14 @@ class FormAddNewYears extends Component {
                 maximumClasses: ''
             },
             open: false,
+            isBlocking: false,
+            lastLocation: null,
+            openExit: false
         }
     }
 
     handleChange = event => {
+        this.setState({ isBlocking: true });
         var target = event.target;
         if (target.name === 'maximumClasses') {
             this.setState({ maximumClasses: parseInt(target.value) });
@@ -79,6 +86,7 @@ class FormAddNewYears extends Component {
     };
 
     handleChangeTextArea = event => {
+        this.setState({ isBlocking: true });
         this.setState({
             describe: event.editor.getData()
         })
@@ -150,10 +158,34 @@ class FormAddNewYears extends Component {
         this.setState({ describe: '' });
     }
 
+    handleClear = () => {
+        this.setState({ describe: '' });
+    }
+
+    handleBlockedNavigation = (lastLocation) => {
+        this.setState({ openExit: true, lastLocation });
+        return false;
+    }
+
+    close = (callback) => this.setState({
+        openExit: false
+    }, callback);
+
+    confirm = () => this.close(() => {
+        const { lastLocation } = this.state;
+        if (lastLocation) {
+            this.setState({
+                openExit: false
+            }, () => {
+                history.push(lastLocation.pathname);
+            })
+        }
+    });
+
 
     render() {
         const { classes, status } = this.props;
-        const { errors } = this.state;
+        const { errors, isBlocking, openExit } = this.state;
         var isShowMessageBeforeSubit = errors.name !== '' 
             || errors.startYears !== '' 
             || errors.maximumClasses !== '';
@@ -163,7 +195,9 @@ class FormAddNewYears extends Component {
             && status.data.response;
         var isShowMessageSuccessAfterSubit = !status.progress 
             && status.status === 'ADD_SUCCESS';
-
+        if (isShowMessageSuccessAfterSubit) {
+            history.push('/admin/edu/years');
+        }
         const currentYear = new Date().getFullYear();
         const allYears = [];
         for (let i = currentYear; i<=(currentYear+100); i++) {
@@ -262,10 +296,17 @@ class FormAddNewYears extends Component {
             <DocumentTitle title=".:Thêm năm học mới:.">
                 <div className={`${styles.formAddNewYears}`}>
                     {alert()}
+                    <Prompt
+                        when={isBlocking}
+                        message={this.handleBlockedNavigation}
+                    />
+                    <Suspense fallback={''}>
+                        <PopupExitPage isShow={openExit} handleClose={this.close} handleConfirm={this.confirm} />
+                    </Suspense>
                     <h3>Thêm năm học mới</h3>
                     <div>
                         <div><b>Chú ý:</b></div>
-                        <ul>
+                        <ul className="attention">
                             <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
                             <li>- Tên năm học tối thiểu <b>9 ký tự</b> và tối đa <b>100 ký tự</b>.</li>
                             <li>- Năm học bắt đầu phải <b>bé hơn hoặc bằng năm học kết thúc</b>.</li>

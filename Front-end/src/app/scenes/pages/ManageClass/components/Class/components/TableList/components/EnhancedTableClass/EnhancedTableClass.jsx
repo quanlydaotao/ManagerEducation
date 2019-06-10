@@ -21,12 +21,13 @@ import { popupOperations } from '../../../../../../../../../state/ducks/popup';
 import { toggleOperations } from '../../../../../../../../../state/ducks/toggle';
 import { EnhancedTableHead } from '../../../../../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../../../../../components/Table/EnhancedTableToolBar';
+import DocumentTitle from 'react-document-title';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import styles from './styles.css';
-import { PopupFormEditClass } from '../../../../../../../../components/Popup/PopupFormEditClass';
 import { PopupDelete } from '../../../../../../../../components/Popup/PopupDelete';
 import { history } from '../../../../../../../../../state/utils';
+import { ButtonEdit } from '../../../../../../../../components/Buttons/ButtonEdit';
 const NotFoundSearch = React.lazy(() => import('../../../../../../../../components/NotFoundSearch/NotFoundSearch'));
 
 const rows = [
@@ -179,115 +180,113 @@ class EnhancedTableClass extends React.Component {
         // }
         return (
             <React.Fragment>
-                { data.length > 0 ? (
-                    <Paper className={classes.root}>
-                        {classById.id ? <PopupFormEditClass data={classById} /> : ''} 
-                        {/*<PopupDelete delete={this.deleteData} /> */}
-                        <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
-                        <div className={classes.tableWrapper}>
-                            <Table className={classes.table} aria-labelledby="tableTitle">
-                                <EnhancedTableHead
-                                    numSelected={selected.length}
-                                    order={order}
-                                    orderBy={orderBy}
-                                    onSelectAllClick={this.handleSelectAllClick}
-                                    onRequestSort={this.handleRequestSort}
-                                    rowCount={data.length}
-                                    rows={rows}
-                                />
-                                <TableBody>
-                                    {stableSort(data, getSorting(order, orderBy))
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map(n => {
-                                            const isSelected = this.isSelected(n.id);
-                                            return (
-                                                <LazyLoad>
-                                                    <TableRow
-                                                        hover
-                                                        role="checkbox"
-                                                        aria-checked={isSelected}
-                                                        tabIndex={-1}
-                                                        key={n.id}
-                                                        selected={isSelected}
-                                                    >
-                                                        <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
-                                                            <Checkbox checked={isSelected} color="default" />
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            <b>{n.classCode || <Skeleton />}</b>
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            <b>{n.name || <Skeleton />}</b>
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {<Chip
-                                                                label={<b>{n.classRoom}</b>}
-                                                                color="inherit"
-                                                                title={<b>{n.classRoom}</b>}
-                                                            /> || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {n.describe || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {n.openDay || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {n.closeDay || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {(n.status ? <Chip
-                                                                icon={<CheckCircleIcon />}
-                                                                label="Mở lớp"
-                                                                color="primary"
-                                                                className={classes.chip}
-                                                                title="Mở lớp"
-                                                            /> : <Chip
-                                                                    icon={<RemoveCircleIcon />}
-                                                                    label="Đóng lớp"
+                <DocumentTitle title=".:Hệ thống lớp học:.">
+                    {data.length > 0 ? (
+                        <Paper className={classes.root}>
+                            {/*<PopupDelete delete={this.deleteData} /> */}
+                            <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
+                            <div className={classes.tableWrapper}>
+                                <Table className={classes.table} aria-labelledby="tableTitle">
+                                    <EnhancedTableHead
+                                        numSelected={selected.length}
+                                        order={order}
+                                        orderBy={orderBy}
+                                        onSelectAllClick={this.handleSelectAllClick}
+                                        onRequestSort={this.handleRequestSort}
+                                        rowCount={data.length}
+                                        rows={rows}
+                                    />
+                                    <TableBody>
+                                        {stableSort(data, getSorting(order, orderBy))
+                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            .map(n => {
+                                                const isSelected = this.isSelected(n.id);
+                                                return (
+                                                    <LazyLoad>
+                                                        <TableRow
+                                                            hover
+                                                            role="checkbox"
+                                                            aria-checked={isSelected}
+                                                            tabIndex={-1}
+                                                            key={n.id}
+                                                            selected={isSelected}
+                                                        >
+                                                            <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.id)}>
+                                                                <Checkbox checked={isSelected} color="default" />
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                <b>{n.classCode || <Skeleton />}</b>
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                <b>{n.name || <Skeleton />}</b>
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {<Chip
+                                                                    label={<b>{n.classRoom}</b>}
                                                                     color="inherit"
-                                                                    title="Đóng lớp"
-                                                            />) || <Skeleton />}
-                                                        </TableCell>
-                                                        <TableCell className="cell">
-                                                            {<Button className="btn" onClick={() => this.handleOpenForm(n.id)} variant="contained" style={{ backgroundColor: '#17b304', color: '#fff', minWidth: 0, padding: '5px' }}
-                                                                title="Chỉnh sửa thông tin lớp học">
-                                                                <LaunchIcon />
-                                                            </Button> || <Skeleton />}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </LazyLoad>
-                                            );
-                                        })}
-                                    {data.length <= 0 && (
-                                        <TableRow>
-                                            <TableCell colSpan={8}>
-                                                <Skeleton count={5} height={50} duration={2} />
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </div>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
-                            component="div"
-                            count={data.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            backIconButtonProps={{
-                                'aria-label': 'Previous Page',
-                            }}
-                            nextIconButtonProps={{
-                                'aria-label': 'Next Page',
-                            }}
-                            onChangePage={this.handleChangePage}
-                            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                        />
-                    </Paper>
-                ) : (
-                    <NotFoundSearch name="Không tìm thấy danh sách lớp học."/>
-                )}
+                                                                    title={<b>{n.classRoom}</b>}
+                                                                /> || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {n.describe || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {n.openDay || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {n.closeDay || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                {(n.status ? <Chip
+                                                                    icon={<CheckCircleIcon />}
+                                                                    label="Mở lớp"
+                                                                    color="primary"
+                                                                    className={classes.chip}
+                                                                    title="Mở lớp"
+                                                                /> : <Chip
+                                                                        icon={<RemoveCircleIcon />}
+                                                                        label="Đóng lớp"
+                                                                        color="inherit"
+                                                                        title="Đóng lớp"
+                                                                    />) || <Skeleton />}
+                                                            </TableCell>
+                                                            <TableCell className="cell">
+                                                                <ButtonEdit title="Chỉnh sửa thông tin lớp học" to={`/admin/edu/classes/${n.id}`} />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    </LazyLoad>
+                                                );
+                                            })}
+                                        {data.length <= 0 && (
+                                            <TableRow>
+                                                <TableCell colSpan={8}>
+                                                    <Skeleton count={5} height={50} duration={2} />
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
+                                component="div"
+                                count={data.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                backIconButtonProps={{
+                                    'aria-label': 'Previous Page',
+                                }}
+                                nextIconButtonProps={{
+                                    'aria-label': 'Next Page',
+                                }}
+                                onChangePage={this.handleChangePage}
+                                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                            />
+                        </Paper>
+                    ) : (
+                            <NotFoundSearch name="Không tìm thấy danh sách lớp học." />
+                        )}
+                </DocumentTitle>
             </React.Fragment>
         );
     }

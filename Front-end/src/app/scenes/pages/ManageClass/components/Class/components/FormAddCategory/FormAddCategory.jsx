@@ -124,7 +124,7 @@ class FormAddCategory extends Component {
           this.setState({
              open: false
           }, () => {  
-             history.replace(lastLocation.pathname);
+             history.push(lastLocation.pathname);
           })
        }
      });

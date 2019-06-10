@@ -21,7 +21,7 @@ class TabBars extends React.Component {
         return (
             <div className={classes.root}>
                 <div className="appBar">
-                    <NavLink to="/admin/account/list/all" activeClassName="activeLink">
+                    <NavLink to="/admin/account/users" activeClassName="activeLink">
                         <ContactsIcon className={classes.leftIcon}/> DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP
                     </NavLink>
                     <NavLink to="/admin/account/new" activeClassName="activeLink">

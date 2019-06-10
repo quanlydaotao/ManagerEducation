@@ -31,16 +31,16 @@ export const doCreateNewClass = ( dataForm ) => ( {
     }
 });
 
-// export const updateYear = ( dataForm ) => ( {
-//     type: types.UPDATE_YEARS,
-//     meta: {
-//         async: true,
-//         blocking: true,
-//         path: "/years",
-//         method: "PUT",
-//         body: JSON.stringify(dataForm)
-//     }
-// });
+export const doUpdateClass = ( dataForm ) => ( {
+    type: types.UPDATE_CLASS,
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/class",
+        method: "PUT",
+        body: JSON.stringify(dataForm)
+    }
+});
 
 // export const deleteYears = ( listId ) => ( {
 //     type: types.DELETE_YEARS,

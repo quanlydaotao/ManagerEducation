@@ -27,7 +27,7 @@ const ManageAccount = ({ match }) => {
 		<div className={`${styles.mainManageAccount}`}>
 			<TabBars />
 			<Switch>
-				<Route exact path={`${match.url}/list/all`} render={() => (
+				<Route exact path={`${match.url}/users`} render={() => (
 					<TabContainer>
 						<Suspense fallback={''}>
 							<EnhancedTableAccount listName="DANH SÁCH QUẢN LÝ ĐĂNG NHẬP HỆ THỐNG" />
@@ -41,7 +41,7 @@ const ManageAccount = ({ match }) => {
 						</Suspense>
 					</TabContainer>
 				)} />
-				<Route exact path={`${match.url}/:id`} component={EditAccount} />
+				<Route exact path={`${match.url}/users/:id`} component={EditAccount} />
 			</Switch>
 		</div>
 	);

@@ -273,7 +273,7 @@ class EnhancedTableAccount extends React.Component {
                                                             {n.dateSigned || <Skeleton />}
                                                         </TableCell>
                                                         <TableCell className="cell">
-                                                            <ButtonEdit title="Chỉnh sửa thông tin tài khoản" to={`/admin/account/${n.id}`} />
+                                                            <ButtonEdit title="Chỉnh sửa thông tin tài khoản" to={`/admin/account/users/${n.id}`} />
                                                         </TableCell>
                                                     </TableRow>
                                                 );

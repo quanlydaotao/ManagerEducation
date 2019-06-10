@@ -27,18 +27,18 @@ const applyStatusActReducer = createReducer( initialState )( {
         state = {progress: false, status: 'ADD_FAILED', data: action.payload}
         return state;
     },
-    // [ types.UPDATE_YEARS ]: ( state, action ) => {
-    //     state = {progress: true, status: 'UPDATING', data: {}}
-    //     return state;
-    // },
-    // [ types.UPDATE_YEARS_COMPLETED ]: ( state, action ) => {
-    //     state = {progress: false, status: 'UPDATE_SUCCESS', data: {}}
-    //     return state;
-    // },
-    // [ types.UPDATE_YEARS_FAILED ]: ( state, action ) => {
-    //     state = {progress: false, status: 'UPDATE_FAILED', data: action.payload}
-    //     return state;
-    // },
+    [ types.UPDATE_CLASS ]: ( state, action ) => {
+        state = {progress: true, status: 'UPDATING', data: {}}
+        return state;
+    },
+    [ types.UPDATE_CLASS_COMPLETED ]: ( state, action ) => {
+        state = {progress: false, status: 'UPDATE_SUCCESS', data: {}}
+        return state;
+    },
+    [ types.UPDATE_CLASS_FAILED ]: ( state, action ) => {
+        state = {progress: false, status: 'UPDATE_FAILED', data: action.payload}
+        return state;
+    },
     // [ types.DELETE_YEARS ]: ( state, action ) => {
     //     return state;
     // },

@@ -334,7 +334,11 @@ class EditAccount extends React.Component {
           })
        }
      });
-
+    
+    closeFormEdit = () => {
+        this.setState({ isBlocking: false });
+        history.replace('/admin/account/users');
+    }
 
     render() {
         const { classes, status } = this.props;
@@ -351,7 +355,7 @@ class EditAccount extends React.Component {
         var isShowMessageSuccessAfterSubit = !status.progress 
             && status.status === 'UPDATE_SUCCESS';
         if (isShowMessageSuccessAfterSubit) {
-            history.replace('/admin/account/list/all');
+            history.replace('/admin/account/users');
         }
         let alert = () => {
             if (isShowMessageBeforeSubit 
@@ -453,7 +457,6 @@ class EditAccount extends React.Component {
                         <PopupExitPage isShow={openExit} handleClose={this.close} handleConfirm={this.confirm} />
                     </Suspense>
                     <form onSubmit={this.handleSubmit} className={`${styles.formEditAccount}`}>
-                        <br />
                         <h4 className="label-title">Chỉnh sửa thông tin tài khoản</h4>
                         <br />
                         <div className="bootstrap snippet contentForm">
@@ -639,7 +642,7 @@ class EditAccount extends React.Component {
                             <Button variant="contained" type="submit" color="primary" className="mr-3">
                                 Lưu
                             </Button>
-                            <Button onClick={this.props.closeFormEdit} color="secondary">
+                            <Button onClick={this.closeFormEdit} color="secondary">
                                 Hủy bỏ
                             </Button>
                             {status.progress ? 

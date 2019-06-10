@@ -1,24 +1,23 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
-import styles from './styles.css';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import { connect } from 'react-redux';
+import styles from './styles.css';
 import { withStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import amber from '@material-ui/core/colors/amber';
 import IconButton from '@material-ui/core/IconButton';
+import { Prompt } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-import CKEditor from 'ckeditor4-react';
-import { yearsOperations } from '../../../../state/ducks/years';
-import { toggleOperations } from '../../../../state/ducks/toggle';
+import { withRouter } from 'react-router';
+import { classOperations } from '../../../../../../../state/ducks/class';
+import DocumentTitle from 'react-document-title';
+const PopupExitPage = React.lazy(() => import('../../../../../../components/Popup/PopupExitPage/PopupExitPage'));
+import { history } from '../../../../../../../state/utils';
+
 
 const style = theme => ({
     root: {
@@ -61,35 +60,8 @@ const style = theme => ({
     iconSmall: {
         fontSize: 20,
     },
-    snackbar: {
-        margin: theme.spacing.unit,
-    },
-    close: {
-        padding: theme.spacing.unit / 2,
-    },
-    error: {
-        backgroundColor: amber[700],
-    },
-    error1: {
-        backgroundColor: theme.palette.error.dark,
-    },
-    success: {
-        backgroundColor: '#338ef9',
-    },
-    button: {
-        margin: theme.spacing.unit,
-        fontSize: 13
-    },
-    leftIcon: {
-        marginRight: theme.spacing.unit,
-    },
-    rightIcon: {
-        marginLeft: theme.spacing.unit,
-    },
-    iconSmall: {
-        fontSize: 20,
-    },
 });
+
 
 function PaperComponent(props) {
     return (
@@ -99,15 +71,15 @@ function PaperComponent(props) {
     );
 }
 
-class PopupFormEditClass extends React.Component {
+class EditClass extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '', 
+            name: '',
             classCode: '',
             classRoom: '',
-            openDay: null, 
-            closeDay: null, 
+            openDay: null,
+            closeDay: null,
             describe: '',
             status: true,
             yearId: 0,
@@ -118,34 +90,44 @@ class PopupFormEditClass extends React.Component {
                 closeDay: '',
                 day: ''
             },
-            open: false,
+            isBlocking: false,
+            lastLocation: null,
+            openExit: false
         }
     }
 
-    componentDidMount() {
-        const { data } = this.props;
-        console.log(data);
-        const {
-            id,
-            name,
-            classCode,
-            classRoom,
-            openDay, 
-            closeDay, 
-            describe,
-            status,
-        } = data;
-        this.setState({
-            id,
-            name, 
-            classCode,
-            classRoom,
-            openDay, 
-            closeDay, 
-            describe,
-            status
-        });
+
+    componentWillMount() {
+        this.setState({ isBlocking: true });
+        this.props.findClassById(this.props.match.params.id);
     }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.detail.id !== prevProps.detail.id) {
+            const { detail } = this.props;
+            const {
+                id,
+                name,
+                classCode,
+                classRoom,
+                openDay,
+                closeDay,
+                describe,
+                status,
+            } = detail;
+            this.setState({
+                id,
+                name,
+                classCode,
+                classRoom,
+                openDay,
+                closeDay,
+                describe,
+                status
+            });
+        }
+    }
+
 
     handleOpen = panel => (event, expanded) => {
         this.setState({
@@ -163,12 +145,12 @@ class PopupFormEditClass extends React.Component {
         const check = this.isErrors(this.state);
         if (check) {
             const {
-                name, classCode, openDay, closeDay, describe, classRoom, status, courseId
+                id, name, classCode, openDay, closeDay, describe, classRoom, status
             } = this.state;
             const formData = {
-                name, classCode, openDay, closeDay, describe, classRoom, status, courseId
+                id, name, classCode, openDay, closeDay, describe, classRoom, status
             }
-            // this.props.createNewClass(formData);
+            this.props.updateClass(formData);
         }
     }
 
@@ -201,7 +183,7 @@ class PopupFormEditClass extends React.Component {
         const op = Date.parse(datas.openDay);
         const cl = Date.parse(datas.closeDay);
 
-        if ( cl - op <= 0 ) {
+        if (cl - op <= 0) {
             day = 'Ngày mở đóng lớp phải lớn hơn ngày mở lớp!';
         } else {
             day = '';
@@ -209,35 +191,63 @@ class PopupFormEditClass extends React.Component {
 
         this.setState({ errors: { name, openDay, closeDay, day } });
 
-        if (name === '' 
-            && openDay === '' 
+        if (name === ''
+            && openDay === ''
             && closeDay === '' && day === '') {
             return true;
         }
         return false;
     }
-    
+
     handleClose = () => {
         this.setState({ open: false });
     }
 
+    handleBlockedNavigation = (lastLocation) => {
+        this.setState({ openExit: true, lastLocation });
+        return false;
+    }
+
+    close = (callback) => this.setState({
+        openExit: false
+    }, callback);
+
+    confirm = () => this.close(() => {
+        const { lastLocation } = this.state;
+        if (lastLocation) {
+            this.setState({
+                openExit: false
+            }, () => {
+                history.replace(lastLocation.pathname);
+            })
+        }
+    });
+
+    closeFormEdit = () => {
+        this.setState({ isBlocking: false });
+        history.replace('/admin/edu/classes');
+    }
+
     render() {
-        const { classes, statusForm } = this.props;
-        const { errors, name, classCode, openDay, closeDay, describe, status, classRoom } = this.state;
-        var isShowMessageBeforeSubit = errors.name !== '' 
-            || errors.openDay !== '' 
+        const { classes, status } = this.props;
+        const { errors, isBlocking, openExit } = this.state;
+        var isShowMessageBeforeSubit = errors.name !== ''
+            || errors.openDay !== ''
             || errors.closeDay !== ''
             || errors.day !== '';
-        var isShowMessageFailueAfterSubit = !status.progress 
-            && status.status === 'ADD_FAILED'
-            && status.data.status === 400 
+        var isShowMessageFailueAfterSubit = !status.progress
+            && status.status === 'UPDATE_FAILED'
+            && status.data.status === 400
             && status.data.response;
-        var isShowMessageSuccessAfterSubit = !status.progress 
-            && status.status === 'ADD_SUCCESS';
+        var isShowMessageSuccessAfterSubit = !status.progress
+            && status.status === 'UPDATE_SUCCESS';
+        if (isShowMessageSuccessAfterSubit) {
+            history.replace('/admin/edu/classes');
+        }
         let alert = () => {
-            if (isShowMessageBeforeSubit 
-                || (!isShowMessageBeforeSubit 
-                && isShowMessageFailueAfterSubit)
+            if (isShowMessageBeforeSubit
+                || (!isShowMessageBeforeSubit
+                    && isShowMessageFailueAfterSubit)
             ) {
                 return (
                     <Snackbar
@@ -259,11 +269,11 @@ class PopupFormEditClass extends React.Component {
                                 <span>
                                     <ul>
                                         {errors.name !== '' ? <li>{errors.name}</li> : ''}
-                                        {errors.openDay !== '' ? <li>{errors.openDay }</li> : ''}
-                                        {errors.closeDay  !== '' ? <li>{errors.closeDay}</li> : ''}
+                                        {errors.openDay !== '' ? <li>{errors.openDay}</li> : ''}
+                                        {errors.closeDay !== '' ? <li>{errors.closeDay}</li> : ''}
                                         {errors.day !== '' ? <li>{errors.day}</li> : ''}
                                         {(!isShowMessageBeforeSubit && status.data.status === 400 && status.data.response) ?
-                                            <li>{status.data.response.createClassFailed ? status.data.response.createClassFailed : 'Tạo năm học thất bại!'}</li> : ''}
+                                            <li>{status.data.response.updateClassFailed ? status.data.response.updateClassFailed : 'Cập nhật lớp học thất bại!'}</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -301,7 +311,7 @@ class PopupFormEditClass extends React.Component {
                             message={
                                 <span>
                                     <ul>
-                                        {(!isShowMessageBeforeSubit && isShowMessageSuccessAfterSubit) ? <li>Chỉnh sửa thông tin lớp học thành công!</li> : ''}
+                                        {(!isShowMessageBeforeSubit && isShowMessageSuccessAfterSubit) ? <li>Cập nhật thông tin lớp học thành công!</li> : ''}
                                     </ul>
                                 </span>
                             }
@@ -324,17 +334,17 @@ class PopupFormEditClass extends React.Component {
             }
         }
         return (
-            <div>
-                {alert()}
-                <Dialog
-                    fullWidth={true}
-                    maxWidth="lg"
-                    open={statusForm}
-                    onClose={this.props.closeFormEdit}
-                    aria-labelledby="draggable-dialog-title"
-                >
-                    <div className={`${styles.formEditClass}`}>
-                        {alert()}
+            <DocumentTitle title=".:Cập nhật lớp học:.">
+                <div>
+                    {alert()}
+                    <Prompt
+                        when={isBlocking}
+                        message={this.handleBlockedNavigation}
+                    />
+                    <Suspense fallback={''}>
+                        <PopupExitPage isShow={openExit} handleClose={this.close} handleConfirm={this.confirm} />
+                    </Suspense>
+                    <form onSubmit={this.handleSubmit} className={`${styles.formEditClass}`}>
                         <h4 className="label-title">Chỉnh sửa thông tin chi tiết lớp học</h4>
                         <div>
                             <div><b>Chú ý:</b></div>
@@ -346,82 +356,86 @@ class PopupFormEditClass extends React.Component {
                             </ul>
                         </div>
                         <div className="contentForm" style={{ display: 'block' }}>
-                            <form onSubmit={this.handleSubmit}>
-                                <div className="row">
-                                    <div className="col-md-2">
-                                        <label htmlFor="classCode"><b>Mã lớp học: (*)</b></label>
-                                        <input id="classCode" type="text" disabled placeholder="Mã lớp" className={`${styles.hide}`} defaultValue={classCode}/>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <label htmlFor="name"><b>Tên lớp học: (*)</b></label>
-                                        <input id="name" type="text" minLength="5" maxLength="100" onChange={this.handleChange} placeholder="VD: Năm học 2019" name="name" defaultValue={name} required />
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="classRoom"><b>Phòng học:</b></label>
-                                        <input id="classRoom" type="text" onChange={this.handleChange} placeholder="VD: 201-TA1" name="classRoom" defaultValue={classRoom}/>
-                                    </div>
+                            <div className="row">
+                                <div className="col-md-2">
+                                    <label htmlFor="classCode"><b>Mã lớp học: (* Auto generate)</b></label>
+                                    <input id="classCode" type="text" disabled placeholder="Mã lớp" className={`${styles.hide}`} defaultValue={this.state.classCode} />
                                 </div>
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <label htmlFor="openDay"><b>Ngày mở lớp (*):</b></label>
-                                        <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" defaultValue={openDay} required/>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="closeDay"><b>Ngày đóng lớp (*):</b></label>
-                                        <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" defaultValue={closeDay} required/>
-                                    </div>
+                                <div className="col-md-4">
+                                    <label htmlFor="name"><b>Tên lớp học: (*)</b></label>
+                                    <input id="name" type="text" minLength="5" maxLength="100" onChange={this.handleChange} placeholder="VD: Năm học 2019" name="name" defaultValue={this.state.name} required />
                                 </div>
-                                <label htmlFor="describe"><b>Mô tả ngắn:</b></label>
-                                <textarea id="describe" name="describe" rows="10" placeholder="Mô tả ngắn..." onChange={this.handleChange} defaultValue={describe}></textarea>
-                                <br />
-                                <label htmlFor="status"><b>Trạng thái:</b></label>
-                                <select name="status" id="status" onChange={this.handleChange} required>
-                                    <option value={true} selected={this.state.status ? true : false}>--- MỞ LỚP HỌC ---</option> 
-                                    <option value={false} selected={!this.state.status ? true : false}>--- ĐÓNG LỚP HỌC ---</option>
-                                </select>
-                                <DialogActions>
-                                    <Button onClick={this.props.closeFormEdit} color="primary">
-                                        Thoát
-                                    </Button>
-                                    <Button type="submit" color="primary">
-                                        Lưu
-                                    </Button>
-                                    {status.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
-                                </DialogActions>
-                            </form>
+                                <div className="col-md-6">
+                                    <label htmlFor="classRoom"><b>Phòng học:</b></label>
+                                    <input id="classRoom" type="text" onChange={this.handleChange} placeholder="VD: 201-TA1" name="classRoom" defaultValue={this.state.classRoom} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <label htmlFor="openDay"><b>Ngày mở lớp (*):</b></label>
+                                    <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" defaultValue={this.state.openDay} required />
+                                </div>
+                                <div className="col-md-6">
+                                    <label htmlFor="closeDay"><b>Ngày đóng lớp (*):</b></label>
+                                    <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" defaultValue={this.state.closeDay} required />
+                                </div>
+                            </div>
+                            <label htmlFor="describe"><b>Mô tả ngắn:</b></label>
+                            <textarea id="describe" name="describe" rows="10" placeholder="Mô tả ngắn..." onChange={this.handleChange} value={this.state.describe}></textarea>
+                            <br />
+                            <label htmlFor="status"><b>Trạng thái:</b></label>
+                            <select name="status" id="status" onChange={this.handleChange} required>
+                                <option value={true} selected={this.state.status ? true : false}>--- MỞ LỚP HỌC ---</option>
+                                <option value={false} selected={!this.state.status ? true : false}>--- ĐÓNG LỚP HỌC ---</option>
+                            </select>
+                            <div>
+                                <Button variant="contained" type="submit" color="primary" className="mr-3">
+                                    Lưu
+                            </Button>
+                                <Button onClick={this.closeFormEdit} color="secondary">
+                                    Hủy bỏ
+                            </Button>
+                                {status.progress ?
+                                    <span style={{ marginLeft: 5, marginTop: 3 }}>
+                                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"
+                                            style={{ fontSize: 30 }}>
+                                        </i>
+                                    </span> : ''}
+                            </div>
                         </div>
-                    </div>
-                </Dialog>
-            </div>
+                    </form>
+                </div>
+            </DocumentTitle>
         );
     }
 }
 
-PopupFormEditClass.propTypes = {
+EditClass.propTypes = {
     classes: PropTypes.object.isRequired,
-    actions: PropTypes.objectOf({
+    status: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
         data: PropTypes.object.isRequired
     }).isRequired,
-
-    closeFormEdit: PropTypes.func.isRequired,
-    updateYear: PropTypes.func.isRequired,
+    detail: PropTypes.object.isRequired,
+    updateClass: PropTypes.func.isRequired,
+    findClassById: PropTypes.func.isRequired
 }
 
-PopupFormEditClass.defaultProps = {
-    statusForm: false,
+EditClass.defaultProps = {
     status: { progress: false, status: '', data: {} },
+    detail: {}
 }
 
 const mapStateToProps = state => ({
-    statusForm: state.toggle.toggleFormEdit,
-    status: state.years.status
+    status: state.class.status,
+    detail: state.class.detail
 });
 
 const mapDispatchToProps = {
-    closeFormEdit: toggleOperations.doCloseFormEditYear,
-    updateYear:  yearsOperations.doUpdateYear,
+    updateClass: classOperations.doUpdateClass,
+    findClassById: classOperations.doGetClassById
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(PopupFormEditClass));
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EditClass)));

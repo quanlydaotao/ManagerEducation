@@ -13,6 +13,8 @@ import java.util.Optional;
 @Repository
 public interface ClassesRepository extends JpaRepository<Classes, Long> {
     List<Classes> findAllByCourseIdOrderByIdDesc(Long id);
+
     Integer countByCourseId(Long id);
-    Optional<Classes> findByName(String name);
+
+    Optional<Classes> findByClassCode(String code);
 }

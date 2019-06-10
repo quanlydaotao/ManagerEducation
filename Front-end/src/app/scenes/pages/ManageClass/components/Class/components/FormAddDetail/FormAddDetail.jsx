@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
 import DocumentTitle from 'react-document-title';
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
 import PropTypes from 'prop-types';
 import { Prompt } from 'react-router-dom';
 import { withRouter } from 'react-router';
@@ -12,11 +11,11 @@ import AddIcon from '@material-ui/icons/Add';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { connect } from 'react-redux';
 import { classOperations } from '../../../../../../../state/ducks/class';
 import randomstring from 'randomstring';
+const PopupExitPage = React.lazy(() => import('../../../../../../components/Popup/PopupExitPage/PopupExitPage'));
+import { history } from '../../../../../../../state/utils';
 
 const style = theme => ({
     snackbar: {
@@ -53,11 +52,11 @@ class FormAddDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '', 
+            name: '',
             classCode: '',
             classRoom: '',
-            openDay: null, 
-            closeDay: null, 
+            openDay: null,
+            closeDay: null,
             describe: '',
             status: true,
             yearId: 0,
@@ -69,19 +68,26 @@ class FormAddDetail extends Component {
                 day: ''
             },
             open: false,
+            isBlocking: false,
+            lastLocation: null,
+            openExit: false
         }
     }
-    
+
+    componentWillMount() {
+        this.setState({ isBlocking: true });
+    }
+
     componentDidMount() {
         const { data } = this.props;
         let classCode = data.nameCourse.split('-');
-        let classString = classCode[0]+classCode[1];
+        let classString = classCode[0] + classCode[1];
         let generateString = randomstring.generate(5);
-        this.setState({ 
-            name: data.name, 
+        this.setState({
+            name: data.name,
             yearId: data.year,
             courseId: data.course,
-            classCode: ( classString + generateString ).toUpperCase()
+            classCode: (classString + generateString).toUpperCase()
         });
     }
     componentWillUnmount() {
@@ -136,7 +142,7 @@ class FormAddDetail extends Component {
         const op = Date.parse(datas.openDay);
         const cl = Date.parse(datas.closeDay);
 
-        if ( cl - op <= 0 ) {
+        if (cl - op <= 0) {
             day = 'Ngày mở đóng lớp phải lớn hơn ngày mở lớp!';
         } else {
             day = '';
@@ -144,36 +150,63 @@ class FormAddDetail extends Component {
 
         this.setState({ errors: { name, openDay, closeDay, day } });
 
-        if (name === '' 
-            && openDay === '' 
+        if (name === ''
+            && openDay === ''
             && closeDay === '' && day === '') {
             return true;
         }
         return false;
     }
-    
+
     handleClose = () => {
         this.setState({ open: false });
     }
 
+    handleBlockedNavigation = (lastLocation) => {
+        this.setState({ openExit: true, lastLocation });
+        return false;
+    }
+
+    close = (callback) => this.setState({
+        openExit: false
+    }, callback);
+
+    confirm = () => this.close(() => {
+        const { lastLocation } = this.state;
+        if (lastLocation) {
+            this.setState({
+                openExit: false
+            }, () => {
+                history.push(lastLocation.pathname);
+            })
+        }
+    });
+
+    closeFormEdit = () => {
+        this.setState({ isBlocking: false });
+        history.push('/admin/edu/classes/category');
+    }
+
     render() {
         const { classes, status } = this.props;
-        const { errors, name, classCode } = this.state;
-        var isShowMessageBeforeSubit = errors.name !== '' 
-            || errors.openDay !== '' 
+        const { errors, name, classCode, isBlocking, openExit } = this.state;
+        var isShowMessageBeforeSubit = errors.name !== ''
+            || errors.openDay !== ''
             || errors.closeDay !== ''
             || errors.day !== '';
-        var isShowMessageFailueAfterSubit = !status.progress 
+        var isShowMessageFailueAfterSubit = !status.progress
             && status.status === 'ADD_FAILED'
-            && status.data.status === 400 
+            && status.data.status === 400
             && status.data.response;
-        var isShowMessageSuccessAfterSubit = !status.progress 
+        var isShowMessageSuccessAfterSubit = !status.progress
             && status.status === 'ADD_SUCCESS';
-
+        if (isShowMessageSuccessAfterSubit) {
+            history.push('/admin/edu/classes');
+        }
         let alert = () => {
-            if (isShowMessageBeforeSubit 
-                || (!isShowMessageBeforeSubit 
-                && isShowMessageFailueAfterSubit)
+            if (isShowMessageBeforeSubit
+                || (!isShowMessageBeforeSubit
+                    && isShowMessageFailueAfterSubit)
             ) {
                 return (
                     <Snackbar
@@ -195,8 +228,8 @@ class FormAddDetail extends Component {
                                 <span>
                                     <ul>
                                         {errors.name !== '' ? <li>{errors.name}</li> : ''}
-                                        {errors.openDay !== '' ? <li>{errors.openDay }</li> : ''}
-                                        {errors.closeDay  !== '' ? <li>{errors.closeDay}</li> : ''}
+                                        {errors.openDay !== '' ? <li>{errors.openDay}</li> : ''}
+                                        {errors.closeDay !== '' ? <li>{errors.closeDay}</li> : ''}
                                         {errors.day !== '' ? <li>{errors.day}</li> : ''}
                                         {(!isShowMessageBeforeSubit && status.data.status === 400 && status.data.response) ?
                                             <li>{status.data.response.createClassFailed ? status.data.response.createClassFailed : 'Tạo năm học thất bại!'}</li> : ''}
@@ -261,24 +294,31 @@ class FormAddDetail extends Component {
         }
         return (
             <DocumentTitle title=".:Chi tiết lớp học:.">
-                <div className={`${styles.formAddNewYears}`}>
+                <div>
                     {alert()}
-                    <h4 className="label-title">Thông tin chi tiết lớp học</h4>
-                    <div>
-                        <div><b>Chú ý:</b></div>
-                        <ul className="attention">
-                            <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
-                            <li>- Mỗi lớp học sẽ tự động có một mã lớp khác nhau</li>
-                            <li>- Tên năm học tối thiểu <b>5 ký tự</b> và tối đa <b>100 ký tự.</b>.</li>
-                            <li>- Ngày mở lớp phải nhỏ hơn ngày đóng lớp.</li>
-                        </ul>
-                    </div>
-                    <div className="contentForm" style={{ display: 'block' }}>
-                        <form onSubmit={this.handleSubmit}>
+                    <Prompt
+                        when={isBlocking}
+                        message={this.handleBlockedNavigation}
+                    />
+                    <Suspense fallback={''}>
+                        <PopupExitPage isShow={openExit} handleClose={this.close} handleConfirm={this.confirm} />
+                    </Suspense>
+                    <form onSubmit={this.handleSubmit} className={`${styles.formAddDetailClass}`}>
+                        <h4 className="label-title">Thông tin chi tiết lớp học</h4>
+                        <div>
+                            <div><b>Chú ý:</b></div>
+                            <ul className="attention">
+                                <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
+                                <li>- Mỗi lớp học sẽ tự động có một mã lớp khác nhau</li>
+                                <li>- Tên năm học tối thiểu <b>5 ký tự</b> và tối đa <b>100 ký tự.</b>.</li>
+                                <li>- Ngày mở lớp phải nhỏ hơn ngày đóng lớp.</li>
+                            </ul>
+                        </div>
+                        <div className="contentForm" style={{ display: 'block' }}>
                             <div className="row">
                                 <div className="col-md-2">
-                                    <label htmlFor="classCode"><b>Mã lớp học: (*)</b></label>
-                                    <input id="classCode" type="text" disabled placeholder="Mã lớp" className={`${styles.hide}`} defaultValue={classCode}/>
+                                    <label htmlFor="classCode"><b>Mã lớp học: (* Auto generate)</b></label>
+                                    <input id="classCode" type="text" disabled placeholder="Mã lớp" className={`${styles.hide}`} defaultValue={classCode} />
                                 </div>
                                 <div className="col-md-4">
                                     <label htmlFor="name"><b>Tên lớp học: (*)</b></label>
@@ -292,11 +332,11 @@ class FormAddDetail extends Component {
                             <div className="row">
                                 <div className="col-md-6">
                                     <label htmlFor="openDay"><b>Ngày mở lớp (*):</b></label>
-                                    <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" required/>
+                                    <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" required />
                                 </div>
                                 <div className="col-md-6">
                                     <label htmlFor="closeDay"><b>Ngày đóng lớp (*):</b></label>
-                                    <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" required/>
+                                    <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" required />
                                 </div>
                             </div>
                             <label htmlFor="describe"><b>Mô tả ngắn:</b></label>
@@ -313,9 +353,12 @@ class FormAddDetail extends Component {
                                         <AddIcon className={classes.rightIcon} />
                                 </Button>
                                 {status.progress ? <span style={{ marginLeft: 5, marginTop: 3 }}><i class="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ fontSize: 30 }}></i></span> : ''}
+                                <Button onClick={this.closeFormEdit} color="secondary">
+                                    Hủy bỏ
+                                </Button>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </DocumentTitle>
         );
