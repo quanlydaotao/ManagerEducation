@@ -6,7 +6,9 @@ const LoginWrapper = () => {
     return (
         <div className={`${styles.login}`}>
             <div className={`${styles.consLg}`}>
-                <LoginPage />
+                <div className={`container ${styles.wrapContainer}`}>
+                    <LoginPage />
+                </div>
             </div>
         </div>
     );

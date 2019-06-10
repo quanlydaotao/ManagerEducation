@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,7 +16,9 @@ import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { Prompt } from 'react-router-dom';
-
+import { withRouter } from 'react-router';
+import { history } from '../../../../../state/utils';
+const PopupExitPage = React.lazy(() => import('../../../../components/Popup/PopupExitPage/PopupExitPage'));
 const style = theme => ({
     snackbar: {
         margin: theme.spacing.unit,
@@ -75,9 +77,13 @@ class FormSign extends Component {
                 password: '',
                 re_password: '',
                 phone_number: '',
+                authorities: ''
             },
             imagePreview: '',
             open: false,
+            isBlocking: false,
+            lastLocation: null,
+            openExit: false
         }
     }
 
@@ -90,6 +96,7 @@ class FormSign extends Component {
     }
 
     handleChange = event => {
+        this.setState({ isBlocking: true });
         var target = event.target;
         if (target.name === 'authorities')
             this.setState({ authorities: [target.value] });
@@ -98,6 +105,7 @@ class FormSign extends Component {
     };
 
     handleChangeFile = event => {
+        this.setState({ isBlocking: true });
         let reader = new FileReader();
         const file = event.target.files[0];
         reader.onloadend = () => {
@@ -170,11 +178,12 @@ class FormSign extends Component {
     }
 
     isErrors = datas => {
-        let login = '';
-        let password = '';
-        let re_password = '';
-        let phone_number = '';
-        if (datas.login === '') {
+        let login = "";
+        let password = "";
+        let re_password = "";
+        let phone_number = "";
+        let authorities = ""
+        if (datas.login === "") {
             login = "Mã đăng nhập không được để trống!";
         } else if (!/((AD|PH|GV|HV)+([0-9]{5})\b)/.test(datas.login)) {
             login = "Mã đăng nhập không đúng định dạng!";
@@ -182,7 +191,7 @@ class FormSign extends Component {
             login = "";
         }
 
-        if (datas.password === '') {
+        if (datas.password === "") {
             password = "Mật khẩu không được để trống!";
         } else if ((datas.password.length < 4) || (datas.password.length > 100)) {
             password = "Mật khẩu phải lớn hơn 3 ký tự và bé hơn 101 ký tự!";
@@ -190,7 +199,7 @@ class FormSign extends Component {
             password = "";
         }
 
-        if (datas.re_password === '') {
+        if (datas.re_password === "") {
             re_password = "Mật khẩu nhập lại không được để trống!";
         } else if (datas.re_password !== datas.password) {
             re_password = "Mật khẩu nhập lại không khớp!";
@@ -198,7 +207,7 @@ class FormSign extends Component {
             re_password = "";
         }
 
-        if (datas.phoneNumber === '') {
+        if (datas.phoneNumber === "") {
             phone_number = "Số điện thoại không được để trống!";
         } else if (!/^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$/.test(datas.phoneNumber)) {
             phone_number = "Số điện thoại nhập không đúng định dạng! (gồm 10 chữ số và là các số điện thoại của việt nam)";
@@ -212,48 +221,69 @@ class FormSign extends Component {
             switch (datas.authorities[0]) {
                 case "ROLE_ADMIN":
                     if (datas.login !== '' && datas.login.substring(0, 2) !== 'AD') {
-                        login = "Mã đăng nhập không khớp với loại tài khoản ADMIN VD: ADxxxxx!!";
+                        authorities = "Mã đăng nhập không khớp với loại tài khoản ADMIN VD: ADxxxxx!!";
                     } else {
-                        login = "";
+                        authorities = "";
                     }
                     break;
                 case "ROLE_TEACHER":
                     if (datas.login !== '' && datas.login.substring(0, 2) !== 'GV') {
-                        login = "Mã đăng nhập không khớp với loại tài khoản GIẢNG VIÊN VD: GVxxxxx!";
+                        authorities = "Mã đăng nhập không khớp với loại tài khoản GIẢNG VIÊN VD: GVxxxxx!";
                     } else {
-                        login = "";
+                        authorities = "";
                     }
                     break;
                 case "ROLE_PARENTS":
                     if (datas.login !== '' && datas.login.substring(0, 2) !== 'PH') {
-                        login = "Mã đăng nhập không khớp với loại tài khoản PHỤ HUYNH VD: PHxxxxx!!";
+                        authorities = "Mã đăng nhập không khớp với loại tài khoản PHỤ HUYNH VD: PHxxxxx!!";
                     } else {
-                        login = "";
+                        authorities = "";
                     }
                     break;
                 case "ROLE_STUDENT":
                     if (datas.login !== '' && datas.login.substring(0, 2) !== 'HV') {
-                        login = "Mã đăng nhập không khớp với loại tài khoản HỌC VIÊN VD: HVxxxxx!!";
+                        authorities = "Mã đăng nhập không khớp với loại tài khoản HỌC VIÊN VD: HVxxxxx!!";
                     } else {
-                        login = "";
+                        authorities = "";
                     }
                     break;
             }
         }
-        this.setState({ errors: { login, password, re_password, phone_number } });
-        if (login === '' && password === '' && re_password === '' && phone_number === '') {
+        this.setState({ errors: { login, password, re_password, phone_number, authorities} });
+        if (login === '' && password === '' && re_password === '' && phone_number === '' && authorities === '') {
             return true;
         }
         return false;
     }
 
+    handleBlockedNavigation = (lastLocation) => {
+       this.setState({ openExit: true, lastLocation });
+       return false;
+    }
+
+    close = (callback) => this.setState({
+               openExit: false
+             }, callback);
+
+    confirm = () => this.close(() => {
+       const {lastLocation} = this.state;
+       if (lastLocation) {
+          this.setState({
+             openExit: false
+          }, () => {  
+             history.replace(lastLocation.pathname);
+          })
+       }
+     });
+
     render() {
         const { classes, status } = this.props;
-        const { errors, imagePreview } = this.state;
+        const { errors, imagePreview, isBlocking, openExit } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' 
             || errors.password !== '' 
             || errors.re_password !== '' 
-            || errors.phone_number !== '';
+            || errors.phone_number !== ''
+            || errors.authorities !== '';
         var isShowMessageFailueAfterSubit = !status.progress 
             && status.status === 'ADD_FAILED'
             && status.data.status === 400 
@@ -286,6 +316,7 @@ class FormSign extends Component {
                                         {errors.password !== '' ? <li>{errors.password}</li> : ''}
                                         {errors.re_password !== '' ? <li>{errors.re_password}</li> : ''}
                                         {errors.phone_number !== '' ? <li>{errors.phone_number}</li> : ''}
+                                        {errors.authorities !== '' ? <li>{errors.authorities}</li> : ''}
                                         {(!isShowMessageBeforeSubit && status.data.status === 400 && status.data.response) ?
                                             <li>{status.data.response.createFailed ? status.data.response.createFailed : 'Đăng ký thất bại!'}</li> : ''}
                                     </ul>
@@ -352,9 +383,12 @@ class FormSign extends Component {
             <DocumentTitle title=".:Thêm mới tài khoản:.">
                 <div className={`${styles.formSign}`}>
                     <Prompt 
-                        when={true}
-                        message={'thoát hả'}
+                        when={isBlocking}
+                        message={this.handleBlockedNavigation}
                     />
+                    <Suspense fallback={''}>
+                        <PopupExitPage isShow={openExit} handleClose={this.close} handleConfirm={this.confirm} />
+                    </Suspense>
                     {alert()}
                     <h3>Đăng ký tài khoản đăng nhập hệ thống</h3>
                     <div>
@@ -514,4 +548,4 @@ const mapDispatchToProps = {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(FormSign));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(FormSign)));

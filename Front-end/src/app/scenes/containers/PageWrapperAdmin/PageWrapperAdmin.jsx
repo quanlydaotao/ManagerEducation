@@ -16,6 +16,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import styles from './styles.css';
 import routes from '../../../routes';
 import { Route } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -354,4 +355,4 @@ PageWrapperAdmin.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(style, { withTheme: true })(PageWrapperAdmin);
+export default withRouter(withStyles(style, { withTheme: true })(PageWrapperAdmin));

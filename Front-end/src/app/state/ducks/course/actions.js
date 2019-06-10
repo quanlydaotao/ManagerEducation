@@ -5,7 +5,17 @@ export const doGetAllCourseByYearId = (id) => ( {
     meta: {
         async: true,
         blocking: true,
-        path: `/course/year/${id}`,
+        path: `/course?year=${id}&filter=false`,
+        method: "GET"
+    }
+} );
+
+export const doGetAllCourseByMaxClasses = (id) => ( {
+    type: types.GET_ALL_COURSE_BY_MAX_CLASSES,
+    meta: {
+        async: true,
+        blocking: true,
+        path: `/course?year=${id}&filter=true`,
         method: "GET"
     }
 } );

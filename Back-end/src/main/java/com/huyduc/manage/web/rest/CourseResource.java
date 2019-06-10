@@ -3,15 +3,12 @@ package com.huyduc.manage.web.rest;
 import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.service.CourseService;
 import com.huyduc.manage.service.dto.CourseDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,15 +26,14 @@ public class CourseResource {
     }
 
     /**
-     * GET /course/year/:id : get all course by year id
+     * GET /course?year=:id&filter=(true|false) : get all course by year id and filter
      *
      * @return the ResponseEntity with status 200 (OK) and with body all course by year id
      */
-    @GetMapping("/course/year/{id}")
+    @GetMapping("/course")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<CourseDTO>> getAllCourseByYearId(@PathVariable("id") Long id) {
-        final Page<CourseDTO> page = courseService.findAllByYearId(PageRequest
-                .of(0, 10000000, Sort.by("id").descending()), id);
-        return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
+    public ResponseEntity<List<CourseDTO>> getAllCourseByYearId(@RequestParam(name = "year", required = true, defaultValue = "0") Long id, @RequestParam(name = "filter", required = true, defaultValue = "false") boolean filter) {
+        final List<CourseDTO> list = courseService.findAllByYearIdAndFilter(id, filter);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

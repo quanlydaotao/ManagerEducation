@@ -2,6 +2,7 @@ import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
 import { PropTypes } from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import { TabBars } from './components/TabBars';
 import Typography from '@material-ui/core/Typography';
 const Statistical = React.lazy(() => import('./components/Statistical/Statistical'));
@@ -61,4 +62,4 @@ class ManageClass extends Component {
     }
 }
 
-export default ManageClass;
+export default withRouter(ManageClass);

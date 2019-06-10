@@ -1,25 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import DocumentTitle from 'react-document-title';
 import styles from './styles.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
+import {  Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import Button from '@material-ui/core/Button';
 import { Prompt } from 'react-router-dom';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import DvrIcon from '@material-ui/icons/Dvr';
-import RateReviewIcon from '@material-ui/icons/RateReview';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import { yearsShape } from '../../../../../../propTypes';
 import { SearchYearAndCourse } from '../../../../../../components/Search/SearchYearAndCourse';
 import { ListSelection } from '../../../../../../components/ListSelection';
-import { selectionOperations } from '../../../../../../../state/ducks/selection';
-import { courseOperations } from '../../../../../../../state/ducks/course';
 import { coursesShape } from '../../../../../../propTypes';
 import { yearsOperations } from '../../../../../../../state/ducks/years';
+import { courseOperations } from '../../../../../../../state/ducks/course';
+const PopupExitPage = React.lazy(() => import('../../../../../../components/Popup/PopupExitPage/PopupExitPage'));
+import { history } from '../../../../../../../state/utils';
 
 const style = theme => ({
     root: {
@@ -59,73 +55,102 @@ class FormAddCategory extends Component {
             nameCourse: '',
             isBlocking: false,
             nameNewClass: '',
-            error: false
+            error: false,
+            lastLocation: null,
+            open: false
         }
     }
     componentDidMount() {
         this.props.getAllYears();
-        this.props.setYearAndCourse({ name: '', year: 0, course: 0 });
     }  
     componentWillUnmount() {
-        this.props.getAllCourseByYearId(0);
+        this.props.getAllCourseByMaxClasses(0);
     }
     selectIdYear = (param) => {
         this.setState({
             idYear: param.id,
             nameYear: param.name,
             idCourse: 0,
-            nameCourse: ''
+            nameCourse: '',
+            isBlocking: true
         });
-        this.props.getAllCourseByYearId(param.id);
+        this.props.getAllCourseByMaxClasses(param.id);
     }  
     selectIdCourse = (param) => {
         this.setState({
             idCourse: param.id,
-            nameCourse: param.name
+            nameCourse: param.name,
+            isBlocking: true
         });
     }
     handleChange = (event) => {
-        this.setState({ nameNewClass: event.target.value });
+        this.setState({ nameNewClass: event.target.value, isBlocking: true });
     }
     handleSubmit = (event) => {
         event.preventDefault();
         let name = event.target.name.value;
         let year = this.state.idYear;
         let course = this.state.idCourse;
+        let { nameYear, nameCourse } = this.state;
         if (this.isSelected()) {
             this.setState({
                 error: true
             });
         } else {
-            this.props.setYearAndCourse({ name, year, course });
+            this.props.setYearAndCourse({ name, year, course, nameYear, nameCourse });
         }
         
     }
     isSelected = err => {
-        const { nameNewClass,idYear, idCourse} = this.state;
-        if (nameNewClass === '' || idYear === 0 || idCourse === 0) {
+        const { nameNewClass,idYear, idCourse, nameYear, nameCourse} = this.state;
+        if (nameNewClass === '' || idYear === 0 || idCourse === 0 || nameYear === '' || nameCourse === '') {
             return true;
         }
         return false;
     }
 
+    handleBlockedNavigation = (lastLocation) => {
+       this.setState({ open: true, lastLocation });
+       return false;
+    }
+
+    close = (callback) => this.setState({
+               open: false
+             }, callback);
+
+    confirm = () => this.close(() => {
+       const { lastLocation } = this.state;
+       if (lastLocation) {
+          this.setState({
+             open: false
+          }, () => {  
+             history.replace(lastLocation.pathname);
+          })
+       }
+     });
+
     render() {
-        const { classes, years, courses } = this.props;
-        const { idYear, idCourse, isBlocking, nameYear, nameCourse } = this.state;
+        const { classes, years, courses, when } = this.props;
+        const { idYear, idCourse, isBlocking, nameYear, nameCourse, nameNewClass, open, lastLocation } = this.state;
         return (
             <DocumentTitle title='.:Thêm mới lớp học:.'>
                 <div className={`${styles.formAddClass}`}>
                     <Prompt 
                         when={isBlocking}
-                        message={'Muốn bỏ em à :('} 
+                        message={this.handleBlockedNavigation}
                     />
-                    <h4 style={{color: '#455e6c'}}>Thêm 1 lớp học mới</h4>
+                    <Suspense fallback={''}>
+                        <PopupExitPage isShow={open} handleClose={this.close} handleConfirm={this.confirm} />
+                    </Suspense>
+                    <h4 className="label-title">Chọn danh mục lớp học</h4>
                     <div>
                         <div><b>Chú ý:</b></div>
-                        <ul className={`${styles.message}`}>
+                        <ul className="attention">
                             <li>- Các trường thông tin đánh dấu <b>(*)</b> ở dưới là bắt buộc.</li>
                             <li>- Vui lòng chọn <b>năm học</b> và <b>khóa đào tạo</b> phù hợp với lớp học của bạn.</li>
                             <li>- Nếu chưa có năm học hoặc khóa đào tạo, vui lòng thêm năm học và khóa đào tạo trước khi thêm lớp học.</li>
+                            <li>- Đối với các khóa học, số lượng lớp học của các khóa nếu đạt số lượng tối đa sẽ không hiển thị ở dưới.</li>
+                            <li>- Nếu muốn bổ sung thêm lớp học, vui lòng chỉnh sửa lại số lượng tối đa lớp học của khóa học đó.</li>
                         </ul>
                     </div>
                     <hr style={{margin: '10px 0 0 0'}}/>
@@ -157,7 +182,7 @@ class FormAddCategory extends Component {
                                                     </div>
                                                     <div className="col-md-5 pl-0">
                                                         <ListSelection 
-                                                            data={courses} 
+                                                            data={courses}
                                                             title="DANH SÁCH KHÓA HỌC" 
                                                             getSelectId={this.selectIdCourse}
                                                         />
@@ -201,8 +226,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     getAllYears: yearsOperations.doGetAllYears,
-    getAllCourseByYearId: courseOperations.doGetAllCourseByYearId
+    getAllCourseByMaxClasses: courseOperations.doGetAllCourseByMaxClasses
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(FormAddCategory));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(FormAddCategory)));

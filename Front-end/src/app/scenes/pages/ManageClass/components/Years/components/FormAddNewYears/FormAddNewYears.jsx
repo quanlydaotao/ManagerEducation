@@ -8,11 +8,11 @@ import { withStyles } from '@material-ui/core/styles';
 import amber from '@material-ui/core/colors/amber';
 import AddIcon from '@material-ui/icons/Add';
 import CKEditor from 'ckeditor4-react';
+import { withRouter }  from 'react-router';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { connect } from 'react-redux';
 import { yearsOperations } from '../../../../../../../state/ducks/years';
 
@@ -362,4 +362,4 @@ const mapDispatchToProps = {
     createNewYear: yearsOperations.doCreateNewYear,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(FormAddNewYears));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(FormAddNewYears)));

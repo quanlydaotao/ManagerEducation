@@ -4,6 +4,7 @@ import styles from './styles.css';
 import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router';
 import QueuePlayNextIcon from '@material-ui/icons/QueuePlayNext';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import TodayIcon from '@material-ui/icons/Today';
@@ -57,7 +58,7 @@ class ToolBar extends Component {
                                 </Button>
                             </Tooltip>
                             <Tooltip title="Thêm lớp học">
-                                <Button component={Link} to="/admin/edu/classes/add/category" variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
+                                <Button component={Link} to="/admin/edu/classes/category" variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
                                     <PlaylistAddIcon className={classes.leftIcon} />
                                     THÊM LỚP HỌC
                                 </Button>
@@ -74,4 +75,4 @@ ToolBar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(style)(ToolBar);
+export default withRouter(withStyles(style)(ToolBar));

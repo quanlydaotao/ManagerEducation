@@ -22,11 +22,11 @@ import { popupOperations } from '../../../../../state/ducks/popup';
 import { toggleOperations } from '../../../../../state/ducks/toggle';
 import { EnhancedTableHead } from '../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../components/Table/EnhancedTableToolBar';
-import { PopupFormEditAccount } from '../../../../components/Popup/PopupFormEditAccount';
 import { PopupDelete } from '../../../../components/Popup/PopupDelete';
 import { history } from '../../../../../state/utils';
 import { ImageAvatars } from '../../../../components/ImageAvatars';
 import { ButtonEdit } from '../../../../components/Buttons/ButtonEdit';
+import { withRouter } from 'react-router';
 const NotFoundSearch = React.lazy(() => import('../../../../components/NotFoundSearch/NotFoundSearch'));
 const rows = [
     { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
@@ -92,7 +92,7 @@ class EnhancedTableAccount extends React.Component {
             orderBy: 'calories',
             selected: [],
             page: 0,
-            rowsPerPage: 10
+            rowsPerPage: 10,
         }
     }
 
@@ -144,11 +144,6 @@ class EnhancedTableAccount extends React.Component {
         this.setState({ page });
     };
 
-    handleOpenForm = (id) => {
-        this.props.findAccountById(id);
-        this.props.openFormEdit();
-    }
-
     handleChangeRowsPerPage = event => {
         this.setState({ rowsPerPage: event.target.value });
     };
@@ -185,7 +180,6 @@ class EnhancedTableAccount extends React.Component {
                 <DocumentTitle title=".:Danh sách tài khoản:.">
                     {accounts.length > 0 ? (
                         <Paper className={classes.root}>
-                            {detail.id ? <PopupFormEditAccount data={detail} /> : ''}
                             <PopupDelete delete={this.deleteData} />
                             <EnhancedTableToolBar
                                 numSelected={selected.length}
@@ -279,7 +273,7 @@ class EnhancedTableAccount extends React.Component {
                                                             {n.dateSigned || <Skeleton />}
                                                         </TableCell>
                                                         <TableCell className="cell">
-                                                            <ButtonEdit title="Chỉnh sửa thông tin tài khoản" id={n.id} handleOpenForm={this.handleOpenForm} />
+                                                            <ButtonEdit title="Chỉnh sửa thông tin tài khoản" to={`/admin/account/${n.id}`} />
                                                         </TableCell>
                                                     </TableRow>
                                                 );
@@ -322,7 +316,6 @@ class EnhancedTableAccount extends React.Component {
 EnhancedTableAccount.propTypes = {
     classes: PropTypes.object.isRequired,
     accounts: PropTypes.arrayOf(accountShape).isRequired,
-    detail: PropTypes.objectOf(accountShape).isRequired,
     status: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
@@ -331,30 +324,24 @@ EnhancedTableAccount.propTypes = {
     listName: PropTypes.string.isRequired,
 
     getAllUserAccount: PropTypes.func.isRequired,
-    findAccountById: PropTypes.func.isRequired,
     deleteAccountByIds: PropTypes.func.isRequired,
-    openFormEdit: PropTypes.func.isRequired,
     openPopupDelete: PropTypes.func.isRequired
 };
 
 EnhancedTableAccount.defaultProps = {
     accounts: [],
-    detail: {},
     status: { progress: false, status: '', data: {} }
 }
 
 const mapStateToProps = state => ({
     accounts: state.account.list,
-    detail: state.account.detail,
     status: state.account.status
 });
 
 const mapDispatchToProps = {
     getAllUserAccount: accountOperations.doGetAllAccounts,
-    findAccountById: accountOperations.doGetAccountById,
     deleteAccountByIds: accountOperations.doDeleteAccountByIds,
-    openFormEdit: toggleOperations.doOpenFormEditAccount,
     openPopupDelete: popupOperations.doOpenPopupDelete
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableAccount));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableAccount)));

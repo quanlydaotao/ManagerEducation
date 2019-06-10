@@ -426,7 +426,7 @@ PopupFormEditYear.defaultProps = {
 
 const mapStateToProps = state => ({
     statusForm: state.toggle.toggleFormEdit,
-    status: state.years.status
+    status: state.class.status
 });
 
 const mapDispatchToProps = {

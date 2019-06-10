@@ -10360,15 +10360,20 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm input[type=email],
 .contentForm input[type=date],
 .contentForm input[type=number],
-.sex, textarea,
+.sex, .contentForm textarea,
 .contentForm select {
     width: 100%;
     display: inline-block;
     padding: 8px 12px;
+    height: 38px;
     margin: 5px 0 18px 0;
     background: #ffffff;
     border: 1px solid #cecece;
-    border-radius: 4px;
+    border-radius: 2px;
+}
+
+.contentForm textarea {
+    height: 100% !important;
 }
 
 .contentForm input[type=text],
@@ -10376,7 +10381,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm input[type=email],
 .contentForm input[type=date],
 .contentForm input[type=number],
-.sex, textarea
+.sex, .contentForm textarea,
 .contentForm select:focus {
     outline: none;
 }
@@ -10394,7 +10399,9 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .contentForm input[type=password]:focus,
 .contentForm input[type=email]:focus,
 .contentForm input[type=date]:focus,
-.contentForm input[type=number]:focus {
+.contentForm input[type=number]:focus,
+.contentForm textarea:focus, 
+.contentForm select:focus {
     background-color: #fafafa;
     outline: 1px solid orange;
 }
@@ -10531,4 +10538,28 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .item-list:hover {
     background-color: #f3f3f3;
     cursor: pointer;
+}
+
+.label-title {
+    position: relative;
+    color: white;
+    display: inline-block;
+    padding: 8px 22px;
+    font-size: 20px;
+    background-color: #445e6c;
+    margin-bottom: 15px;
+}
+
+.label-title:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 102%;
+    background-color: orange;
+    height: 100%;
+    width: 15px;
+};
+
+.attention {
+    color: #9c9a9a;
 }

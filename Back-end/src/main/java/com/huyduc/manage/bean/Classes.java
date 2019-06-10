@@ -67,7 +67,7 @@ public class Classes implements Serializable {
     }
 
     @Basic
-    @Column(name = "describe")
+    @Column(name = "`describe`")
     public String getDescribe() {
         return describe;
     }

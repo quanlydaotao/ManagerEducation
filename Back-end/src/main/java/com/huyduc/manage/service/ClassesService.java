@@ -1,7 +1,9 @@
 package com.huyduc.manage.service;
+
 import com.huyduc.manage.service.dto.ClassesDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,9 +16,10 @@ public interface ClassesService {
      * Save a class.
      *
      * @param classesDTO the entity to save
+     * @param courseId the id course
      * @return the persisted entity
      */
-    ClassesDTO save(ClassesDTO classesDTO);
+    ClassesDTO save(ClassesDTO classesDTO, Long courseId);
 
     /**
      * Get all classes.
@@ -30,10 +33,10 @@ public interface ClassesService {
     /**
      * Get all classes by course id.
      *
-     * @param pageable the pagination information
+     * @param id the id course of class
      * @return the list of entities
      */
-    Page<ClassesDTO> findAllClassesByCourseId(Pageable pageable, Long id);
+    List<ClassesDTO> findAllClassesByCourseId(Long id);
 
 
     /**

@@ -1,9 +1,7 @@
 import { 
-    doSetDataCourseSelection,
-    doSetDataYearSelection
+    doSetDataSelection,
 } from "./actions";
 
 export {
-    doSetDataCourseSelection, 
-    doSetDataYearSelection
+    doSetDataSelection, 
 };

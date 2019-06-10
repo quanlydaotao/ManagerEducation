@@ -21,6 +21,7 @@ public final class ErrorConstants {
     public static final URI FILE_UPLOAD_FAILURE = URI.create(PROBLEM_BASE_URL + "/file-upload-failure");
     public static final URI FILE_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/file-not-found");
     public static final URI YEAR_ALREADY_EXISTS_TYPE = URI.create(PROBLEM_BASE_URL + "/year-already-exists");
+    public static final URI CLASS_ALREADY_EXISTS_TYPE = URI.create(PROBLEM_BASE_URL + "/class-already-exists");
 
     private ErrorConstants() {
     }

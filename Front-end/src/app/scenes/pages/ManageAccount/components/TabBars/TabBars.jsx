@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 const style = theme => ({
     root: {
@@ -15,7 +16,6 @@ const style = theme => ({
 });
 
 class TabBars extends React.Component {
- 
     render() {
         const { classes } = this.props;
         return (
@@ -24,7 +24,7 @@ class TabBars extends React.Component {
                     <NavLink to="/admin/account/list/all" activeClassName="activeLink">
                         <ContactsIcon className={classes.leftIcon}/> DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP
                     </NavLink>
-                    <NavLink to="/admin/account/add/new" activeClassName="activeLink">
+                    <NavLink to="/admin/account/new" activeClassName="activeLink">
                         <HowToRegIcon className={classes.leftIcon}/> THÊM MỚI TÀI KHOẢN
                     </NavLink>
                 </div>
@@ -37,4 +37,4 @@ TabBars.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(style)(TabBars);
+export default withRouter(withStyles(style)(TabBars));

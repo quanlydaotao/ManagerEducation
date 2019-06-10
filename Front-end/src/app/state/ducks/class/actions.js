@@ -5,7 +5,7 @@ export const doGetClassesByCourseId = (id) => ( {
     meta: {
         async: true,
         blocking: true,
-        path: `/class/course/${id}`,
+        path: `/class?course=${id}`,
         method: "GET"
     }
 } );
@@ -20,16 +20,16 @@ export const doGetClassById = ( id ) => ( {
     }
 } );
 
-// export const addNewYear = ( dataForm ) => ( {
-//     type: types.ADD_NEW_YEARS,
-//     meta: {
-//         async: true,
-//         blocking: true,
-//         path: "/years",
-//         method: "POST",
-//         body: JSON.stringify(dataForm)
-//     }
-// });
+export const doCreateNewClass = ( dataForm ) => ( {
+    type: types.ADD_NEW_CLASS,
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/class",
+        method: "POST",
+        body: JSON.stringify(dataForm)
+    }
+});
 
 // export const updateYear = ( dataForm ) => ( {
 //     type: types.UPDATE_YEARS,

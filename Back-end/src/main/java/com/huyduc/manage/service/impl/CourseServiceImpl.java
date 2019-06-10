@@ -1,19 +1,20 @@
 package com.huyduc.manage.service.impl;
 
+import com.huyduc.manage.repository.ClassesRepository;
 import com.huyduc.manage.repository.CourseRepository;
 import com.huyduc.manage.service.CourseService;
 import com.huyduc.manage.service.dto.CourseDTO;
 import com.huyduc.manage.service.mapper.CourseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Course.
@@ -24,9 +25,11 @@ public class CourseServiceImpl implements CourseService {
 
     private final Logger log = LoggerFactory.getLogger(YearsServiceImpl.class);
     private final CourseRepository courseRepository;
+    private final ClassesRepository classesRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, ClassesRepository classesRepository) {
         this.courseRepository = courseRepository;
+        this.classesRepository = classesRepository;
     }
 
     @Override
@@ -37,15 +40,30 @@ public class CourseServiceImpl implements CourseService {
     /**
      * Get all course by id years.
      *
-     * @param pageable the pagination information
+     * @param id     the id year of course
+     * @param filter the filter data by max class
      * @return the list of entities
      */
     @Override
-    public Page<CourseDTO> findAllByYearId(Pageable pageable, Long id) {
+    public List<CourseDTO> findAllByYearIdAndFilter(Long id, boolean filter) {
         log.debug("Request to get all Courses");
-        Page<CourseDTO> page = courseRepository.findAllByYearId(pageable, id)
-                .map(CourseMapper.INSTANCE::toDto);
-        return page;
+        List<CourseDTO> data = courseRepository.findAllByYearIdOrderByIdDesc(id)
+                .stream()
+                .map(CourseMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+        if (filter) {
+            List<CourseDTO> dataFilter = new ArrayList<>();
+            data.forEach(item -> {
+                if (item.isStatus()) {
+                    Integer count = classesRepository.countByCourseId(item.getId());
+                    if (count < item.getMaxClasses()) {
+                        dataFilter.add(item);
+                    }
+                }
+            });
+            return dataFilter;
+        }
+        return data;
     }
 
     @Override

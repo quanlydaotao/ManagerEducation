@@ -1,6 +1,7 @@
 import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { SearchYearAndCourse } from '../../../../../../components/Search/SearchYearAndCourse';
 import { ListSelection } from '../../../../../../components/ListSelection';
 import { connect } from 'react-redux';
@@ -21,31 +22,43 @@ class TableList extends Component {
             nameYear: '',
             idCourse: 0,
             nameCourse: '',
-            course: [],
-            class: []
         }
     }
     componentDidMount() {
         this.props.getAllYears();
-    }  
+    }
+    
+    componentDidUpdate(prevProps, prevState) {
+        const { idYear, idCourse } = this.state;
+        if (this.state.idYear !== prevState.idYear) {
+            this.props.getAllCourseByYearId(idYear);
+        }
+        if (this.state.idCourse !== prevState.idCourse) {
+            this.props.getAllClassesByCourseId(idCourse);
+        }
+    }
+
     componentWillUnmount() {
-        this.props.getAllCourseByYearId(0);
+        this.props.getAllCourseByYearId(0);  
         this.props.getAllClassesByCourseId(0);
     }
+
     selectIdYear = (param) => {
         this.setState({
             idYear: param.id,
-            nameYear: param.name
+            nameYear: param.name,
+            idCourse: 0,
+            nameCourse: ''
         });
-        this.props.getAllCourseByYearId(param.id);
     }  
+
     selectIdCourse = (param) => {
         this.setState({
             idCourse: param.id,
             nameCourse: param.name
         });
-        this.props.getAllClassesByCourseId(param.id);
-    }  
+    } 
+
     render() {
         const { years, courses, classes } = this.props;
         const { idYear, idCourse } = this.state;
@@ -113,8 +126,7 @@ const mapDispatchToProps = {
     getAllYears: yearsOperations.doGetAllYears,
     getAllCourseByYearId: courseOperations.doGetAllCourseByYearId,
     getAllClassesByCourseId: classOperations.doGetClassesByCourseId,
-
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableList);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TableList));

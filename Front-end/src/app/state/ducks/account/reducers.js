@@ -7,7 +7,7 @@ const applyListReducer = createReducer( [] )( {
 });
 
 const applyDetailReducer  = createReducer( {} )( {
-    [ types.GET_USER_ACCOUNT_BY_ID_COMPLETED ]: ( state, action ) => state = action.payload,
+    [ types.GET_USER_ACCOUNT_BY_ID_COMPLETED ]: ( state, action ) => action.payload,
 });
 
 const initialState = {progress: false, status: '',  data: {}}
@@ -49,6 +49,7 @@ const applyStatusActReducer = createReducer( initialState )( {
         return state;
     }
 });
+
 
 export default combineReducers( {
     list: applyListReducer,

@@ -2,11 +2,13 @@ import React, { Suspense } from 'react';
 import styles from './styles.css';
 import { TabBars } from './components/TabBars';
 import { Route, Switch } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 const Statistical = React.lazy(() => import('./components/Statistical/Statistical'));
 const FormSign = React.lazy(() => import('./components/FormSign/FormSign'));
 const EnhancedTableAccount = React.lazy(() => import('./components/EnhancedTableAccount/EnhancedTableAccount'));
+const EditAccount  = React.lazy(() => import('./components/EditAccount/EditAccount'));
 
 function TabContainer(props) {
 	return (
@@ -20,35 +22,29 @@ TabContainer.propTypes = {
 	children: PropTypes.node.isRequired,
 };
 
-const ManageAccount = () => {
+const ManageAccount = ({ match }) => {
 	return (
 		<div className={`${styles.mainManageAccount}`}>
 			<TabBars />
 			<Switch>
-				<Route exact path="/admin/account" render={() => (
-					<TabContainer>
-						<Suspense fallback={''}>
-							<Statistical />
-						</Suspense>
-					</TabContainer>
-				)} />
-				<Route exact path="/admin/account/list/all" render={() => (
+				<Route exact path={`${match.url}/list/all`} render={() => (
 					<TabContainer>
 						<Suspense fallback={''}>
 							<EnhancedTableAccount listName="DANH SÁCH QUẢN LÝ ĐĂNG NHẬP HỆ THỐNG" />
 						</Suspense>
 					</TabContainer>
 				)} />
-				<Route exact path="/admin/account/add/new" render={() => (
+				<Route exact path={`${match.url}/new`} render={() => (
 					<TabContainer>
 						<Suspense fallback={<div>Loading...</div>}>
 							<FormSign />
 						</Suspense>
 					</TabContainer>
 				)} />
+				<Route exact path={`${match.url}/:id`} component={EditAccount} />
 			</Switch>
 		</div>
 	);
 }
 
-export default ManageAccount;
+export default withRouter(ManageAccount);

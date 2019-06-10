@@ -16,28 +16,26 @@ const style = theme => ({
     },
 });
 
-class TabBars extends React.Component {
-    render() {
-        const { classes } = this.props;
-        return (
-            <div className={classes.root}>
-                <div className="appBar">
-                    <NavLink to="/admin/edu/years" activeClassName="activeLink">
-                        <StyleIcon className={classes.leftIcon} />  NĂM HỌC ĐÀO TẠO
-                    </NavLink>
-                    <NavLink to="/admin/edu/courses" activeClassName="activeLink">
-                        <DevicesOtherIcon className={classes.leftIcon} /> KHÓA ĐÀO TẠO
-                    </NavLink>
-                    <NavLink to="/admin/edu/classes" activeClassName="activeLink">
-                        <CastForEducationIcon className={classes.leftIcon} /> HỆ THỐNG LỚP HỌC
-                    </NavLink>
-                    <NavLink to="/admin/edu/timetables" activeClassName="activeLink">
-                        <SchoolIcon className={classes.leftIcon} /> QUẢN LÝ ĐÀO TẠO/ THỐNG KÊ DỮ LIỆU
-                    </NavLink>
-                </div>
+const TabBars = (props) => {
+    const { classes } = props;
+    return (
+        <div className={classes.root}>
+            <div className="appBar">
+                <NavLink to="/admin/edu/years" activeClassName="activeLink">
+                    <StyleIcon className={classes.leftIcon} />  NĂM HỌC ĐÀO TẠO
+                </NavLink>
+                <NavLink to="/admin/edu/courses" activeClassName="activeLink">
+                    <DevicesOtherIcon className={classes.leftIcon} /> KHÓA ĐÀO TẠO
+                </NavLink>
+                <NavLink to="/admin/edu/classes" activeClassName="activeLink">
+                    <CastForEducationIcon className={classes.leftIcon} /> HỆ THỐNG LỚP HỌC
+                </NavLink>
+                <NavLink to="/admin/edu/timetables" activeClassName="activeLink">
+                    <SchoolIcon className={classes.leftIcon} /> QUẢN LÝ ĐÀO TẠO/ THỐNG KÊ DỮ LIỆU
+                </NavLink>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 TabBars.propTypes = {

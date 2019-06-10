@@ -13,6 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { classShape } from '../../../../../../../../propTypes';
 import { classOperations } from '../../../../../../../../../state/ducks/class';
@@ -23,7 +24,7 @@ import { EnhancedTableToolBar } from '../../../../../../../../components/Table/E
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import styles from './styles.css';
-import { PopupFormEditYear } from '../../../../../../../../components/Popup/PopupFormEditYear';
+import { PopupFormEditClass } from '../../../../../../../../components/Popup/PopupFormEditClass';
 import { PopupDelete } from '../../../../../../../../components/Popup/PopupDelete';
 import { history } from '../../../../../../../../../state/utils';
 const NotFoundSearch = React.lazy(() => import('../../../../../../../../components/NotFoundSearch/NotFoundSearch'));
@@ -169,6 +170,7 @@ class EnhancedTableClass extends React.Component {
     render() {
         const { classes, listName, data, classById, status } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
+        console.log(classById);
         // if (actionsYears && actionsYears.status === 'DELETE_SUCCESS' && actionsYears.data === selected.length) {
         //     alert("Xóa thành công " + actionsYears.data + " trường dữ liệu năm học!");
         //     history.push('/administrator/education/years');
@@ -179,7 +181,7 @@ class EnhancedTableClass extends React.Component {
             <React.Fragment>
                 { data.length > 0 ? (
                     <Paper className={classes.root}>
-                        {classById.id ? <PopupFormEditYear data={classById} /> : ''} 
+                        {classById.id ? <PopupFormEditClass data={classById} /> : ''} 
                         {/*<PopupDelete delete={this.deleteData} /> */}
                         <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
                         <div className={classes.tableWrapper}>
@@ -306,7 +308,7 @@ EnhancedTableClass.defaultProps = {
 }
 
 const mapStateToProps = state => ({
-    classById: state.class.getClass,
+    classById: state.class.detail,
 });
 
 const mapDispatchToProps = {
@@ -314,4 +316,4 @@ const mapDispatchToProps = {
     openForm: toggleOperations.doOpenFormEditClass,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableClass));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableClass)));

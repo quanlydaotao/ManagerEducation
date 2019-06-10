@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import { withRouter } from 'react-router';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DraftsIcon from '@material-ui/icons/Drafts';
@@ -89,4 +90,4 @@ LeftContent.propTypes = {
 };
 
 
-export default withStyles(style)(LeftContent);
+export default withRouter(withStyles(style)(LeftContent));

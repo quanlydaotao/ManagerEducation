@@ -106,4 +106,4 @@ const mapDispatchToProps = {
     login: sessionOperations.login
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormPanel);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FormPanel));

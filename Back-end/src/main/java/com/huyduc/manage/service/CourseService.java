@@ -1,8 +1,6 @@
 package com.huyduc.manage.service;
 
 import com.huyduc.manage.service.dto.CourseDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,10 +22,11 @@ public interface CourseService {
     /**
      * Get all course by id years.
      *
-     * @param pageable the pagination information
+     * @param id     the id year of course
+     * @param filter the filter data by max class
      * @return the list of entities
      */
-    Page<CourseDTO> findAllByYearId(Pageable pageable, Long id);
+    List<CourseDTO> findAllByYearIdAndFilter(Long id, boolean filter);
 
 
     /**

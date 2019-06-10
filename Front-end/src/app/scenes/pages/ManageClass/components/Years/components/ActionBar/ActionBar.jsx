@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -39,14 +40,14 @@ class ActionBar extends React.Component {
                 }}>DANH SÁCH CÁC TÁC VỤ</div>}
                 className={classes.root}
             >
-                <ListItem button component={NavLink} to="/admin/edu/years/add/new" activeClassName="activeLink">
+                <ListItem button component={NavLink} to="/admin/edu/years/new" activeClassName="activeLink">
                     <ListItemIcon>
                         <QueuePlayNextIcon />
                     </ListItemIcon>
                     <ListItemText inset primary="THÊM NĂM HỌC MỚI" classes={{ primary: classes.conf }} />
                     <AddIcon className="iconConfig"/>
                 </ListItem>
-                <ListItem button component={NavLink} to="/admin/edu/years/add/notifications" activeClassName="activeLink">
+                <ListItem button component={NavLink} to="/admin/edu/years/notifications" activeClassName="activeLink">
                     <ListItemIcon>
                         <QuestionAnswerIcon />
                     </ListItemIcon>
@@ -69,4 +70,4 @@ ActionBar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(style)(ActionBar);
+export default withRouter(withStyles(style)(ActionBar));

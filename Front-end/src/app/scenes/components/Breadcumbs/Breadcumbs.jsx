@@ -14,7 +14,6 @@ const style = theme => ({
     root: {
         padding: '8px 18px',
         borderRadius: '0',
-        boxShadow: 'none'
     },
     chip: {
         backgroundColor: theme.palette.grey[100],

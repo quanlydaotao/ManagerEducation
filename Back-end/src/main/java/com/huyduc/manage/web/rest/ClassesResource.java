@@ -3,17 +3,15 @@ package com.huyduc.manage.web.rest;
 import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.service.ClassesService;
 import com.huyduc.manage.service.dto.ClassesDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import com.huyduc.manage.web.rest.vm.ManagedClassesVM;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import com.huyduc.manage.web.rest.errors.ClassesAlreadyExistException;
 
+import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,16 +28,15 @@ public class ClassesResource {
     }
 
     /**
-     * GET /class/course/:id : get all classes by course id
+     * GET /class?course=:id : get the "id" course
      *
      * @return the ResponseEntity with status 200 (OK) and with body all classes by year id
      */
-    @GetMapping("/class/course/{id}")
+    @GetMapping("/class")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<ClassesDTO>> getAllClassesByCourseId(@PathVariable("id") Long id) {
-        final Page<ClassesDTO> page = classesService.findAllClassesByCourseId(PageRequest
-                .of(0, 10000000, Sort.by("id").descending()), id);
-        return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
+    public ResponseEntity<List<ClassesDTO>> getAllClassesByCourseId(@RequestParam(name = "course", required = true, defaultValue = "0") Long id) {
+        final List<ClassesDTO> list = classesService.findAllClassesByCourseId(id);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /**
@@ -52,6 +49,26 @@ public class ClassesResource {
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<ClassesDTO> getClass(@PathVariable Long id) {
         Optional<ClassesDTO> classesDTO = classesService.findOne(id);
-        return ResponseEntity.ok().body(classesDTO .get());
+        return ResponseEntity.ok().body(classesDTO.get());
+    }
+
+    /**
+     * POST  /class: Create a new years.
+     *
+     * @param classesVM the classesVM to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new classesDTO, or with status 400 (Bad Request) if the class has already or not created.
+     * @throws URISyntaxException           if the Location URI syntax is incorrect
+     * @throws ClassesAlreadyExistException 400 (Bad Request) if the class is already in exists
+     */
+    @PostMapping("/class")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<ClassesDTO> createYears(@RequestBody ManagedClassesVM classesVM) throws URISyntaxException {
+        try {
+            ClassesDTO result = classesService.save(classesVM, classesVM.getCourseId());
+            return new ResponseEntity(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity(Collections.singletonMap("createClassFailed",
+                    e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 }

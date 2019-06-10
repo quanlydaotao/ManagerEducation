@@ -14,13 +14,13 @@ import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { connect } from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
+import { withRouter } from 'react-router';
 import { yearsShape } from '../../../../../../propTypes';
 import { yearsOperations } from '../../../../../../../state/ducks/years';
 import { popupOperations } from '../../../../../../../state/ducks/popup';
 import { toggleOperations } from '../../../../../../../state/ducks/toggle';
 import { EnhancedTableHead } from '../../../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../../../components/Table/EnhancedTableToolBar';
-import { PopupFormEditYear } from '../../../../../../components/Popup/PopupFormEditYear';
 import { PopupDelete } from '../../../../../../components/Popup/PopupDelete';
 import { history } from '../../../../../../../state/utils';
 import { ButtonEdit } from '../../../../../../components/Buttons/ButtonEdit';
@@ -181,7 +181,6 @@ class EnhancedTableYear extends React.Component {
             <React.Fragment>
                 { years.length > 0 ? (
                     <Paper className={classes.root}>
-                        {detail.id ? <PopupFormEditYear data={detail} /> : ''} 
                         <PopupDelete delete={this.deleteData} />
                         <EnhancedTableToolBar 
                             numSelected={selected.length} 
@@ -268,11 +267,7 @@ class EnhancedTableYear extends React.Component {
                                                             />) || <Skeleton />}
                                                         </TableCell>
                                                         <TableCell className="cell">
-                                                            <ButtonEdit 
-                                                                title="Chỉnh sửa thông tin năm học" 
-                                                                id={n.id} 
-                                                                handleOpenForm={this.handleOpenForm} 
-                                                            />
+                                                            <ButtonEdit title="Chỉnh sửa thông tin năm học" to={`/admin/edu/years/${n.id}`} />
                                                         </TableCell>
                                                     </TableRow>
                                                 </LazyLoad>
@@ -350,4 +345,4 @@ const mapDispatchToProps = {
     deleteYearByIds: yearsOperations.doDeleteYearByIds
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableYear));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableYear)));
