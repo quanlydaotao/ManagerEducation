@@ -4,6 +4,7 @@ import com.huyduc.manage.bean.Years;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,4 +13,5 @@ import java.util.Optional;
 @Repository
 public interface YearsRepository extends JpaRepository<Years, Long> {
     Optional<Years> findOneByStartYears(String years);
+    List<Years> findAllByStatusIsTrueOrderByStartYearsDesc();
 }

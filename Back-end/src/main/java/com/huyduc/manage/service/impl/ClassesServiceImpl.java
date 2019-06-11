@@ -118,8 +118,22 @@ public class ClassesServiceImpl implements ClassesService {
                 .map(ClassesMapper.INSTANCE::toDto);
     }
 
+    /**
+     * Delete the class by id.
+     *
+     * @param ids the list id of the entity
+     * @return the count is total all id deleted
+     */
     @Override
     public AtomicInteger delete(List<Long> ids) {
-        return null;
+        AtomicInteger count = new AtomicInteger();
+        ids.forEach(id -> {
+            classesRepository.findById(id).ifPresent(cls -> {
+                classesRepository.delete(cls);
+                count.getAndIncrement();
+                log.debug("Deleted Class: {}", cls);
+            });
+        });
+        return count;
     }
 }

@@ -211,11 +211,16 @@ th {
 
 label {
     display: inline-block;
-    margin-bottom: .5rem
+    margin-bottom: .5rem;
+    font-size: 12px !important;
 }
 
 button {
-    border-radius: 0
+    border-radius: 2px;
+}
+
+button span {
+    font-size: 11px !important;
 }
 
 /* button:focus {
@@ -10317,7 +10322,8 @@ a.text-dark:hover {
         border-color: #dee2e6
     }
 }
-tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
+tr > td.cell {font-size: 11px !important; padding: 0 20px !important;}
+tr > td.cell span { font-size: 11px !important; }
 
 /* HEADER */
 @media screen and (min-width: 1200px) {
@@ -10481,7 +10487,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
 .message ul li {
     line-height: 25px;
     color: #8e8e8e;
-    font-size: 13px;
+    font-size: 12px;
 }
 /* END-ENHANCEDTABLE */
 
@@ -10522,7 +10528,8 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     height: 100%;
     display: inline-block;
     color: #455e6b;
-    font-size: 13px;
+    font-weight: 500;
+    font-size: 11px;
     padding: 10px 25px 7px;
 }
 
@@ -10544,6 +10551,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     position: relative;
     color: white;
     display: inline-block;
+    border-radius: 2px;
     padding: 8px 22px;
     font-size: 20px;
     background-color: #445e6c;
@@ -10554,6 +10562,7 @@ tr > td.cell {font-size: 12px !important; padding: 0 20px !important;}
     content: '';
     position: absolute;
     top: 0;
+    border-radius: 2px;
     left: 102%;
     background-color: orange;
     height: 100%;

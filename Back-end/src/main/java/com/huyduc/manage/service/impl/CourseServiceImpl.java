@@ -56,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
             data.forEach(item -> {
                 if (item.isStatus()) {
                     Integer count = classesRepository.countByCourseId(item.getId());
-                    if (count < item.getMaxClasses()) {
+                    if (count < item.getMaxClasses() && item.isStatus()) {
                         dataFilter.add(item);
                     }
                 }

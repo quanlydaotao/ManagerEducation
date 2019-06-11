@@ -11,12 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 
 /**
@@ -77,15 +80,26 @@ public class YearsServiceImpl implements YearsService {
     /**
      * Get all the years.
      *
-     * @param pageable the pagination information
+     * @param status the status year
      * @return the list of entities
      */
     @Override
-    public Page<YearsDTO> findAll(Pageable pageable) {
+    public List<YearsDTO> findAll(boolean status) {
         log.debug("Request to get all Years");
-        Page<YearsDTO> page = yearsRepository.findAll(pageable)
-                .map(YearsMapper.INSTANCE::toDto);
-        return page;
+        List<YearsDTO> list = new ArrayList<>();
+        if (!status) {
+            list = yearsRepository.findAll(Sort.by("startYears").descending())
+                .stream()
+                .map(years -> YearsMapper.INSTANCE.toDto(years))
+                .collect(Collectors.toList());
+            return list;
+        }
+        list = yearsRepository.findAllByStatusIsTrueOrderByStartYearsDesc()
+            .stream()
+            .map(years -> YearsMapper.INSTANCE.toDto(years))
+            .collect(Collectors.toList());
+        return list;
+
     }
 
 

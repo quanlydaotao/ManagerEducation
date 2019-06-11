@@ -22,12 +22,13 @@ import { popupOperations } from '../../../../../state/ducks/popup';
 import { toggleOperations } from '../../../../../state/ducks/toggle';
 import { EnhancedTableHead } from '../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../components/Table/EnhancedTableToolBar';
-import { PopupDelete } from '../../../../components/Popup/PopupDelete';
 import { history } from '../../../../../state/utils';
 import { ImageAvatars } from '../../../../components/ImageAvatars';
 import { ButtonEdit } from '../../../../components/Buttons/ButtonEdit';
 import { withRouter } from 'react-router';
 const NotFoundSearch = React.lazy(() => import('../../../../components/NotFoundSearch/NotFoundSearch'));
+const PopupDelete = React.lazy(() => import('../../../../components/Popup/PopupDelete/PopupDelete'));
+
 const rows = [
     { id: 'imageUrl', numeric: false, disablePadding: false, label: 'Avatar' },
     { id: 'firstName', numeric: false, disablePadding: false, label: 'Họ' },
@@ -69,8 +70,9 @@ const style = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing.unit * 3,
-        boxShadow: '0 2px 4px 0 rgba(0,0,0,.05)',
-        padding: '0 24px'
+        border: '1px solid #ececec',
+        boxShadow: 'none',
+        padding: '0 39px'
     },
     table: {
         minWidth: 1020,
@@ -166,7 +168,7 @@ class EnhancedTableAccount extends React.Component {
             && status.status === 'DELETE_SUCCESS'
             && status.data === selected.length) {
             alert("Xóa thành công " + status.data + " trường dữ liệu tài khoản!");
-            history.push('/admin/account/list/all'
+            history.push('/admin/account/users'
             );
         } else if (
             status
@@ -180,7 +182,9 @@ class EnhancedTableAccount extends React.Component {
                 <DocumentTitle title=".:Danh sách tài khoản:.">
                     {accounts.length > 0 ? (
                         <Paper className={classes.root}>
-                            <PopupDelete delete={this.deleteData} />
+                            <Suspense fallback="" >
+                                <PopupDelete delete={this.deleteData} />    
+                            </Suspense>
                             <EnhancedTableToolBar
                                 numSelected={selected.length}
                                 listName={listName}

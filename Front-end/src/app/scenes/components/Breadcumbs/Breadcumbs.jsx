@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const style = theme => ({
     root: {
-        padding: '8px 18px',
+        padding: '8px 18px 5px',
         borderRadius: '0',
     },
     chip: {
@@ -36,7 +36,6 @@ const style = theme => ({
 
 function handleClick(event) {
     event.preventDefault();
-    alert('You clicked a breadcrumb.'); // eslint-disable-line no-alert
 }
 
 function CustomBreadcrumb(props) {

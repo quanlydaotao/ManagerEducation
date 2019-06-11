@@ -21,8 +21,8 @@ const style = theme => ({
         paddingLeft: theme.spacing.unit * 4,
     },
     conf: {
-        fontSize: 13,
-        fontWeight: '500',
+        fontSize: 11,
+        fontWeight: '400',
         color: '#455e6b'
     }
 });
@@ -35,8 +35,14 @@ class ActionBar extends React.Component {
             <List
                 component="nav"
                 subheader={<div style={{
-                    padding: '0px 10px 15px', fontWeight: 'bold',
-                    color: '#455e6b'
+                    fontWeight: 'bold',
+                    color: '#455e6b',
+                    fontSize: 13,
+                    padding: 13,
+                    marginBottom: 5,
+                    borderRadius: '2px',
+                    backgroundColor: '#f7f7f7',
+                    color: 'rgb(69, 94, 107)'
                 }}>DANH SÁCH CÁC TÁC VỤ</div>}
                 className={classes.root}
             >

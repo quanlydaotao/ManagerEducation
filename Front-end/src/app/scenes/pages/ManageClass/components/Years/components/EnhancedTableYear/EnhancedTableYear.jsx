@@ -22,10 +22,10 @@ import { popupOperations } from '../../../../../../../state/ducks/popup';
 import { toggleOperations } from '../../../../../../../state/ducks/toggle';
 import { EnhancedTableHead } from '../../../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../../../components/Table/EnhancedTableToolBar';
-import { PopupDelete } from '../../../../../../components/Popup/PopupDelete';
 import { history } from '../../../../../../../state/utils';
 import { ButtonEdit } from '../../../../../../components/Buttons/ButtonEdit';
 const NotFoundSearch = React.lazy(() => import('../../../../../../components/NotFoundSearch/NotFoundSearch'));
+const PopupDelete = React.lazy(() => import('../../../../../../components/Popup/PopupDelete/PopupDelete'));
 
 const rows = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
@@ -66,7 +66,9 @@ const style = theme => ({
     root: {
         width: '100%',
         boxShadow: '0 2px 4px 0 rgba(0,0,0,.05)',
-        padding: '0 24px',
+        padding: '0 39px',
+        border: '1px solid #ececec',
+        boxShadow: 'none',
         borderRadius: '2px'
     },
     table: {
@@ -94,7 +96,7 @@ class EnhancedTableYear extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getAllYears();
+        this.props.getAllYears(false);
     }
 
     handleRequestSort = (event, property) => {
@@ -183,7 +185,9 @@ class EnhancedTableYear extends React.Component {
                 <DocumentTitle title=".:Danh sách năm học:.">
                     {years.length > 0 ? (
                         <Paper className={classes.root}>
-                            <PopupDelete delete={this.deleteData} />
+                            <Suspense fallback="">
+                                <PopupDelete delete={this.deleteData} />
+                            </Suspense>
                             <EnhancedTableToolBar
                                 numSelected={selected.length}
                                 listName={listName}
@@ -320,9 +324,7 @@ EnhancedTableYear.propTypes = {
     }).isRequired,
     detail: PropTypes.object.isRequired,
     listName: PropTypes.string.isRequired,
-
     getAllYears: PropTypes.func.isRequired,
-    openFormEdit: PropTypes.func.isRequired,
     openPopupDelete: PropTypes.func.isRequired,
     deleteYearByIds: PropTypes.func.isRequired,
     findYearById: PropTypes.func.isRequired,
@@ -342,7 +344,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     getAllYears: yearsOperations.doGetAllYears,
-    openFormEdit: toggleOperations.doOpenFormEditYear,
     openPopupDelete: popupOperations.doOpenPopupDelete,
     findYearById: yearsOperations.doGetYearById,
     deleteYearByIds: yearsOperations.doDeleteYearByIds

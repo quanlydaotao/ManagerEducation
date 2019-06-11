@@ -3,8 +3,13 @@
     background-color: #fafafa;
 }
 
+
+.mainWrapper {
+    background-color: #fdfdfd;
+}
+
 .mainWrapper input {
-    font-size: 13px;
+    font-size: 12px;
     padding-top: 6px;
     padding-bottom: 7px;
 }

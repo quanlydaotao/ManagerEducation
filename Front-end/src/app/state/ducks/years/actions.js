@@ -1,11 +1,11 @@
 import * as types from "./types";
 
-export const doGetAllYears = () => ( {
+export const doGetAllYears = ( status ) => ( {
     type: types.GET_ALL_YEARS,
     meta: {
         async: true,
         blocking: true,
-        path: "/years",
+        path: `/years?status=${status ? true : false}`,
         method: "GET"
     }
 } );

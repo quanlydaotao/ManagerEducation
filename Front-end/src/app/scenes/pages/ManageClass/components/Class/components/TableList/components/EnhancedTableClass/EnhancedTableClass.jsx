@@ -18,16 +18,15 @@ import { connect } from 'react-redux';
 import { classShape } from '../../../../../../../../propTypes';
 import { classOperations } from '../../../../../../../../../state/ducks/class';
 import { popupOperations } from '../../../../../../../../../state/ducks/popup';
-import { toggleOperations } from '../../../../../../../../../state/ducks/toggle';
 import { EnhancedTableHead } from '../../../../../../../../components/Table/EnhancedTableHead';
 import { EnhancedTableToolBar } from '../../../../../../../../components/Table/EnhancedTableToolBar';
 import DocumentTitle from 'react-document-title';
 import Skeleton from 'react-loading-skeleton';
 import LazyLoad from 'react-lazyload';
 import styles from './styles.css';
-import { PopupDelete } from '../../../../../../../../components/Popup/PopupDelete';
 import { history } from '../../../../../../../../../state/utils';
 import { ButtonEdit } from '../../../../../../../../components/Buttons/ButtonEdit';
+const PopupDelete = React.lazy(() => import('../../../../../../../../components/Popup/PopupDelete/PopupDelete'));
 const NotFoundSearch = React.lazy(() => import('../../../../../../../../components/NotFoundSearch/NotFoundSearch'));
 
 const rows = [
@@ -69,6 +68,7 @@ const style = theme => ({
     root: {
         width: '100%',
         borderRadius: '2px',
+        border: '1px solid #ececec',
         boxShadow: 'none',
         margin: 0
     },
@@ -158,32 +158,33 @@ class EnhancedTableClass extends React.Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
-    // handleDelete = (param) => {
-    //     this.props.openPopupDelete();
-    // }
+    handleDelete = (param) => {
+        this.props.openPopupDelete();
+    }
 
-    // deleteData = (param) => {
-    //     this.props.deleteYears(this.state.selected);
-    // }
+    deleteData = (param) => {
+        this.props.deleteClass(this.state.selected);
+    }
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
         const { classes, listName, data, classById, status } = this.props;
         const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        console.log(classById);
-        // if (actionsYears && actionsYears.status === 'DELETE_SUCCESS' && actionsYears.data === selected.length) {
-        //     alert("Xóa thành công " + actionsYears.data + " trường dữ liệu năm học!");
-        //     history.push('/administrator/education/years');
-        // } else if (actionsYears && actionsYears.status === 'DELETE_FAILED' && actionsYears.data !== selected.length) {
-        //     alert("Xóa dữ liệu năm học thất bại!");
-        // }
+        if (status && status.status === 'DELETE_SUCCESS' && status.data === selected.length) {
+            alert("Xóa thành công " + status.data + " trường dữ liệu năm học!");
+            history.push('/admin/edu/classes');
+        } else if (status && status.status === 'DELETE_FAILED' && status.data !== selected.length) {
+            alert("Xóa dữ liệu lớp học thất bại!");
+        }
         return (
             <React.Fragment>
                 <DocumentTitle title=".:Hệ thống lớp học:.">
                     {data.length > 0 ? (
                         <Paper className={classes.root}>
-                            {/*<PopupDelete delete={this.deleteData} /> */}
+                            <Suspense fallback="">
+                                <PopupDelete delete={this.deleteData} />
+                            </Suspense>
                             <EnhancedTableToolBar numSelected={selected.length} listName={listName} actionDelete={this.handleDelete} />
                             <div className={classes.tableWrapper}>
                                 <Table className={classes.table} aria-labelledby="tableTitle">
@@ -298,7 +299,7 @@ EnhancedTableClass.propTypes = {
     classById: PropTypes.object.isRequired,
     listName: PropTypes.string.isRequired,
     findClassById: PropTypes.func.isRequired,
-    openForm: PropTypes.func.isRequired
+    deleteClass: PropTypes.func.isRequired
 };
 
 EnhancedTableClass.defaultProps = {
@@ -308,11 +309,13 @@ EnhancedTableClass.defaultProps = {
 
 const mapStateToProps = state => ({
     classById: state.class.detail,
+    status: state.class.status
 });
 
 const mapDispatchToProps = {
     findClassById: classOperations.doGetClassById,
-    openForm: toggleOperations.doOpenFormEditClass,
+    deleteClass: classOperations.doDeleteClassByIds,
+    openPopupDelete: popupOperations.doOpenPopupDelete,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EnhancedTableClass)));

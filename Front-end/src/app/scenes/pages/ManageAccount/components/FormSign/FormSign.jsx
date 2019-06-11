@@ -37,7 +37,7 @@ const style = theme => ({
     },
     button: {
         margin: theme.spacing.unit,
-        fontSize: 13
+        fontSize: 12,
     },
     leftIcon: {
         marginRight: theme.spacing.unit,
@@ -437,7 +437,7 @@ class FormSign extends Component {
                                     </div>
                                     <p>By creating an account you agree to our <a href="#" style={{ color: 'dodgerblue' }}>Terms &amp; Privacy</a>.</p>
                                     <div className="clearfix">
-                                        <Button variant="contained" type="submit" color="primary" className={`reset-button ${classes.button}`}>
+                                        <Button variant="contained" type="submit" style={{backgroundColor: '#425e6e', color: '#fff'}} className={`reset-button ${classes.button}`}>
                                             ĐĂNG KÝ
                                             <PersonAddIcon className={classes.rightIcon} />
                                         </Button>

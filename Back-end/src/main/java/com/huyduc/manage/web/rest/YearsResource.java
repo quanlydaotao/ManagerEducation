@@ -40,10 +40,9 @@ public class YearsResource {
      */
     @GetMapping("/years")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<YearsDTO>> getAllYears() {
-        final Page<YearsDTO> page = yearsService.findAll(PageRequest
-                .of(0, 10000000, Sort.by("id").descending()));
-        return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
+    public ResponseEntity<List<YearsDTO>> getAllYears(@RequestParam(name="status", defaultValue = "false", required = false) boolean status) {
+        final List<YearsDTO> list = yearsService.findAll(status);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /**

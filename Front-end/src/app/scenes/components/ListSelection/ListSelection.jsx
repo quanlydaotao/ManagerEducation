@@ -27,7 +27,7 @@ const style = theme => ({
         padding: 0,
     },
     conf: {
-        fontSize: 13,
+        fontSize: 11,
         fontWeight: '300',
         color: '#455e6b', 
     }

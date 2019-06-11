@@ -111,12 +111,12 @@ class EnhancedTableToolBar extends React.Component {
                                         <FilterListIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Upload">
+                                {/*<Tooltip title="Upload">
                                     <Button variant="contained" color="inherit" className={classes.button}>
                                         Upload
                                         <CloudUploadIcon className={classes.rightIcon} />
                                     </Button>
-                                </Tooltip>
+                                </Tooltip>*/}
                             </div>
                         )}
                 </div>

@@ -40,6 +40,7 @@ const style = theme => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
+        boxShadow: 'none'
     },
     appBarShift: {
         width: `calc(100% - ${drawerWidth}px)`,
@@ -250,7 +251,7 @@ class PageWrapperAdmin extends React.Component {
                     style={{ backgroundImage: 'linear-gradient(to right, rgb(69, 94, 107), rgb(58, 94, 118), rgb(52, 92, 129), rgb(56, 89, 139), rgb(21, 52, 72))', padding: '0 24px', zIndex: 1 }}
                 >
 
-                    <Toolbar style={{ minHeight: 51 }} disableGutters={!open}>
+                    <Toolbar style={{ minHeight: 45 }} disableGutters={!open}>
                         <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer"
                             color="inherit"
                             aria-label="Open drawer"
@@ -325,7 +326,7 @@ class PageWrapperAdmin extends React.Component {
                     className={classNames(classes.content, {
                         [classes.contentShift]: open,
                     })}
-                    style={{ marginTop: 51 }}
+                    style={{ marginTop: 45 }}
                 >
                     <Suspense fallback={''}>
                         <Breadcumbs />

@@ -42,13 +42,13 @@ export const doUpdateClass = ( dataForm ) => ( {
     }
 });
 
-// export const deleteYears = ( listId ) => ( {
-//     type: types.DELETE_YEARS,
-//     meta: {
-//         async: true,
-//         blocking: true,
-//         path: "/years",
-//         method: "DELETE",
-//         body: JSON.stringify(listId)
-//     }
-// });
+export const doDeleteClassByIds = ( ids ) => ( {
+    type: types.DELETE_CLASS,
+    meta: {
+        async: true,
+        blocking: true,
+        path: "/class",
+        method: "DELETE",
+        body: JSON.stringify(ids)
+    }
+});

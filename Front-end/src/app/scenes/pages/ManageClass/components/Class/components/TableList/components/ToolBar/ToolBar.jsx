@@ -18,8 +18,8 @@ import { Link } from 'react-router-dom';
 
 const style = theme => ({
     button: {
-        fontSize: 13,
-        fontWeight: '300'
+        fontSize: 11,
+        fontWeight: '300',
     },
     leftIcon: {
         marginRight: theme.spacing.unit,
@@ -45,20 +45,20 @@ class ToolBar extends Component {
                     </div>
                     <div className="col-md-8">
                         <div className="text-right">
-                            <Tooltip component={Link} to="/admin/edu/years/new" title="Thêm năm học đào tạo mới">
+                            <Tooltip component={Link} to="/admin/edu/years/new" title="Thêm năm học đào tạo mới" className="mr-3">
                                 <Button variant="outlined" className={classes.button}>
                                     <DateRangeIcon className={classes.leftIcon} />
                                     THÊM NĂM HỌC ĐÀO TẠO MỚI
                                 </Button>
                             </Tooltip>
-                            <Tooltip title="Thêm khóa mới">
+                            <Tooltip component={Link} to="/admin/edu/years/new" title="Thêm khóa mới" className="mr-3">
                                 <Button variant="outlined" className={classes.button}>
                                     <QueuePlayNextIcon className={classes.leftIcon} />
                                     THÊM KHÓA MỚI
                                 </Button>
                             </Tooltip>
                             <Tooltip title="Thêm lớp học">
-                                <Button component={Link} to="/admin/edu/classes/category" variant="outlined" className={classes.button} style={{ backgroundColor: '#445e6c', color: 'white' }} className={classes.button}>
+                                <Button component={Link} to="/admin/edu/classes/category" variant="outlined" className={classes.button} className={classes.button}>
                                     <PlaylistAddIcon className={classes.leftIcon} />
                                     THÊM LỚP HỌC
                                 </Button>

@@ -76,13 +76,13 @@ class EditYear extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 0, 
-            name: '', 
+            id: 0,
+            name: '',
             startYears: '',
-            openDay: null, 
-            closeDay: null, 
+            openDay: null,
+            closeDay: null,
             describe: '',
-            maximumClasses: 0, 
+            maximumClasses: 0,
             status: true,
             errors: {
                 name: '',
@@ -105,28 +105,28 @@ class EditYear extends React.Component {
         if (this.props.detail.id !== prevProps.detail.id) {
             const { detail } = this.props;
             const {
-                id, 
-                name, 
+                id,
+                name,
                 startYears,
-                openDay, 
-                closeDay, 
+                openDay,
+                closeDay,
                 describe,
-                maximumClasses, 
+                maximumClasses,
                 status
             } = detail;
             this.setState({
-                id, 
-                name, 
+                id,
+                name,
                 startYears,
-                openDay, 
-                closeDay, 
+                openDay,
+                closeDay,
                 describe,
-                maximumClasses, 
+                maximumClasses,
                 status
             });
         }
     }
-    
+
 
     handleChange = event => {
         var target = event.target;
@@ -151,23 +151,23 @@ class EditYear extends React.Component {
         const check = this.isErrors(this.state);
         if (check) {
             const {
-                id, 
-                name, 
-                startYears, 
-                openDay, 
-                closeDay, 
-                describe, 
-                maximumClasses, 
+                id,
+                name,
+                startYears,
+                openDay,
+                closeDay,
+                describe,
+                maximumClasses,
                 status
             } = this.state;
             const formData = {
-                id, 
-                name, 
-                startYears, 
-                openDay, 
-                closeDay, 
-                describe, 
-                maximumClasses, 
+                id,
+                name,
+                startYears,
+                openDay,
+                closeDay,
+                describe,
+                maximumClasses,
                 status
             }
             this.props.updateYear(formData);
@@ -194,29 +194,29 @@ class EditYear extends React.Component {
                 if (startYears < 0) {
                     startYears = "Năm học phải lớn hơn 0!";
                 } else {
-                    startYears= "";
+                    startYears = "";
                 }
             } catch (error) {
                 startYears = "Dữ liệu đầu vào không hợp lệ!";
             }
         }
 
-        if(datas.maximumClasses < 0 || datas.maximumClasses > 100) {
+        if (datas.maximumClasses < 0 || datas.maximumClasses > 100) {
             maximumClasses = "Số lớp học tối đa phải lớn hơn hoặc bằng 0 và bé hơn hoặc bằng 100!";
         } else {
             maximumClasses = "";
         }
 
-        
+
         this.setState({ errors: { name, startYears, maximumClasses } });
-        if (name === '' 
-            && startYears === '' 
+        if (name === ''
+            && startYears === ''
             && maximumClasses === '') {
             return true;
         }
         return false;
     }
-    
+
     handleClose = () => {
         this.setState({ open: false });
     }
@@ -226,24 +226,24 @@ class EditYear extends React.Component {
     }
 
     handleBlockedNavigation = (lastLocation) => {
-       this.setState({ openExit: true, lastLocation });
-       return false;
+        this.setState({ openExit: true, lastLocation });
+        return false;
     }
 
     close = (callback) => this.setState({
-               openExit: false
-             }, callback);
+        openExit: false
+    }, callback);
 
     confirm = () => this.close(() => {
-       const {lastLocation} = this.state;
-       if (lastLocation) {
-          this.setState({
-             openExit: false
-          }, () => {  
-             history.replace(lastLocation.pathname);
-          })
-       }
-     });
+        const { lastLocation } = this.state;
+        if (lastLocation) {
+            this.setState({
+                openExit: false
+            }, () => {
+                history.replace(lastLocation.pathname);
+            })
+        }
+    });
 
     closeFormEdit = () => {
         this.setState({ isBlocking: false });
@@ -253,21 +253,21 @@ class EditYear extends React.Component {
     render() {
         const { classes, status, statusForm } = this.props;
         const { errors, isBlocking, openExit } = this.state;
-        var isShowMessageBeforeSubit = errors.name !== '' 
-            || errors.startYears !== '' 
+        var isShowMessageBeforeSubit = errors.name !== ''
+            || errors.startYears !== ''
             || errors.maximumClasses !== '';
-        var isShowMessageFailueAfterSubit = !status.progress 
+        var isShowMessageFailueAfterSubit = !status.progress
             && status.status === 'UPDATE_FAILED'
-            && status.data.status === 400 
+            && status.data.status === 400
             && status.data.response;
-        var isShowMessageSuccessAfterSubit = !status.progress 
+        var isShowMessageSuccessAfterSubit = !status.progress
             && status.status === 'UPDATE_SUCCESS';
         if (isShowMessageSuccessAfterSubit) {
             history.replace('/admin/edu/years');
         }
         const currentYear = new Date().getFullYear();
         const allYears = [];
-        for (let i = currentYear; i<=(currentYear+100); i++) {
+        for (let i = currentYear; i <= (currentYear + 100); i++) {
             allYears.push(i);
         }
         let alert = () => {
@@ -358,7 +358,7 @@ class EditYear extends React.Component {
             <DocumentTitle title=".:Cập nhật năm học:.">
                 <div>
                     {alert()}
-                    <Prompt 
+                    <Prompt
                         when={isBlocking}
                         message={this.handleBlockedNavigation}
                     />
@@ -384,22 +384,22 @@ class EditYear extends React.Component {
                                     <input id="name" type="text" minLength="9" maxLength="100" onChange={this.handleChange} placeholder="VD: Năm học 2019" name="name" defaultValue={this.state.name} required />
                                     <label htmlFor="startYears"><b>Năm học: (*)</b></label>
                                     <select name="startYears" id="startYears" onChange={this.handleChange} required>
-                                        { this.state.startYears ? <option value={this.state.startYears} selected>{this.state.startYears}</option> :  <option value="">--- CHỌN NĂM HỌC ---</option>}
-                                        { 
+                                        {this.state.startYears ? <option value={this.state.startYears} selected>{this.state.startYears}</option> : <option value="">--- CHỌN NĂM HỌC ---</option>}
+                                        {
                                             allYears.map((value, index) => (
                                                 <option key={index} value={value}>{value}</option>
                                             ))
                                         }
                                     </select>
                                     <label htmlFor="maximumClasses"><b>Số khóa học tối đa: (*)</b></label>
-                                    <input type="number" id="maximumClasses" pattern="^[0-9]+$" min={0} max={100} onChange={this.handleChange} placeholder="Số khóa học tối đa..." name="maximumClasses" value={this.state.maximumClasses} required/>
+                                    <input type="number" id="maximumClasses" pattern="^[0-9]+$" min={0} max={100} onChange={this.handleChange} placeholder="Số khóa học tối đa..." name="maximumClasses" value={this.state.maximumClasses} required />
                                     <label htmlFor="openDay"><b>Ngày khai giảng năm học:</b></label>
-                                    <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" defaultValue={this.state.openDay}/>
+                                    <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" defaultValue={this.state.openDay} />
                                     <label htmlFor="closeDay"><b>Ngày bế giảng năm học:</b></label>
-                                    <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" defaultValue={this.state.closeDay}/>
+                                    <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" defaultValue={this.state.closeDay} />
                                     <label htmlFor="status"><b>Trạng thái:</b></label>
                                     <select name="status" id="status" onChange={this.handleChange} required>
-                                        <option value={true} selected={this.state.status ? true : false}>--- MỞ NĂM HỌC ---</option> 
+                                        <option value={true} selected={this.state.status ? true : false}>--- MỞ NĂM HỌC ---</option>
                                         <option value={false} selected={!this.state.status ? true : false}>--- ĐÓNG NĂM HỌC ---</option>
                                     </select>
                                 </div>
@@ -424,10 +424,10 @@ class EditYear extends React.Component {
                             <Button onClick={this.closeFormEdit} color="secondary">
                                 Hủy bỏ
                             </Button>
-                            {status.progress ? 
+                            {status.progress ?
                                 <span style={{ marginLeft: 5, marginTop: 3 }}>
-                                    <i class="fa fa-spinner fa-pulse fa-3x fa-fw" 
-                                       style={{ fontSize: 30 }}>
+                                    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"
+                                        style={{ fontSize: 30 }}>
                                     </i>
                                 </span> : ''}
                         </div>
@@ -459,7 +459,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    updateYear:  yearsOperations.doUpdateYear,
+    updateYear: yearsOperations.doUpdateYear,
     findYearById: yearsOperations.doGetYearById
 };
 

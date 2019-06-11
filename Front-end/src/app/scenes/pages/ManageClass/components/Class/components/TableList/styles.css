@@ -6,9 +6,9 @@
 }
 
 .tbFix {
-    padding: 30px 3px;
+    padding: 30px 24px;
     background: white;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,.05);
+    border: 1px solid #ececec;
     margin: 0;
     border-radius: 2px;
 }

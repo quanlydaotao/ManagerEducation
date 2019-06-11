@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 
@@ -99,5 +100,20 @@ public class ClassesResource {
             return new ResponseEntity(Collections.singletonMap("updateClassFailed",
                     e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    /**
+     * DELETE /class: delete the class by id
+     *
+     * @param ids the list id of the class to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/class")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<AtomicInteger> deleteYears(@RequestBody List<Long> ids) {
+        AtomicInteger count = classesService.delete(ids);
+        if (count.get() <= 0)
+            return ResponseEntity.badRequest().body(count);
+        return ResponseEntity.ok().body(count);
     }
 }

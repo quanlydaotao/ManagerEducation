@@ -24,10 +24,10 @@ public interface YearsService {
     /**
      * Get all the years.
      *
-     * @param pageable the pagination information
+     * @param status the status year
      * @return the list of entities
      */
-    Page<YearsDTO> findAll(Pageable pageable);
+    List<YearsDTO> findAll(boolean status);
 
     /**
      * Update the years.

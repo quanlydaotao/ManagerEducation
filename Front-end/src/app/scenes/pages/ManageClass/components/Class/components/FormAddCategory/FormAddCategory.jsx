@@ -61,11 +61,8 @@ class FormAddCategory extends Component {
         }
     }
     componentDidMount() {
-        this.props.getAllYears();
+        this.props.getAllYears(true);
     }  
-    componentWillUnmount() {
-        this.props.getAllCourseByMaxClasses(0);
-    }
     selectIdYear = (param) => {
         this.setState({
             idYear: param.id,

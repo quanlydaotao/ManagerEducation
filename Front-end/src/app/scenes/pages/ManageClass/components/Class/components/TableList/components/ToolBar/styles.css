@@ -1,18 +1,14 @@
-.ToolBar button {
-    margin: 0 5px;
-    box-shadow: none;
-    font-size: 13px;
+.ToolBar a {
+    font-size: 11px;
     font-weight: 400;
-    padding: 5px 20px;
+    padding: 5px 15px;
     text-transform: none;
-    background-color: #ffffff;
-    color: #405e6f;
-    border: 1px solid #dbdbdb;
-    border-radius: 3px;
+    border-radius: 4px;
+    border:  none;
 }
 
 .ToolBar button svg {
-    font-size: 18px;
+    font-size: 13px;
 }
 
 .count {
@@ -21,6 +17,6 @@
 
 .count span {
     color: #445e6c;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
 }
