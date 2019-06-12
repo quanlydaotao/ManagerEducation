@@ -1,5 +1,5 @@
 .formEditAccount {
-	padding: 30px 39px;
+	padding: 30px 24px;
 	border: 1px solid #ececec;
     border-radius: 2px;
     background-color: white;
@@ -8,7 +8,9 @@
 }
 
 .popupForm p {
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    color:  #777777;
 }
 .rightContent {
     width: 100%;

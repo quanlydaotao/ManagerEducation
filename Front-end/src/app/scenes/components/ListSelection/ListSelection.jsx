@@ -12,7 +12,6 @@ const style = theme => ({
     root: {
         width: '100%',
         maxWidth: '100%',
-        margin: '10px 0',
         backgroundColor: theme.palette.background.paper,
         position: 'relative',
         overflowY: 'scroll',
@@ -28,7 +27,7 @@ const style = theme => ({
     },
     conf: {
         fontSize: 11,
-        fontWeight: '300',
+        fontWeight: '400',
         color: '#455e6b', 
     }
 });
@@ -67,7 +66,7 @@ class ListSelection extends React.Component {
                         backgroundColor: '#ececec',
                         color: '#445e6c', 
                         fontWeight: '700', 
-                        fontSize: '13px'
+                        fontSize: '11px'
                     }}
                 >
                     <RateReviewIcon /> 

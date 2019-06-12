@@ -8,8 +8,8 @@
     background-color: #fdfdfd;
 }
 
-.mainWrapper input {
-    font-size: 12px;
+.mainWrapper input, .mainWrapper select, .mainWrapper option, .mainWrapper{
+    font-size: 11px;
     padding-top: 6px;
     padding-bottom: 7px;
 }

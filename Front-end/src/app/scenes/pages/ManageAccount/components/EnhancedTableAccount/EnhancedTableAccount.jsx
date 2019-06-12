@@ -72,7 +72,7 @@ const style = theme => ({
         marginTop: theme.spacing.unit * 3,
         border: '1px solid #ececec',
         boxShadow: 'none',
-        padding: '0 39px'
+        padding: '0 24px'
     },
     table: {
         minWidth: 1020,

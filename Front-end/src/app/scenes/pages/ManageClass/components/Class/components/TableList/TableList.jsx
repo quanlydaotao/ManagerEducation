@@ -79,14 +79,14 @@ class TableList extends Component {
                     <div className="col-md-3 pr-0">
                         <ListSelection 
                             data={years} 
-                            title="DANH SÁCH NĂM HỌC ĐÀO TẠO" 
+                            title="NĂM HỌC ĐÀO TẠO" 
                             getSelectId={this.selectIdYear}
                         />
                     </div>
                     <div className={`col-md-2 pl-0  ${styles.wrapCourse}`}>
                         <ListSelection 
                             data={courses} 
-                            title="DANH SÁCH KHÓA HỌC" 
+                            title="KHÓA HỌC" 
                             getSelectId={this.selectIdCourse}
                         />
                     </div>
