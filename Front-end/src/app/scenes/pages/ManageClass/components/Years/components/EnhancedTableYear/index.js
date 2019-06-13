@@ -1,1 +1,2 @@
-export { default as EnhancedTableYear } from './EnhancedTableYear';
+export { default as EnhancedTableYear }
+from './EnhancedTableYear';

@@ -1,1 +1,2 @@
-export { default as ManageClass } from './ManageClass';
+export { default as ManageClass }
+from './ManageClass';

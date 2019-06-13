@@ -1,1 +1,2 @@
-export { default as VerticalMenuAdmin } from './VerticalMenuAdmin';
+export { default as VerticalMenuAdmin }
+from './VerticalMenuAdmin';

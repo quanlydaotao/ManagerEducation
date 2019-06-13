@@ -1,1 +1,2 @@
-export { default as EnhancedTableAccount } from './EnhancedTableAccount';
+export { default as EnhancedTableAccount }
+from './EnhancedTableAccount';

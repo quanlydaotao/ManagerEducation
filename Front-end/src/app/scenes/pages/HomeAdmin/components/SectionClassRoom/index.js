@@ -1,1 +1,2 @@
-export { default as SectionClassRoom } from './SectionClassRoom';
+export { default as SectionClassRoom }
+from './SectionClassRoom';

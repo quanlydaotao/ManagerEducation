@@ -2,7 +2,7 @@ import PropTypes, { bool } from "prop-types";
 
 const { shape } = PropTypes;
 
-export default shape( {
+export default shape({
     id: PropTypes.number.isRequired,
     login: PropTypes.string.isRequired,
     firstName: PropTypes.string.isRequired,

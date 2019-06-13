@@ -1,1 +1,2 @@
-export { default as CardClass } from './CardClass.jsx';
+export { default as CardClass }
+from './CardClass.jsx';

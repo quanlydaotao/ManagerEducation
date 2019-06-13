@@ -1,1 +1,2 @@
-export { default as ButtonEdit } from './ButtonEdit';
+export { default as ButtonEdit }
+from './ButtonEdit';

@@ -1,1 +1,2 @@
-export { default as FormSign } from './FormSign';
+export { default as FormSign }
+from './FormSign';

@@ -1,1 +1,2 @@
-export { default as ListSelection } from './ListSelection';
+export { default as ListSelection }
+from './ListSelection';

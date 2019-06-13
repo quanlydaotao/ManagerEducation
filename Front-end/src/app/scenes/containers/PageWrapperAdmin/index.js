@@ -1,1 +1,2 @@
-export { default as PageWrapperAdmin } from './PageWrapperAdmin';
+export { default as PageWrapperAdmin }
+from './PageWrapperAdmin';

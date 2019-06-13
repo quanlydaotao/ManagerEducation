@@ -5,12 +5,12 @@
     margin-top: 15px;
     padding: 1px;
 }
+
 .panel .wrapPanel {
     background: #ffffff;
     margin: 20px;
     padding: 20px;
 }
-
 
 @media only screen and (max-width: 1140px) {
     .panel .wrapPanel {

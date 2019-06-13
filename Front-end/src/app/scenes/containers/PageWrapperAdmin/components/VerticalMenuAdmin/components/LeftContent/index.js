@@ -1,1 +1,2 @@
-export { default as LeftContent } from './LeftContent';
+export { default as LeftContent }
+from './LeftContent';

@@ -1,1 +1,2 @@
-export { default as HomeAdmin } from './HomeAdmin';
+export { default as HomeAdmin }
+from './HomeAdmin';

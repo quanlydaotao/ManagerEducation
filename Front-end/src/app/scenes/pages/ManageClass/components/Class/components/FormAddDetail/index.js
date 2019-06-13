@@ -1,1 +1,2 @@
-export { default as FormAddDetail } from './FormAddDetail';
+export { default as FormAddDetail }
+from './FormAddDetail';

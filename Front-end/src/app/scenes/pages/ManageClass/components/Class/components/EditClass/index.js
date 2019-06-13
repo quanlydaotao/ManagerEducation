@@ -1,1 +1,2 @@
-export { default as EditClass } from './EditClass';
+export { default as EditClass }
+from './EditClass';

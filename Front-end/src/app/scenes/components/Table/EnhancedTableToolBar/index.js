@@ -1,1 +1,2 @@
-export { default as EnhancedTableToolBar } from './EnhancedTableToolBar';
+export { default as EnhancedTableToolBar }
+from './EnhancedTableToolBar';

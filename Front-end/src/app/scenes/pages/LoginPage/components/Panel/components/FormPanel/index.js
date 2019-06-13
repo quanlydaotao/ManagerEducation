@@ -1,1 +1,2 @@
-export { default as FormPanel } from './FormPanel';
+export { default as FormPanel }
+from './FormPanel';

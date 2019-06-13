@@ -4,6 +4,7 @@
  * Config file by : Dao Huy Duc
  * Version: 1.1
  */
+
 @charset "UTF-8";
 @import url(./Normalize.css);
 @import url(./Icon.css);
@@ -43,8 +44,6 @@
 ::before {
     box-sizing: border-box
 }
-
-
 
 [tabindex="-1"]:focus {
     outline: 0!important
@@ -223,6 +222,7 @@ button span {
     font-size: 11px !important;
 }
 
+
 /* button:focus {
     outline: 1px dotted;
     outline: 5px auto -webkit-focus-ring-color
@@ -232,7 +232,8 @@ button,
 input,
 optgroup,
 select,
-textarea, .sex {
+textarea,
+.sex {
     margin: 0;
     font-family: inherit;
     line-height: inherit
@@ -10246,8 +10247,8 @@ a.text-dark:hover {
 
 @media print {
     *,
-    ::after,
-    ::before {
+     ::after,
+     ::before {
         text-shadow: none!important;
         box-shadow: none!important
     }
@@ -10322,25 +10323,38 @@ a.text-dark:hover {
         border-color: #dee2e6
     }
 }
-tr > td.cell {font-size: 11px !important; padding: 0 20px !important;}
-tr > td.cell span { font-size: 11px !important; }
+
+tr>td.cell {
+    font-size: 11px !important;
+    padding: 0 20px !important;
+}
+
+tr>td.cell span {
+    font-size: 11px !important;
+}
+
 
 /* HEADER */
+
 @media screen and (min-width: 1200px) {
-	.wrapContent {
-        width: 80% !important; 
+    .wrapContent {
+        width: 80% !important;
     }
 }
+
 .tall {
     border: 0;
     height: 1px;
-    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.20), rgba(0,0,0,0));
-    background-image: -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.20), rgba(0,0,0,0));
-    background-image: -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.20), rgba(0,0,0,0));
-    background-image: -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.20), rgba(0,0,0,0));
+    background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0));
+    background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0));
+    background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0));
+    background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0));
     margin: 0;
 }
+
+
 /* END HEADER */
+
 
 /* CONTENT_FORM */
 
@@ -10360,13 +10374,16 @@ tr > td.cell span { font-size: 11px !important; }
     padding: 15px 0 0;
 }
 
+
 /* Full-width input fields */
+
 .contentForm input[type=text],
 .contentForm input[type=password],
 .contentForm input[type=email],
 .contentForm input[type=date],
 .contentForm input[type=number],
-.sex, .contentForm textarea,
+.sex,
+.contentForm textarea,
 .contentForm select {
     width: 100%;
     display: inline-block;
@@ -10387,7 +10404,8 @@ tr > td.cell span { font-size: 11px !important; }
 .contentForm input[type=email],
 .contentForm input[type=date],
 .contentForm input[type=number],
-.sex, .contentForm textarea,
+.sex,
+.contentForm textarea,
 .contentForm select:focus {
     outline: none;
 }
@@ -10406,7 +10424,7 @@ tr > td.cell span { font-size: 11px !important; }
 .contentForm input[type=email]:focus,
 .contentForm input[type=date]:focus,
 .contentForm input[type=number]:focus,
-.contentForm textarea:focus, 
+.contentForm textarea:focus,
 .contentForm select:focus {
     background-color: #fafafa;
     outline: 1px solid orange;
@@ -10475,23 +10493,30 @@ tr > td.cell span { font-size: 11px !important; }
     background-position: center;
 }
 
+
 /* END CONTENT_FORM */
 
 
 /* ENHANCEDTABLE */
+
 .message {
     background-color: #f7f7f7;
     margin-bottom: 5px;
     border-radius: 2px;
 }
+
 .message ul li {
     line-height: 25px;
     color: #8e8e8e;
     font-size: 11px;
 }
+
+
 /* END-ENHANCEDTABLE */
 
+
 /* ACTIVE LINK */
+
 .activeLink {
     background-color: #455e6c !important;
     color: #ffffff !important;
@@ -10509,7 +10534,9 @@ tr > td.cell span { font-size: 11px !important; }
     box-shadow: none !important;
 }
 
+
 /* TAB-BAR */
+
 .appBar {
     width: 100%;
     display: block;
@@ -10567,8 +10594,9 @@ tr > td.cell span { font-size: 11px !important; }
     background-color: orange;
     height: 100%;
     width: 15px;
-};
+}
 
+;
 .attention {
     color: #9c9a9a;
     font-size: 11px;

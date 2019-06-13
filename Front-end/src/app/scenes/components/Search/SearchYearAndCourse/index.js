@@ -1,1 +1,2 @@
-export { default as SearchYearAndCourse } from './SearchYearAndCourse';
+export { default as SearchYearAndCourse }
+from './SearchYearAndCourse';

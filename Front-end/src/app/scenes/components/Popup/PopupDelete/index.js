@@ -1,1 +1,2 @@
-export { default as PopupDelete } from './PopupDelete';
+export { default as PopupDelete }
+from './PopupDelete';

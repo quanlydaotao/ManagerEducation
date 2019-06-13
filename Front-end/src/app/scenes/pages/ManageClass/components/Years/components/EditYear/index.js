@@ -1,1 +1,2 @@
-export { default as EditYear } from './EditYear'; 
+export { default as EditYear }
+from './EditYear';

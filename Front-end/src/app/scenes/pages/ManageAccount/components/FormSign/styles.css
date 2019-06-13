@@ -7,10 +7,12 @@
     border: 1px solid #ececec;
     border-radius: 2px;
 }
+
 .formSign label {
     font-size: 12px;
     line-height: 18px;
 }
+
 .formSign h3 {
     margin-bottom: 20px;
     padding: 10px;

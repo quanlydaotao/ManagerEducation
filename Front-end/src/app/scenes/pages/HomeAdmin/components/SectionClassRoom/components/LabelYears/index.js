@@ -1,1 +1,2 @@
-export { default as LabelYears } from './LabelYears';
+export { default as LabelYears }
+from './LabelYears';

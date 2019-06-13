@@ -1,1 +1,2 @@
-export { default as ButtonSwitch } from './ButtonSwitch';
+export { default as ButtonSwitch }
+from './ButtonSwitch';

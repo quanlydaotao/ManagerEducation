@@ -1,1 +1,2 @@
-export { default as TabBars } from './TabBars';
+export { default as TabBars }
+from './TabBars';

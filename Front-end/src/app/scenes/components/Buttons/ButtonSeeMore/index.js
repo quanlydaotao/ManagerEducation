@@ -1,1 +1,2 @@
-export { default as ButtonSeeMore } from './ButtonSeeMore';
+export { default as ButtonSeeMore }
+from './ButtonSeeMore';

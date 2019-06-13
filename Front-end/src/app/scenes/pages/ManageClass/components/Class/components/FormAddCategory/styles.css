@@ -1,5 +1,5 @@
 .formAddClass {
-	width: 100%;
+    width: 100%;
     display: block !important;
     padding: 40px 24px;
     background-color: #fff;
@@ -9,14 +9,14 @@
 
 .contentFormClass {
     display: block !important;
-    padding:  0 !important;
+    padding: 0 !important;
 }
 
 .selection {
-	padding: 24px 100px;
+    padding: 24px 100px;
     background-color: #fafafa;
 }
 
 .wrapSelection {
-	background-color: white;
+    background-color: white;
 }

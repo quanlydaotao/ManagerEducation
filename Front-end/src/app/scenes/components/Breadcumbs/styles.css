@@ -2,6 +2,7 @@
     width: 100%;
     display: block;
 }
+
 .imgBreadcumb {
     float: left;
     width: 70px;
@@ -18,6 +19,6 @@
 }
 
 .itemBreadcums {
-	height: 30px !important;
-	font-size: 12px !important;
+    height: 30px !important;
+    font-size: 12px !important;
 }

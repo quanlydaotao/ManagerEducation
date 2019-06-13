@@ -2,9 +2,9 @@ import React, { Component, Suspense } from 'react';
 import styles from './styles.css';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { accountShape } from '../../../../propTypes';
 import { accountOperations } from '../../../../../state/ducks/account';
 import { fileOperations } from '../../../../../state/ducks/file';
+import { locationOperations } from '../../../../../state/ducks/location';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
 import amber from '@material-ui/core/colors/amber';
@@ -69,10 +69,12 @@ class FormSign extends Component {
             month: '01',
             day: '01',
             sex: true,
-            nations: 'Kinh', 
-            address: '', 
+            nations: 'Kinh',  
             address1: '',
             langKey: 'vi', 
+            province: '',
+            district: '',
+            ward: '',
             identityCardNumber: '', 
             dateIndentityCardNumber: '',
             locationIndentityCardNumber: '',
@@ -92,6 +94,10 @@ class FormSign extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.getAllProvince();
+    }
+
     handleClose = () => {
         this.setState({ open: false });
     }
@@ -108,6 +114,20 @@ class FormSign extends Component {
         else
             this.setState({ [target.name]: target.value });
     };
+
+    handleSelectLocation = event => {
+        var target = event.target;
+        if (target.name === 'province') {
+            this.setState({ province: target.value, district: '', ward: '' });
+            this.props.getWardByDistrictId(0);
+            this.props.getDistrictByProvinceId(target.value);
+        } else if(target.name === 'district') {
+            this.setState({ district: target.value, ward: '' });
+            this.props.getWardByDistrictId(target.value);
+        } else if (target.name === 'ward') {
+            this.setState({ ward: target.value });
+        }
+    }
 
     handleChangeFile = event => {
         this.setState({ isBlocking: true });
@@ -140,10 +160,11 @@ class FormSign extends Component {
                 firstName, 
                 lastName, 
                 email, 
-                birthday, 
                 sex, 
                 nations,
-                address, 
+                province,
+                district,
+                ward,
                 address1,
                 year,
                 month,
@@ -168,7 +189,7 @@ class FormSign extends Component {
                 email, 
                 birthday: year+"-"+month+"-"+day, 
                 sex, nations,
-                address, 
+                address: province+"-"+district+"-"+ward, 
                 address1, 
                 langKey, 
                 identityCardNumber, 
@@ -287,8 +308,7 @@ class FormSign extends Component {
      });
 
     render() {
-        console.log(this.state);
-        const { classes, status } = this.props;
+        const { classes, status, provinces, districts, wards } = this.props;
         const { errors, imagePreview, isBlocking, openExit } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' 
             || errors.password !== '' 
@@ -564,21 +584,21 @@ class FormSign extends Component {
                                             <label htmlFor="tinh"><b>Quê quán:</b></label>
                                             <div className="row">
                                                 <div className="col-3">
-                                                    <select name="tinh" id="tinh" onChange={this.handleChange}>
-                                                        <option value="Tỉnh/ Thành phố">Tỉnh/ Thành phố</option>
-                                                        <option value="Khác">Khác...</option>
+                                                    <select name="province" id="tinh" onChange={this.handleSelectLocation}>
+                                                        <option value="">Tỉnh/ Thành phố</option>
+                                                        { provinces.map((value, index) => <option key={index} value={value.id}>{value.name}</option>) }
                                                     </select>
                                                 </div>
                                                 <div className="col-3">
-                                                    <select name="quan" id="quan" onChange={this.handleChange}>
-                                                        <option value="Quận/ Huyện (TX)">Quận/ Huyện (TX)</option>
-                                                        <option value="Khác">Khác...</option>
+                                                    <select name="district" id="quan" onChange={this.handleSelectLocation}>
+                                                        <option value="">Quận/ Huyện (TX)</option>
+                                                        { districts.map((value, index) => <option key={index} value={value.id}>{value.name}</option>) }
                                                     </select>
                                                 </div>
                                                 <div className="col-6">
-                                                    <select name="xa" id="xa" onChange={this.handleChange}>
-                                                        <option value="Xã/ Phường/ Thị trấn">Xã/ Phường/ Thị trấn</option>
-                                                        <option value="Khác">Khác...</option>
+                                                    <select name="ward" id="xa" onChange={this.handleSelectLocation}>
+                                                        <option value="">Xã/ Phường/ Thị trấn</option>
+                                                        { wards.map((value, index) => <option key={index} value={value.id}>{value.name}</option>) }
                                                     </select>
                                                 </div>
                                             </div>
@@ -602,6 +622,9 @@ class FormSign extends Component {
 
 FormSign.propTypes = {
     classes: PropTypes.object.isRequired,
+    provinces: PropTypes.array.isRequired,
+    districts: PropTypes.array.isRequired,
+    wards: PropTypes.array.isRequired,
     status: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
@@ -609,19 +632,30 @@ FormSign.propTypes = {
     }).isRequired,
     createNewUserAccount: PropTypes.func.isRequired,
     uploadAvatar: PropTypes.func.isRequired,
+    getAllProvince: PropTypes.func.isRequired,
+    getDistrictByProvinceId: PropTypes.func.isRequired,
+    getWardByDistrictId: PropTypes.func.isRequired
 };
 
 FormSign.defaultProps = {
-    status: { progress: false, status: '', data: {} }
+    status: { progress: false, status: '', data: {} },
+    provinces: [],
+    districts: [],
+    wards: []
 }
 
 const mapStateToProps = state => ({
-    status: state.account.status
+    status: state.account.status,
+    provinces: state.location.provinces,
+    districts: state.location.districts,
+    wards: state.location.wards
 });
-
 const mapDispatchToProps = {
     createNewUserAccount: accountOperations.doCreateNewAccount,
-    uploadAvatar: fileOperations.doUploadFile
+    uploadAvatar: fileOperations.doUploadFile,
+    getAllProvince: locationOperations.doGetAllProvince,
+    getDistrictByProvinceId: locationOperations.doGetDistrictsByProvinceId,
+    getWardByDistrictId: locationOperations.doGetWardByDistrictId
 };
 
 

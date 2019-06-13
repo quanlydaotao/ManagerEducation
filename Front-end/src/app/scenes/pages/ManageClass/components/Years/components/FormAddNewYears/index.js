@@ -1,1 +1,2 @@
-export { default as FormAddNewYears } from './FormAddNewYears';
+export { default as FormAddNewYears }
+from './FormAddNewYears';

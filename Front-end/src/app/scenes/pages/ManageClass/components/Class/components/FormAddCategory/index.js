@@ -1,1 +1,2 @@
-export { default as FormAddCategory } from './FormAddCategory';
+export { default as FormAddCategory }
+from './FormAddCategory';

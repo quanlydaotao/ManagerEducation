@@ -13,8 +13,8 @@
     border: none;
 }
 
-.formControlBorderless:hover, 
-.formControlBorderless:active, 
+.formControlBorderless:hover,
+.formControlBorderless:active,
 .formControlBorderless:focus {
     border: none !important;
     outline: none !important;
@@ -43,6 +43,6 @@
     border: none !important;
     outline: none !important;
     background-color: #fff !important;
-    margin:  0 0 0 10px !important;
-    padding:  0 !important;
+    margin: 0 0 0 10px !important;
+    padding: 0 !important;
 }

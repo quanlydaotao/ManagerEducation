@@ -1,1 +1,2 @@
-export { default as Breadcumbs } from './Breadcumbs';
+export { default as Breadcumbs }
+from './Breadcumbs';

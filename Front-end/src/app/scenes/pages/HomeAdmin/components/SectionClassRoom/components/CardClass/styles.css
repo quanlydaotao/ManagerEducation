@@ -4,19 +4,20 @@
     border: 1px solid hsl(0, 4%, 86%);
     display: block;
     transition: all ease 1s;
-    -webkit-box-shadow: -1px 14px 51px -17px rgba(0,0,0,.75);
-    -moz-box-shadow: -1px 14px 51px -17px rgba(0,0,0,.75);
-    box-shadow: -1px 14px 51px -17px rgba(0,0,0,.75);
+    -webkit-box-shadow: -1px 14px 51px -17px rgba(0, 0, 0, .75);
+    -moz-box-shadow: -1px 14px 51px -17px rgba(0, 0, 0, .75);
+    box-shadow: -1px 14px 51px -17px rgba(0, 0, 0, .75);
     /* padding: 5px; */
 }
+
 .topCard {
     padding: 15px 20px;
     display: block;
-    background-image:url(https://lh3.googleusercontent.com/Y2MgzmpsyjRF-K1bYxOI7GGiOJE6s79qHuxirOsEecNJWETJbhv1EKTGscvvMRgX1jWOomiya1Hh=w380-h130-p);
+    background-image: url(https://lh3.googleusercontent.com/Y2MgzmpsyjRF-K1bYxOI7GGiOJE6s79qHuxirOsEecNJWETJbhv1EKTGscvvMRgX1jWOomiya1Hh=w380-h130-p);
     background-size: cover;
 }
 
-.topCard > a {
+.topCard>a {
     font-size: 20px;
 }
 
@@ -24,11 +25,12 @@
     font-size: 11px;
 }
 
-.topCard > a:hover {
+.topCard>a:hover {
     color: orange;
 }
 
-.topCard > a, .topCard > span {
+.topCard>a,
+.topCard>span {
     color: #ffffff;
 }
 
@@ -67,4 +69,3 @@
 .footerCard a i {
     font-size: 25px;
 }
-

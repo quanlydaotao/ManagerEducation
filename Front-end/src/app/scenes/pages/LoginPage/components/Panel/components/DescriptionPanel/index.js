@@ -1,1 +1,2 @@
-export { default as DescriptionPanel } from './DescriptionPanel';
+export { default as DescriptionPanel }
+from './DescriptionPanel';
