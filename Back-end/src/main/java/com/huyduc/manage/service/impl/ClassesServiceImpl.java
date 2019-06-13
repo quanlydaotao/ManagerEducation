@@ -31,33 +31,34 @@ public class ClassesServiceImpl implements ClassesService {
     private final Logger log = LoggerFactory.getLogger(ClassesServiceImpl.class);
     private final ClassesRepository classesRepository;
     private final CourseRepository courseRepository;
+    private final ClassesMapper classesMapper;
 
-    public ClassesServiceImpl(ClassesRepository classesRepository, CourseRepository courseRepository) {
+    public ClassesServiceImpl(ClassesRepository classesRepository, CourseRepository courseRepository, ClassesMapper classesMapper) {
         this.classesRepository = classesRepository;
         this.courseRepository = courseRepository;
+        this.classesMapper = classesMapper;
     }
 
     /**
      * Save a class.
      *
      * @param classesDTO the entity to save
-     * @param courseId   the id course
      * @return the persisted entity
      */
     @Override
-    public ClassesDTO save(ClassesDTO classesDTO, Long courseId) {
+    public ClassesDTO save(ClassesDTO classesDTO) {
         log.debug("Request to save Class : {}", classesDTO);
         Optional<Classes> classExits = classesRepository.findByClassCode(classesDTO.getClassCode());
         if (classExits.isPresent()) {
             throw new ClassesAlreadyExistException();
         }
-        Classes classes = ClassesMapper.INSTANCE.toEntity(classesDTO);
-        Optional<Course> course = courseRepository.findById(courseId);
+        Classes classes = classesMapper.toEntity(classesDTO);
+        Optional<Course> course = courseRepository.findById(classesDTO.getCourseId());
         if (!course.isPresent()) {
             throw new CourseNotFoundException();
         }
         classes.setCourse(course.get());
-        return ClassesMapper.INSTANCE.toDto(classesRepository.save(classes));
+        return classesMapper.toDto(classesRepository.save(classes));
     }
 
     @Override
@@ -76,7 +77,7 @@ public class ClassesServiceImpl implements ClassesService {
         log.debug("Request to get all Classes");
         List<ClassesDTO> list = classesRepository.findAllByCourseIdOrderByIdDesc(id)
                 .stream()
-                .map(ClassesMapper.INSTANCE::toDto)
+                .map(classesMapper::toDto)
                 .collect(Collectors.toList());
         return list;
     }
@@ -98,10 +99,10 @@ public class ClassesServiceImpl implements ClassesService {
                     if (classIsExist.isPresent() && classIsExist.get().getId() != classesDTO.getId()) {
                         throw new ClassesAlreadyExistException();
                     }
-                    Classes classes1 = ClassesMapper.INSTANCE.toEntity(classesDTO);
+                    Classes classes1 = classesMapper.toEntity(classesDTO);
                     classes1.setCourse(classes.getCourse());
                     log.debug("Changed Information for Class: {}", classesDTO);
-                    return ClassesMapper.INSTANCE.toDto(classesRepository.save(classes1));
+                    return classesMapper.toDto(classesRepository.save(classes1));
                 });
     }
 
@@ -115,7 +116,7 @@ public class ClassesServiceImpl implements ClassesService {
     public Optional<ClassesDTO> findOne(Long id) {
         log.debug("Request to get Class : {}", id);
         return classesRepository.findById(id)
-                .map(ClassesMapper.INSTANCE::toDto);
+                .map(classesMapper::toDto);
     }
 
     /**

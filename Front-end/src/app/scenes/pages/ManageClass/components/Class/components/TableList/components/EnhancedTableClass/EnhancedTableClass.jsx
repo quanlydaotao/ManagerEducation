@@ -92,7 +92,7 @@ class EnhancedTableClass extends React.Component {
             orderBy: 'calories',
             selected: [],
             page: 0,
-            rowsPerPage: 5
+            rowsPerPage: 10
         }
     }
 
@@ -117,7 +117,7 @@ class EnhancedTableClass extends React.Component {
 
     handleSelectAllClick = event => {
         if (event.target.checked) {
-            this.setState({ selected: this.props.listClass.map(n => n.id) });
+            this.setState({ selected: this.props.data.map(n => n.id) });
             return;
         }
         this.setState({ selected: [] });
@@ -269,7 +269,7 @@ class EnhancedTableClass extends React.Component {
                                 </Table>
                             </div>
                             <TablePagination
-                                rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
+                                rowsPerPageOptions={[10, 15, 25, 50, 75, 100]}
                                 component="div"
                                 count={data.length}
                                 rowsPerPage={rowsPerPage}

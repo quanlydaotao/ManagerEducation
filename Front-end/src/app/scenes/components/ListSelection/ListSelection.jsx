@@ -17,6 +17,7 @@ const style = theme => ({
         overflowY: 'scroll',
         height: 420,
         maxHeight: 420,
+        margin: '10px 0'
     },
     listSection: {
         backgroundColor: 'inherit',

@@ -54,6 +54,8 @@ public class UserMapper {
             user.setSex(userDTO.getSex());
             user.setNations(userDTO.getNations());
             user.setAddress1(user.getAddress1());
+            user.setDateIdentityCardNumber(userDTO.getDateIdentityCardNumber());
+            user.setLocationIdentityCardNumber(userDTO.getLocationIdentityCardNumber());
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
             return user;

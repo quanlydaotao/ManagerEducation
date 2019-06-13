@@ -66,6 +66,11 @@ public class UserDTO {
     @Size(min = 2, max = 6)
     private String langKey;
 
+    private Date dateIdentityCardNumber;
+
+    @Size(max = 100)
+    private String locationIdentityCardNumber;
+
     private Set<String> authorities;
 
     public UserDTO() {
@@ -89,6 +94,8 @@ public class UserDTO {
         this.address1 = user.getAddress1();
         this.activated = user.getActivated();
         this.langKey = user.getLangKey();
+        this.dateIdentityCardNumber = user.getDateIdentityCardNumber();
+        this.locationIdentityCardNumber = user.getLocationIdentityCardNumber();
         this.authorities = user.getAuthorities().stream()
                 .map(Authority::getName)
                 .collect(Collectors.toSet());
@@ -230,6 +237,22 @@ public class UserDTO {
         this.dateSigned = dateSigned;
     }
 
+    public Date getDateIdentityCardNumber() {
+        return dateIdentityCardNumber;
+    }
+
+    public void setDateIdentityCardNumber(Date dateIdentityCardNumber) {
+        this.dateIdentityCardNumber = dateIdentityCardNumber;
+    }
+
+    public String getLocationIdentityCardNumber() {
+        return locationIdentityCardNumber;
+    }
+
+    public void setLocationIdentityCardNumber(String locationIdentityCardNumber) {
+        this.locationIdentityCardNumber = locationIdentityCardNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -258,8 +281,8 @@ public class UserDTO {
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", phone_number='" + phoneNumber + '\'' +
-                ", identity_card_number='" + identityCardNumber + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", identityCardNumber='" + identityCardNumber + '\'' +
                 ", birthday=" + birthday +
                 ", dateSigned=" + dateSigned +
                 ", sex=" + sex +
@@ -267,6 +290,8 @@ public class UserDTO {
                 ", address1='" + address1 + '\'' +
                 ", activated=" + activated +
                 ", langKey='" + langKey + '\'' +
+                ", dateIdentityCardNumber=" + dateIdentityCardNumber +
+                ", locationIdentityCardNumber='" + locationIdentityCardNumber + '\'' +
                 ", authorities=" + authorities +
                 '}';
     }

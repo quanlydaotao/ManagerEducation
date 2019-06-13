@@ -10370,9 +10370,9 @@ tr > td.cell span { font-size: 11px !important; }
 .contentForm select {
     width: 100%;
     display: inline-block;
-    padding: 8px 12px;
-    height: 38px;
-    margin: 5px 0 18px 0;
+    padding: 7px 12px;
+    height: 32px;
+    margin: 0 0 18px 0;
     background: #ffffff;
     border: 1px solid #cecece;
     border-radius: 2px;

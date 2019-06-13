@@ -105,6 +105,13 @@ public class User implements Serializable {
     @Column(name = "date_signed")
     private Timestamp dateSigned;
 
+    @Column(name = "date_identity_card_number")
+    private Date dateIdentityCardNumber;
+
+    @Size(max = 100)
+    @Column(name = "location_identity_card_number", length = 100)
+    private String locationIdentityCardNumber;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -280,6 +287,22 @@ public class User implements Serializable {
         this.dateSigned = dateSigned;
     }
 
+    public Date getDateIdentityCardNumber() {
+        return dateIdentityCardNumber;
+    }
+
+    public void setDateIdentityCardNumber(Date dateIdentityCardNumber) {
+        this.dateIdentityCardNumber = dateIdentityCardNumber;
+    }
+
+    public String getLocationIdentityCardNumber() {
+        return locationIdentityCardNumber;
+    }
+
+    public void setLocationIdentityCardNumber(String locationIdentityCardNumber) {
+        this.locationIdentityCardNumber = locationIdentityCardNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -313,15 +336,16 @@ public class User implements Serializable {
                 ", activationKey='" + activationKey + '\'' +
                 ", resetKey='" + resetKey + '\'' +
                 ", address='" + address + '\'' +
-                ", phone_number='" + phoneNumber + '\'' +
-                ", identity_card_number='" + identityCardNumber + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", identityCardNumber='" + identityCardNumber + '\'' +
                 ", birthday=" + birthday +
                 ", sex=" + sex +
                 ", nations='" + nations + '\'' +
-                ", date_signed'" + dateSigned +
                 ", address1='" + address1 + '\'' +
+                ", dateSigned=" + dateSigned +
+                ", dateIdentityCardNumber=" + dateIdentityCardNumber +
+                ", locationIdentityCardNumber='" + locationIdentityCardNumber + '\'' +
                 ", authorities=" + authorities +
                 '}';
     }
-
 }

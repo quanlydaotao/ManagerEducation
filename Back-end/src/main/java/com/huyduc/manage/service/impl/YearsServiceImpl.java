@@ -5,12 +5,9 @@ import com.huyduc.manage.repository.YearsRepository;
 import com.huyduc.manage.service.YearsService;
 import com.huyduc.manage.service.dto.YearsDTO;
 import com.huyduc.manage.service.mapper.YearsMapper;
-import com.huyduc.manage.web.rest.errors.InvalidPasswordException;
 import com.huyduc.manage.web.rest.errors.YearAlreadyExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +63,7 @@ public class YearsServiceImpl implements YearsService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(years -> {
+                    System.out.println(years.getCourses().size());
                     Optional<Years> yearIsExist = yearsRepository.findOneByStartYears(yearDTO.getStartYears());
                     if (yearIsExist.isPresent() && yearIsExist.get().getId() != yearDTO.getId()) {
                         throw new YearAlreadyExistException();
@@ -89,15 +87,15 @@ public class YearsServiceImpl implements YearsService {
         List<YearsDTO> list = new ArrayList<>();
         if (!status) {
             list = yearsRepository.findAll(Sort.by("startYears").descending())
-                .stream()
-                .map(years -> YearsMapper.INSTANCE.toDto(years))
-                .collect(Collectors.toList());
+                    .stream()
+                    .map(years -> YearsMapper.INSTANCE.toDto(years))
+                    .collect(Collectors.toList());
             return list;
         }
         list = yearsRepository.findAllByStatusIsTrueOrderByStartYearsDesc()
-            .stream()
-            .map(years -> YearsMapper.INSTANCE.toDto(years))
-            .collect(Collectors.toList());
+                .stream()
+                .map(years -> YearsMapper.INSTANCE.toDto(years))
+                .collect(Collectors.toList());
         return list;
 
     }

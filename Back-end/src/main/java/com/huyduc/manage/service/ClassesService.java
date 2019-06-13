@@ -19,7 +19,7 @@ public interface ClassesService {
      * @param courseId the id course
      * @return the persisted entity
      */
-    ClassesDTO save(ClassesDTO classesDTO, Long courseId);
+    ClassesDTO save(ClassesDTO classesDTO);
 
     /**
      * Get all classes.

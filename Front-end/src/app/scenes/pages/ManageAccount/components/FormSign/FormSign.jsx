@@ -19,6 +19,7 @@ import { Prompt } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { history } from '../../../../../state/utils';
 const PopupExitPage = React.lazy(() => import('../../../../components/Popup/PopupExitPage/PopupExitPage'));
+
 const style = theme => ({
     snackbar: {
         margin: theme.spacing.unit,
@@ -64,13 +65,17 @@ class FormSign extends Component {
             lastName: '', 
             email: '',
             image: null, 
-            birthday: null, 
+            year: '1938',
+            month: '01',
+            day: '01',
             sex: true,
             nations: 'Kinh', 
             address: '', 
             address1: '',
             langKey: 'vi', 
             identityCardNumber: '', 
+            dateIndentityCardNumber: '',
+            locationIndentityCardNumber: '',
             activated: true,
             errors: {
                 login: '',
@@ -139,7 +144,12 @@ class FormSign extends Component {
                 sex, 
                 nations,
                 address, 
-                address1, 
+                address1,
+                year,
+                month,
+                day, 
+                dateIndentityCardNumber,
+                locationIndentityCardNumber,
                 langKey, 
                 identityCardNumber, 
                 activated, 
@@ -156,7 +166,7 @@ class FormSign extends Component {
                 firstName, 
                 lastName, 
                 email, 
-                birthday, 
+                birthday: year+"-"+month+"-"+day, 
                 sex, nations,
                 address, 
                 address1, 
@@ -277,6 +287,7 @@ class FormSign extends Component {
      });
 
     render() {
+        console.log(this.state);
         const { classes, status } = this.props;
         const { errors, imagePreview, isBlocking, openExit } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' 
@@ -293,6 +304,18 @@ class FormSign extends Component {
         if (isShowMessageSuccessAfterSubit) {
             history.push('/admin/account/users');
         }
+        const optionYear = [];
+        const optionMonth = [];
+        const optionDay = [];
+        for (let i=1938; i<(new Date()).getFullYear(); i++) {
+            optionYear.push(<option value={i}>Năm {i}</option>);
+        } 
+        for (let i=1; i<=12; i++) {
+            optionMonth.push(<option value={i < 10 ? `0${i}` : i}>{i < 10 ? `Tháng 0${i}` : `Tháng ${i}`}</option>);
+        } 
+        for (let i=1; i<=31; i++) {
+            optionDay.push(<option value={i < 10 ? `0${i}` : i}>{i < 10 ? `Ngày 0${i}` : `Ngày ${i}`}</option>);
+        } 
         let alert = () => {
             if (isShowMessageBeforeSubit || (!isShowMessageBeforeSubit && isShowMessageFailueAfterSubit)) {
                 return (
@@ -409,17 +432,17 @@ class FormSign extends Component {
                                 <div className="col-md-4">
                                     <h2 className="titleForm">Thông tin đăng ký tài khoản ( Bắt buộc )</h2>
                                     <label htmlFor="login"><b>Mã đăng nhập: (*)</b></label>
-                                    <input type="text" pattern="(AD|PH|GV|HV)+([0-9]{5})\b" minLength="7" maxLength="50" onChange={this.handleChange} placeholder="VD: AD88901, GV67834, PH09813, HV00001..." name="login" required />
+                                    <input type="text" id="login" pattern="(AD|PH|GV|HV)+([0-9]{5})\b" minLength="7" maxLength="50" onChange={this.handleChange} placeholder="VD: AD88901, GV67834, PH09813, HV00001..." name="login" required />
                                     <label htmlFor="password"><b>Mật khẩu: (*)</b></label>
-                                    <input type="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="VD: Meocon123, Abc@1234..." name="password" required />
+                                    <input type="password" id="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="VD: Meocon123, Abc@1234..." name="password" required />
                                     <label htmlFor="re_password"><b>Nhập lại mật khẩu: (*)</b></label>
-                                    <input type="password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="Nhập lại mật khẩu..." name="re_password" required />
+                                    <input type="password" id="re_password" autoComplete="false" minLength="4" maxLength="100" onChange={this.handleChange} placeholder="Nhập lại mật khẩu..." name="re_password" required />
                                     <label htmlFor="phone_number"><b>Nhập số điện thoại: (*)</b></label>
-                                    <input type="text" pattern="^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$" minLength="10" maxLength="20" onChange={this.handleChange} placeholder="VD: 0363205500, 0984610934..." name="phoneNumber" required />
+                                    <input type="text" id="phone_number" pattern="^(03[2|3|4|5|6|7|8|9]|07[0|6|7|8|9]|08[1|2|3|4|5]|05[6|8|9])[0-9]{7}$" minLength="10" maxLength="20" onChange={this.handleChange} placeholder="VD: 0363205500, 0984610934..." name="phoneNumber" required />
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <label htmlFor="authorities"><b>Loại tài khoản: (*)</b></label>
-                                            <select name="authorities" id="role" onChange={this.handleChange} required>
+                                            <label htmlFor="auth"><b>Loại tài khoản: (*)</b></label>
+                                            <select id="auth" name="authorities" id="role" onChange={this.handleChange} required>
                                                 <option value="">--- Loại tài khoản ---</option>
                                                 <option value="ROLE_ADMIN">Quản trị viên</option>
                                                 <option value="ROLE_TEACHER">Giảng viên</option>
@@ -429,7 +452,7 @@ class FormSign extends Component {
                                         </div>
                                         <div className="col-md-6">
                                             <label htmlFor="activated"><b>Trạng thái:</b></label>
-                                            <select name="activated" onChange={this.handleChange} id="activated" required>
+                                            <select id="activated" name="activated" onChange={this.handleChange} id="activated" required>
                                                 <option value={true}>Kích hoạt</option>
                                                 <option value={false}>Chưa kích hoạt</option>
                                             </select>
@@ -453,8 +476,8 @@ class FormSign extends Component {
                                     <div className="row">
                                         <div className="col-md-3">
                                             <div className="avatarUpload">
-                                                <label htmlFor="imageUrl"><b>Ảnh:</b></label>
-                                                <div className="avatarEdit">
+                                                <label htmlFor="imageUrl"><b>Ảnh đại diện:</b></label>
+                                                <div id="imageUrl" className="avatarEdit">
                                                     <input type="file" id="imageUpload" onChange={this.handleChangeFile} name="imageUrl" accept=".png, .jpg, .jpeg" />
                                                     <label htmlFor="imageUpload" />
                                                 </div>
@@ -467,52 +490,104 @@ class FormSign extends Component {
                                         <div className="col-md-9">
                                             <div className="row">
                                                 <div className="col-md-6">
-                                                    <label htmlFor="firstName"><b>Họ:</b></label>
-                                                    <input type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đào Huy, Hoàng Ngọc, Hoàng Thị..." name="firstName" />
+                                                    <label htmlFor="firstName"><b>Họ và tên đệm:</b></label>
+                                                    <input id="firstName" type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đào Huy, Hoàng Ngọc, Hoàng Thị..." name="firstName" />
                                                 </div>
                                                 <div className="col-md-6">
                                                     <label htmlFor="lastName"><b>Tên:</b></label>
-                                                    <input type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName" />
+                                                    <input id="lastName" type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName" />
                                                 </div>
                                             </div>
+                                            <div className="row">
+                                                <div className="col-12"><label htmlFor="day"><b>Ngày sinh:</b></label><br/></div>
+                                                <div className="col-4">
+                                                    <select name="day" id="day" onChange={this.handleChange}>
+                                                        { optionDay }
+                                                    </select>
+                                                </div>
+                                                <div className="col-4">
+                                                    <select name="month" id="month" onChange={this.handleChange}>
+                                                         { optionMonth }
+                                                    </select>
+                                                </div>
+                                                <div className="col-4">
+                                                    <select name="year" id="year" onChange={this.handleChange}>
+                                                        { optionYear }
+                                                    </select>
+                                                </div>
+                                                
+                                                <div className="col-12">
+                                                    <label htmlFor="sex"><b>Giới tính:</b></label>
+                                                    <div className="sex">
+                                                        <div class="form-check-inline">
+                                                            <label className="form-check-label">
+                                                            <input type="radio" defaultValue={true} onChange={this.handleChange} className="form-check-input" defaultChecked={true} name="sex" />Nam
+                                                        </label>
+                                                        </div>
+                                                        <div className="form-check-inline">
+                                                            <label className="form-check-label">
+                                                                <input type="radio" defaultValue={false} onChange={this.handleChange} className="form-check-input" name="sex" />Nữ
+                                                        </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-12">
+                                            <div className="row">
+                                                <div className="col-3">
+                                                    <label htmlFor="nations"><b>Dân tộc:</b></label>
+                                                    <select id="nations" name="nations" id="nations" onChange={this.handleChange}>
+                                                        <option value="Kinh">Kinh</option>
+                                                        <option value="Khác">Khác...</option>
+                                                    </select>
+                                                </div>
+                                                <div className="col-3">
+                                                    <label htmlFor="identity_card_number"><b>Số CMND/CCCD:</b></label>
+                                                    <input id="identity_card_number" type="text" onChange={this.handleChange} placeholder="VD: 175077212, 178221981..." name="identityCardNumber" />
+                                                </div>
+                                                <div className="col-2">
+                                                    <label htmlFor="date_card_number"><b>Ngày cấp:</b></label>
+                                                    <input id="date_card_number" type="date" onChange={this.handleChange} placeholder="Ngày cấp" name="dateIndentityCardNumber" />
+                                                </div>
+                                                <div className="col-4">
+                                                    <label htmlFor="locate_card_number"><b>Nơi cấp:</b></label>
+                                                    <input id="locate_card_number" type="text" maxLength="100" onChange={this.handleChange} placeholder="VD: CA tỉnh Thanh Hóa..." name="locationIndentityCardNumber" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-12">
                                             <label htmlFor="email"><b>Email:</b></label>
-                                            <input type="email" maxLength="5" maxLength="254" onChange={this.handleChange} placeholder="VD: huyducactvn.edu.vn, huyduc@gmail.com..." name="email" />
+                                            <input id="email" type="email" maxLength="5" maxLength="254" onChange={this.handleChange} placeholder="VD: huyducactvn.edu.vn, huyduc@gmail.com..." name="email" />
                                         </div>
-
-                                        <div className="col-md-6">
-                                            <label htmlFor="birthday"><b>Ngày sinh:</b></label>
-                                            <input type="date" placeholder="VD: 1998-10-02, 1999-08-12" name="birthday" onChange={this.handleChange} />
-                                            <label htmlFor="nations"><b>Dân tộc:</b></label>
-                                            <select name="nations" id="nations" onChange={this.handleChange}>
-                                                <option value="Kinh">Kinh</option>
-                                                <option value="Khác">Khác...</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <label htmlFor="sex"><b>Giới tính:</b></label>
-                                            <div className="sex">
-                                                <div class="form-check-inline">
-                                                    <label className="form-check-label">
-                                                        <input type="radio" defaultValue={true} onChange={this.handleChange} className="form-check-input" defaultChecked={true} name="sex" />Nam
-                                                </label>
+                                        <div className="col-md-12">
+                                            <label htmlFor="tinh"><b>Quê quán:</b></label>
+                                            <div className="row">
+                                                <div className="col-3">
+                                                    <select name="tinh" id="tinh" onChange={this.handleChange}>
+                                                        <option value="Tỉnh/ Thành phố">Tỉnh/ Thành phố</option>
+                                                        <option value="Khác">Khác...</option>
+                                                    </select>
                                                 </div>
-                                                <div className="form-check-inline">
-                                                    <label className="form-check-label">
-                                                        <input type="radio" defaultValue={false} onChange={this.handleChange} className="form-check-input" name="sex" />Nữ
-                                                </label>
+                                                <div className="col-3">
+                                                    <select name="quan" id="quan" onChange={this.handleChange}>
+                                                        <option value="Quận/ Huyện (TX)">Quận/ Huyện (TX)</option>
+                                                        <option value="Khác">Khác...</option>
+                                                    </select>
+                                                </div>
+                                                <div className="col-6">
+                                                    <select name="xa" id="xa" onChange={this.handleChange}>
+                                                        <option value="Xã/ Phường/ Thị trấn">Xã/ Phường/ Thị trấn</option>
+                                                        <option value="Khác">Khác...</option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <label htmlFor="identity_card_number"><b>Số CMND/CCCD:</b></label>
-                                            <input type="text" onChange={this.handleChange} placeholder="VD: 175077212, 178221981..." name="identityCardNumber" />
                                         </div>
-
-                                        <div className="col-md-6">
-                                            <label htmlFor="address"><b>Hộ khẩu thường trú:</b></label>
-                                            <input type="text" maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address" />
-                                        </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-12">
                                             <label htmlFor="address1"><b>Nơi sống hiện tại:</b></label>
-                                            <input type="text" maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address1" />
+                                            <textarea id="address1" maxLength="254" rows="1" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address1">
+                                                
+                                            </textarea>
                                         </div>
                                     </div>
                                 </div>

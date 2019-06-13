@@ -63,9 +63,7 @@ class FormAddDetail extends Component {
             courseId: 0,
             errors: {
                 name: '',
-                openDay: '',
-                closeDay: '',
-                day: ''
+                openDay: ''
             },
             open: false,
             isBlocking: false,
@@ -116,8 +114,6 @@ class FormAddDetail extends Component {
     isErrors = datas => {
         let name = '';
         let openDay = '';
-        let closeDay = '';
-        let day = ''
 
         if (datas.name === '') {
             name = 'Tên lớp học không được để trống!';
@@ -133,26 +129,10 @@ class FormAddDetail extends Component {
             openDay = '';
         }
 
-        if (datas.closeDay === null) {
-            closeDay = 'Ngày đóng lớp không được để trống!';
-        } else {
-            closeDay = '';
-        }
 
-        const op = Date.parse(datas.openDay);
-        const cl = Date.parse(datas.closeDay);
+        this.setState({ errors: { name, openDay} });
 
-        if (cl - op <= 0) {
-            day = 'Ngày mở đóng lớp phải lớn hơn ngày mở lớp!';
-        } else {
-            day = '';
-        }
-
-        this.setState({ errors: { name, openDay, closeDay, day } });
-
-        if (name === ''
-            && openDay === ''
-            && closeDay === '' && day === '') {
+        if (name === '' && openDay === '') {
             return true;
         }
         return false;
@@ -190,10 +170,7 @@ class FormAddDetail extends Component {
     render() {
         const { classes, status } = this.props;
         const { errors, name, classCode, isBlocking, openExit } = this.state;
-        var isShowMessageBeforeSubit = errors.name !== ''
-            || errors.openDay !== ''
-            || errors.closeDay !== ''
-            || errors.day !== '';
+        var isShowMessageBeforeSubit = errors.name !== ''|| errors.openDay !== '';
         var isShowMessageFailueAfterSubit = !status.progress
             && status.status === 'ADD_FAILED'
             && status.data.status === 400
@@ -229,8 +206,6 @@ class FormAddDetail extends Component {
                                     <ul>
                                         {errors.name !== '' ? <li>{errors.name}</li> : ''}
                                         {errors.openDay !== '' ? <li>{errors.openDay}</li> : ''}
-                                        {errors.closeDay !== '' ? <li>{errors.closeDay}</li> : ''}
-                                        {errors.day !== '' ? <li>{errors.day}</li> : ''}
                                         {(!isShowMessageBeforeSubit && status.data.status === 400 && status.data.response) ?
                                             <li>{status.data.response.createClassFailed ? status.data.response.createClassFailed : 'Tạo năm học thất bại!'}</li> : ''}
                                     </ul>
@@ -335,8 +310,8 @@ class FormAddDetail extends Component {
                                     <input type="date" id="openDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="openDay" required />
                                 </div>
                                 <div className="col-md-6">
-                                    <label htmlFor="closeDay"><b>Ngày đóng lớp (*):</b></label>
-                                    <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" required />
+                                    <label htmlFor="closeDay"><b>Ngày đóng lớp:</b></label>
+                                    <input type="date" id="closeDay" onChange={this.handleChange} placeholder="VD: 09/05/2019" name="closeDay" />
                                 </div>
                             </div>
                             <label htmlFor="describe"><b>Mô tả ngắn:</b></label>

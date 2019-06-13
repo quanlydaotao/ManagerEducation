@@ -28,13 +28,14 @@ public class ClassesDTO {
     @NotNull
     private Date openDay;
 
-    @NotNull
     private Date closeDay;
 
     private String classRoom;
 
     @NotNull
     private boolean status;
+
+    private Long courseId;
 
     public ClassesDTO() {
         // Empty constructor needed for Jackson.
@@ -104,6 +105,14 @@ public class ClassesDTO {
         this.classRoom = classRoom;
     }
 
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -133,8 +142,9 @@ public class ClassesDTO {
                 ", describe='" + describe + '\'' +
                 ", openDay=" + openDay +
                 ", closeDay=" + closeDay +
-                ", classRoom=" + classRoom +
+                ", classRoom='" + classRoom + '\'' +
                 ", status=" + status +
+                ", courseId=" + courseId +
                 '}';
     }
 }

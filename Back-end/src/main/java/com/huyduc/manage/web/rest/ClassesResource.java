@@ -4,7 +4,6 @@ import com.huyduc.manage.security.AuthoritiesConstants;
 import com.huyduc.manage.service.ClassesService;
 import com.huyduc.manage.service.dto.ClassesDTO;
 import com.huyduc.manage.web.rest.util.HeaderUtil;
-import com.huyduc.manage.web.rest.vm.ManagedClassesVM;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,16 +58,16 @@ public class ClassesResource {
     /**
      * POST  /class: Create a new years.
      *
-     * @param classesVM the classesVM to create
+     * @param classesDTO the classesDTO to create
      * @return the ResponseEntity with status 201 (Created) and with body the new classesDTO, or with status 400 (Bad Request) if the class has already or not created.
      * @throws URISyntaxException           if the Location URI syntax is incorrect
      * @throws ClassesAlreadyExistException 400 (Bad Request) if the class is already in exists
      */
     @PostMapping("/class")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<ClassesDTO> createClass(@RequestBody ManagedClassesVM classesVM) throws URISyntaxException {
+    public ResponseEntity<ClassesDTO> createClass(@RequestBody ClassesDTO classesDTO) throws URISyntaxException {
         try {
-            ClassesDTO result = classesService.save(classesVM, classesVM.getCourseId());
+            ClassesDTO result = classesService.save(classesDTO);
             return new ResponseEntity(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity(Collections.singletonMap("createClassFailed",

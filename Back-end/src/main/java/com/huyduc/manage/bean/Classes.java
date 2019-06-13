@@ -88,7 +88,6 @@ public class Classes implements Serializable {
     }
 
     @Basic
-    @NotNull
     @Column(name = "close_day", nullable = false)
     public Date getCloseDay() {
         return closeDay;
