@@ -175,6 +175,7 @@ class FormAddCategory extends Component {
                                                             data={years} 
                                                             title="DANH SÁCH NĂM HỌC ĐÀO TẠO" 
                                                             getSelectId={this.selectIdYear}
+                                                            classify="year"
                                                         />
                                                     </div>
                                                     <div className="col-md-5 pl-0">
@@ -182,6 +183,7 @@ class FormAddCategory extends Component {
                                                             data={courses}
                                                             title="DANH SÁCH KHÓA HỌC" 
                                                             getSelectId={this.selectIdCourse}
+                                                            classify="course"
                                                         />
                                                     </div>
                                                 </div>

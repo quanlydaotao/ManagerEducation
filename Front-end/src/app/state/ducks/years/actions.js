@@ -53,3 +53,8 @@ export const doDeleteYearByIds = ( ids ) => ( {
     }
 });
 
+export const doSelectYear = ( id ) => ( {
+    type: types.SELECT_YEAR,
+    payload: id
+});
+

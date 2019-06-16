@@ -20,15 +20,10 @@ export const doGetAllCourseByMaxClasses = (id) => ( {
     }
 } );
 
-// export const getUserAccountById = ( id ) => ( {
-//     type: types.GET_USER_ACCOUNT_BY_ID,
-//     meta: {
-//         async: true,
-//         blocking: true,
-//         path: `/users/${id}`,
-//         method: "GET"
-//     }
-// } );
+export const doSelectCourse = ( id ) => ( {
+    type: types.SELECT_COURSE,
+    payload: id
+} );
 
 // export const addNewUserAccount = ( dataForm ) => ( {
 //     type: types.ADD_NEW_USER_ACCOUNT,

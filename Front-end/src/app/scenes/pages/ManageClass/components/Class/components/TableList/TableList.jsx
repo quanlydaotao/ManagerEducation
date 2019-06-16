@@ -81,6 +81,7 @@ class TableList extends Component {
                             data={years} 
                             title="NĂM HỌC ĐÀO TẠO" 
                             getSelectId={this.selectIdYear}
+                            classify="year"
                         />
                     </div>
                     <div className={`col-md-2 pl-0  ${styles.wrapCourse}`}>
@@ -88,6 +89,7 @@ class TableList extends Component {
                             data={courses} 
                             title="KHÓA HỌC" 
                             getSelectId={this.selectIdCourse}
+                            classify="course"
                         />
                     </div>
                     <div className="col-md-7">

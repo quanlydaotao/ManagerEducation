@@ -135,8 +135,8 @@ DROP TABLE IF EXISTS `course_classes`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `course_classes` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `course_id` bigint(20) DEFAULT NULL,
-  `class_id` bigint(20) DEFAULT NULL,
+  `course_id` bigint(20) NOT NULL,
+  `class_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `course_classes__fk` (`class_id`),
   KEY `class_course___fk` (`course_id`),
@@ -153,6 +153,35 @@ LOCK TABLES `course_classes` WRITE;
 /*!40000 ALTER TABLE `course_classes` DISABLE KEYS */;
 INSERT INTO `course_classes` VALUES (10,32,17),(11,32,18),(12,32,19),(13,32,20),(14,32,21),(15,32,22),(16,36,23),(17,36,24),(18,36,25),(19,36,26),(20,36,27),(21,36,28),(22,37,29),(23,37,30),(24,37,31),(27,64,34),(28,64,35),(29,65,36),(30,65,37),(31,65,38),(32,65,39),(33,66,40),(34,66,41),(35,66,42),(36,70,43),(37,70,44),(38,70,45),(39,70,46),(40,72,47),(41,72,48),(42,72,49),(43,72,50),(44,72,51),(45,73,52),(46,73,53),(47,74,54),(48,74,55),(49,74,56),(50,76,57),(51,76,58),(52,77,59),(53,77,60),(54,79,61),(55,79,62),(56,79,63),(57,79,64),(58,79,65),(59,79,66),(60,36,67),(61,36,68),(62,37,69),(63,36,70);
 /*!40000 ALTER TABLE `course_classes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `detail_timetables`
+--
+
+DROP TABLE IF EXISTS `detail_timetables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `detail_timetables` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `number_session` int(11) NOT NULL,
+  `day_of_weeks` int(11) NOT NULL,
+  `time_start` date NOT NULL,
+  `time_end` date NOT NULL,
+  `timetable_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `detail_timetables_timetables_id_fk` (`timetable_id`),
+  CONSTRAINT `detail_timetables_timetables_id_fk` FOREIGN KEY (`timetable_id`) REFERENCES `timetables` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detail_timetables`
+--
+
+LOCK TABLES `detail_timetables` WRITE;
+/*!40000 ALTER TABLE `detail_timetables` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detail_timetables` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -184,6 +213,36 @@ INSERT INTO `district` VALUES ('001','Quận Ba Đình','Quận','01'),('002','Q
 UNLOCK TABLES;
 
 --
+-- Table structure for table `payment`
+--
+
+DROP TABLE IF EXISTS `payment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `payment` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name_pay` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `amount` varchar(50) NOT NULL,
+  `payment_date` timestamp NOT NULL,
+  `user_pay` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `descript` mediumtext,
+  `detail_timetables_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `payment_detail_timetables_id_fk` (`detail_timetables_id`),
+  CONSTRAINT `payment_detail_timetables_id_fk` FOREIGN KEY (`detail_timetables_id`) REFERENCES `detail_timetables` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment`
+--
+
+LOCK TABLES `payment` WRITE;
+/*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `province`
 --
 
@@ -209,6 +268,70 @@ INSERT INTO `province` VALUES ('01','Thành phố Hà Nội','Thành phố Trung
 UNLOCK TABLES;
 
 --
+-- Table structure for table `timetables`
+--
+
+DROP TABLE IF EXISTS `timetables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `timetables` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `time_start` date NOT NULL,
+  `time_end` date NOT NULL,
+  `id_class` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  KEY `fk_timetable_class_idx` (`id_class`),
+  CONSTRAINT `fk_timetable_class` FOREIGN KEY (`id_class`) REFERENCES `class` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `timetables`
+--
+
+LOCK TABLES `timetables` WRITE;
+/*!40000 ALTER TABLE `timetables` DISABLE KEYS */;
+/*!40000 ALTER TABLE `timetables` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tuition`
+--
+
+DROP TABLE IF EXISTS `tuition`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `tuition` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `amount_to_pay` varchar(50) NOT NULL DEFAULT '0',
+  `money_reduced` varchar(50) NOT NULL DEFAULT '0',
+  `amount_missing` varchar(50) NOT NULL DEFAULT '0',
+  `descript` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `status` bit(1) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `detail_time_tables_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  KEY `tuition_detail_timetables_id_fk` (`detail_time_tables_id`),
+  KEY `tuition_user_id_fk` (`user_id`),
+  CONSTRAINT `tuition_detail_timetables_id_fk` FOREIGN KEY (`detail_time_tables_id`) REFERENCES `detail_timetables` (`id`),
+  CONSTRAINT `tuition_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tuition`
+--
+
+LOCK TABLES `tuition` WRITE;
+/*!40000 ALTER TABLE `tuition` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tuition` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -217,22 +340,22 @@ DROP TABLE IF EXISTS `user`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `login` varchar(50) NOT NULL,
-  `password_hash` varchar(60) NOT NULL,
+  `login` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `password_hash` varchar(60) CHARACTER SET latin1 NOT NULL,
   `first_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `last_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `email` varchar(254) DEFAULT NULL,
+  `email` varchar(254) CHARACTER SET latin1 DEFAULT NULL,
   `image_url` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `activated` bit(1) NOT NULL,
-  `lang_key` varchar(6) DEFAULT NULL,
-  `activation_key` varchar(20) DEFAULT NULL,
-  `reset_key` varchar(20) DEFAULT NULL,
+  `lang_key` varchar(6) CHARACTER SET latin1 DEFAULT NULL,
+  `activation_key` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
+  `reset_key` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
   `address` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `phone_number` varchar(20) NOT NULL,
-  `identity_card_number` varchar(20) DEFAULT NULL,
+  `phone_number` varchar(20) CHARACTER SET latin1 NOT NULL,
+  `identity_card_number` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
   `birthday` date DEFAULT NULL,
   `sex` bit(1) DEFAULT b'1',
-  `nations` varchar(50) DEFAULT NULL,
+  `nations` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   `address1` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `date_signed` date DEFAULT NULL,
   `date_identity_card_number` date DEFAULT NULL,
@@ -240,7 +363,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_user_login` (`login`),
   UNIQUE KEY `user_phone_number_uindex` (`phone_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,7 +372,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (61,'AD01010','$2a$10$UjWOxdIm5yK5LNMK/1R6b.6bAccea2SJMQtkZ5cRItLMD33qqTpEC','Đỗ Minh','Chiến','','9dd4e461268c8034f5c8564e155c67a6.jpg',_binary '','vi','31970701169615766420',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363125500','17895465464',NULL,_binary '','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-16',NULL,NULL),(62,'HV00001','$2a$10$YR1CtAx4WithRR9oD6Dpj.W1Uo9is66q.TRVrZBcSVWryiv2Q6Ht.','Hoàng Ngọc','Khánh','ngockhanh@gmail.com','2d7ccddb12b3e78ca6f3141b582c9cb7.jpg',_binary '','vi','26049563882408803755',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363204500','17895465464','2019-05-15',_binary '','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-08',NULL,NULL),(64,'AD12002','$2a$10$y77LTMktGOOcxXSOcKEpw.eWT.WE8KGtxN4TA7RWHkUHMVpdBrY/q','Nguyễn Duy','Mạnh','','9dd4e461268c8034f5c8564e155c67a6.jpg',_binary '','vi','25965059104381355961',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363205500','17895465464','2019-05-10',_binary '\0','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-10',NULL,NULL),(73,'AD00001','$2a$10$HffNCkQMwfo2MkAUYAZa2uc.2TdW5bmbKNmB4QSpqVazLdMatm7.i','Đào Huy','Đức','','78f35718d521c40179d0cba7daeed1ab.jpg',_binary '','vi','94395005279266750900',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363105500','17895465464',NULL,_binary '','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-13',NULL,NULL),(74,'PH00624','$2a$10$bLHgJmWNUCCrzMe1PMjyBO3m/m8nZthq7yZohDHGUJCDZ0VpRoAM.','Đào Huy','Hoàng','huydu21c003@hocvienact.edu.vn','fd456406745d816a45cae554c788e754.jpg',_binary '\0','vi','09250693261408654747',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363905000','17895465464','2019-05-16',_binary '','Khác','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-14',NULL,NULL),(75,'AD00992','$2a$10$P76caHfPwrsr.Y/ODqNDkuqnJacpMb68KBy4afI9oKKEKLJYPJYOO','Chu Thị Minh','Hiền','','9dd4e461268c8034f5c8564e155c67a6.jpg',_binary '','vi','98875201186547163375',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363219500','17895465464',NULL,_binary '','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-08',NULL,NULL),(86,'AD00991','$2a$10$qCf9FelIp0qSLqcex2nfJuIaMDt1ad7Q5gHJpZgqJ8luAGmK3tnsm','Administrator','Administrator','admi4n112@localhost','2c88954b0f97cc778494cc2b4358c8a8.png',_binary '\0','vi','16564255829183682463','00586276569043613681','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0361234600','17895465464','2019-05-09',_binary '\0','Khác','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-28',NULL,NULL),(87,'AD99999','$2a$10$A2/DnktJMKxUY9kAROO1lOm2U7ZZ/LWZE5Tnlkvb5pOj4vYaRulEK','Đào Huy','Đức','huyducactvn1123@gmail.com','',_binary '','vi','09916364425093119650','11362566335384721706','','0363278800','175077295','1998-08-12',_binary '','Kinh','170 Chiến thắng, Văn Quán, hà đông, hà nội','2019-06-12',NULL,NULL);
+INSERT INTO `user` VALUES (61,'AD01010','$2a$10$UjWOxdIm5yK5LNMK/1R6b.6bAccea2SJMQtkZ5cRItLMD33qqTpEC','Đỗ Minh','Chiến','','9dd4e461268c8034f5c8564e155c67a6.jpg',_binary '','vi','31970701169615766420',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363125500','17895465464',NULL,_binary '','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-16','2010-01-01','CA HÀ NỘI'),(62,'HV00001','$2a$10$YR1CtAx4WithRR9oD6Dpj.W1Uo9is66q.TRVrZBcSVWryiv2Q6Ht.','Hoàng Ngọc','Khánh','ngockhanh@gmail.com','2d7ccddb12b3e78ca6f3141b582c9cb7.jpg',_binary '','vi','26049563882408803755',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363204500','17895465464','2019-05-15',_binary '','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-08',NULL,NULL),(64,'AD12002','$2a$10$y77LTMktGOOcxXSOcKEpw.eWT.WE8KGtxN4TA7RWHkUHMVpdBrY/q','Nguyễn Duy','Mạnh','','9dd4e461268c8034f5c8564e155c67a6.jpg',_binary '','vi','25965059104381355961',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363205500','17895465464','2019-05-10',_binary '\0','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-10',NULL,NULL),(73,'AD00001','$2a$10$HffNCkQMwfo2MkAUYAZa2uc.2TdW5bmbKNmB4QSpqVazLdMatm7.i','Đào Huy','Đức','','78f35718d521c40179d0cba7daeed1ab.jpg',_binary '','vi','94395005279266750900',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363105500','17895465464',NULL,_binary '','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-13',NULL,NULL),(74,'PH00624','$2a$10$bLHgJmWNUCCrzMe1PMjyBO3m/m8nZthq7yZohDHGUJCDZ0VpRoAM.','Đào Huy','Hoàng','huydu21c003@hocvienact.edu.vn','fd456406745d816a45cae554c788e754.jpg',_binary '\0','vi','09250693261408654747',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363905000','17895465464','2019-05-16',_binary '','Khác','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-14',NULL,NULL),(75,'AD00992','$2a$10$P76caHfPwrsr.Y/ODqNDkuqnJacpMb68KBy4afI9oKKEKLJYPJYOO','Chu Thị Minh','Hiền','','9dd4e461268c8034f5c8564e155c67a6.jpg',_binary '','vi','98875201186547163375',NULL,'Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','0363219500','17895465464',NULL,_binary '','Kinh','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-08',NULL,NULL),(86,'AD00991','$2a$10$qCf9FelIp0qSLqcex2nfJuIaMDt1ad7Q5gHJpZgqJ8luAGmK3tnsm','Đào Huy Đức','Hooàng','admi4n112@localhost','2c88954b0f97cc778494cc2b4358c8a8.png',_binary '\0','vi','16564255829183682463','00586276569043613681','95-961-31915','0361234600','17895465464','2019-05-09',_binary '\0','Khác','Thôn 4, Nông Trường, Triệu Sơn, Thanh Hóa','2019-05-28',NULL,NULL),(87,'AD99999','$2a$10$A2/DnktJMKxUY9kAROO1lOm2U7ZZ/LWZE5Tnlkvb5pOj4vYaRulEK','Đào Huy','Đức','huyducactvn1123@gmail.com','',_binary '','vi','09916364425093119650','11362566335384721706','24-218-07447','0363278800','175077243','1944-07-06',_binary '\0','Kinh','170 Chiến thắng, Văn Quán, hà đông, hà nội','2019-06-12',NULL,NULL),(88,'AD88888','$2a$10$IB6TRr8I5NlFicLYyq3c1O2xh3T.iu6mzJp1DJh2l4c6zsD8bZTuC','','','','',_binary '','vi','37911986405833401311','33495236327615951356','87-871-30028','0367895500','175077295','1951-07-10',_binary '\0','Kinh','','2019-06-13','2110-05-01','CA HÀ LỘỘI'),(89,'AD00029','$2a$10$N5ja8qPcXKERdSaoAtxUJOB1XCiA4UxCKhyPuKatUwY3LECup4CyW','Đào Huy','Khánh','huydu12167c@hocvienact.edu.vn','18d23b3304ea8c3b46638fb463024197.jpeg',_binary '','vi','25484036969797585350','19228465676891983522','77-754-26722','0363205509','17895465464','1997-10-06',_binary '','Kinh','Văn quán, hà lội','2019-06-14','2019-06-21','CA Ninh Bình');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,7 +399,7 @@ CREATE TABLE `user_authority` (
 
 LOCK TABLES `user_authority` WRITE;
 /*!40000 ALTER TABLE `user_authority` DISABLE KEYS */;
-INSERT INTO `user_authority` VALUES (61,'ROLE_ADMIN'),(64,'ROLE_ADMIN'),(73,'ROLE_ADMIN'),(75,'ROLE_ADMIN'),(86,'ROLE_ADMIN'),(87,'ROLE_ADMIN'),(74,'ROLE_PARENTS'),(62,'ROLE_STUDENT');
+INSERT INTO `user_authority` VALUES (61,'ROLE_ADMIN'),(64,'ROLE_ADMIN'),(73,'ROLE_ADMIN'),(75,'ROLE_ADMIN'),(86,'ROLE_ADMIN'),(87,'ROLE_ADMIN'),(88,'ROLE_ADMIN'),(89,'ROLE_ADMIN'),(74,'ROLE_PARENTS'),(62,'ROLE_STUDENT');
 /*!40000 ALTER TABLE `user_authority` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -348,13 +471,13 @@ DROP TABLE IF EXISTS `years_course`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `years_course` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `years_id` bigint(20) DEFAULT NULL,
-  `course_id` bigint(20) DEFAULT NULL,
+  `years_id` bigint(20) NOT NULL,
+  `course_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_class_years_idx` (`years_id`),
   KEY `years_course__fk` (`course_id`),
-  CONSTRAINT `course_years___fk` FOREIGN KEY (`years_id`) REFERENCES `years` (`id`),
-  CONSTRAINT `years_course__fk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+  CONSTRAINT `years_course_course_id_fk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
+  CONSTRAINT `years_course_years_id_fk` FOREIGN KEY (`years_id`) REFERENCES `years` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -364,7 +487,7 @@ CREATE TABLE `years_course` (
 
 LOCK TABLES `years_course` WRITE;
 /*!40000 ALTER TABLE `years_course` DISABLE KEYS */;
-INSERT INTO `years_course` VALUES (22,5,33),(23,5,34),(24,5,35),(25,5,36),(26,5,37),(27,6,38),(28,6,39),(29,6,40),(30,6,41),(31,6,42),(32,6,43),(33,6,44),(34,6,45),(35,7,46),(36,7,47),(37,7,48),(38,7,49),(39,7,50),(40,7,51),(41,7,52),(42,8,53),(43,8,54),(44,8,55),(45,8,56),(46,8,57),(47,8,58),(68,5,82);
+INSERT INTO `years_course` VALUES (1,5,32),(2,5,33),(3,5,34),(4,5,35),(5,5,36),(6,5,37),(7,6,38),(8,6,39),(9,6,40),(10,6,41),(11,6,42),(12,6,43),(13,6,44),(14,6,45),(15,7,46),(16,7,47),(17,7,48),(18,7,49),(19,7,50),(20,7,51),(21,7,52);
 /*!40000 ALTER TABLE `years_course` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -377,4 +500,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-13 12:15:15
+-- Dump completed on 2019-06-17  2:37:44

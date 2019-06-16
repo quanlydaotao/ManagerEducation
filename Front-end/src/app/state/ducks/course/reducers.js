@@ -7,6 +7,10 @@ const applyListReducer = createReducer( [] )( {
     [ types.GET_ALL_COURSE_BY_MAX_CLASSES_COMPLETED ]: ( state, action ) => action.payload,
 });
 
+const applySelectReducer = createReducer( 0 )( {
+    [ types.SELECT_COURSE ]: ( state, action ) => action.payload
+});
+
 // const getAccountReducer = createReducer( {} )( {
 //     [ types.GET_USER_ACCOUNT_BY_ID ]: ( state, action ) => {
 //         state = {};
@@ -77,4 +81,5 @@ const applyListReducer = createReducer( [] )( {
 
 export default combineReducers( {
     list: applyListReducer,
+    select: applySelectReducer
 } );

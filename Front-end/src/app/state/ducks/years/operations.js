@@ -3,7 +3,8 @@ import {
     doGetAllYears,
     doDeleteYearByIds,
     doGetYearById,
-    doUpdateYear
+    doUpdateYear,
+    doSelectYear
 } from "./actions";
 
 export {
@@ -11,5 +12,6 @@ export {
     doGetAllYears,
     doDeleteYearByIds,
     doGetYearById,
-    doUpdateYear
+    doUpdateYear,
+    doSelectYear
 };

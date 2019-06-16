@@ -10,7 +10,8 @@ import java.util.Set;
 /**
  * An Province.
  */
-@Entity(name = "province")
+@Entity
+@Table(name = "province")
 public class Province implements Serializable {
     private String id;
     private String name;

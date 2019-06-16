@@ -10,7 +10,8 @@ import java.util.Objects;
 /**
  * An Ward.
  */
-@Entity(name = "ward")
+@Entity
+@Table(name = "ward")
 public class Ward implements Serializable {
     private String id;
     private String name;

@@ -30,9 +30,7 @@ class ManageClass extends Component {
                 <Switch>
                     <Route exact path="/admin/edu" render={() => (
                         <TabContainer>
-                            <Suspense fallback={'Loading...'}>
-                                <Statistical />
-                            </Suspense>
+                            aaaa
                         </TabContainer>
                     )} />
                     <Route path="/admin/edu/years" render={() => (
@@ -53,6 +51,13 @@ class ManageClass extends Component {
                         <TabContainer>
                             <Suspense fallback={'Loading...'}>
                                 <div>Add new class</div>
+                            </Suspense>
+                        </TabContainer>
+                    )} />
+                    <Route exact path="/admin/edu/timetables" render={() => (
+                        <TabContainer>
+                            <Suspense fallback={'Loading...'}>
+                                <Statistical />
                             </Suspense>
                         </TabContainer>
                     )} />

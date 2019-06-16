@@ -11,7 +11,8 @@ import java.util.Set;
 /**
  * An District.
  */
-@Entity(name = "district")
+@Entity
+@Table(name = "district")
 public class District implements Serializable {
 
     private String id;

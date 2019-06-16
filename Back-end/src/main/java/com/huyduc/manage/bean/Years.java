@@ -116,7 +116,7 @@ public class Years implements Serializable {
         this.status = status;
     }
 
-    @OneToMany(mappedBy = "year", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToMany(mappedBy = "year", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     public Set<Course> getCourses() {
         return courses;
     }

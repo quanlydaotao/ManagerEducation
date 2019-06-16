@@ -76,8 +76,8 @@ class FormSign extends Component {
             district: '',
             ward: '',
             identityCardNumber: '', 
-            dateIndentityCardNumber: '',
-            locationIndentityCardNumber: '',
+            dateIdentityCardNumber: '',
+            locationIdentityCardNumber: '',
             activated: true,
             errors: {
                 login: '',
@@ -169,8 +169,8 @@ class FormSign extends Component {
                 year,
                 month,
                 day, 
-                dateIndentityCardNumber,
-                locationIndentityCardNumber,
+                dateIdentityCardNumber,
+                locationIdentityCardNumber,
                 langKey, 
                 identityCardNumber, 
                 activated, 
@@ -192,6 +192,8 @@ class FormSign extends Component {
                 address: province+"-"+district+"-"+ward, 
                 address1, 
                 langKey, 
+                dateIdentityCardNumber,
+                locationIdentityCardNumber,
                 identityCardNumber, 
                 activated, 
                 image
@@ -515,7 +517,7 @@ class FormSign extends Component {
                                                 </div>
                                                 <div className="col-md-6">
                                                     <label htmlFor="lastName"><b>Tên:</b></label>
-                                                    <input id="lastName" type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName" />
+                                                    <input id="lastName" type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName"/>
                                                 </div>
                                             </div>
                                             <div className="row">
@@ -568,11 +570,11 @@ class FormSign extends Component {
                                                 </div>
                                                 <div className="col-2">
                                                     <label htmlFor="date_card_number"><b>Ngày cấp:</b></label>
-                                                    <input id="date_card_number" type="date" onChange={this.handleChange} placeholder="Ngày cấp" name="dateIndentityCardNumber" />
+                                                    <input id="date_card_number" type="date" onChange={this.handleChange} placeholder="Ngày cấp" name="dateIdentityCardNumber" />
                                                 </div>
                                                 <div className="col-4">
                                                     <label htmlFor="locate_card_number"><b>Nơi cấp:</b></label>
-                                                    <input id="locate_card_number" type="text" maxLength="100" onChange={this.handleChange} placeholder="VD: CA tỉnh Thanh Hóa..." name="locationIndentityCardNumber" />
+                                                    <input id="locate_card_number" type="text" maxLength="100" onChange={this.handleChange} placeholder="VD: CA tỉnh Thanh Hóa..." name="locationIdentityCardNumber" />
                                                 </div>
                                             </div>
                                         </div>
@@ -585,19 +587,19 @@ class FormSign extends Component {
                                             <div className="row">
                                                 <div className="col-3">
                                                     <select name="province" id="tinh" onChange={this.handleSelectLocation}>
-                                                        <option value="">Tỉnh/ Thành phố</option>
+                                                        <option value="0">Tỉnh/ Thành phố</option>
                                                         { provinces.map((value, index) => <option key={index} value={value.id}>{value.name}</option>) }
                                                     </select>
                                                 </div>
                                                 <div className="col-3">
                                                     <select name="district" id="quan" onChange={this.handleSelectLocation}>
-                                                        <option value="">Quận/ Huyện (TX)</option>
+                                                        <option value="0">Quận/ Huyện (TX)</option>
                                                         { districts.map((value, index) => <option key={index} value={value.id}>{value.name}</option>) }
                                                     </select>
                                                 </div>
                                                 <div className="col-6">
                                                     <select name="ward" id="xa" onChange={this.handleSelectLocation}>
-                                                        <option value="">Xã/ Phường/ Thị trấn</option>
+                                                        <option value="0">Xã/ Phường/ Thị trấn</option>
                                                         { wards.map((value, index) => <option key={index} value={value.id}>{value.name}</option>) }
                                                     </select>
                                                 </div>

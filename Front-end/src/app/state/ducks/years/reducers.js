@@ -50,9 +50,14 @@ const applyStatusActReducer = createReducer( initialState )( {
     }
 });
 
+const applySelectReducer = createReducer( 0 )( {
+    [ types.SELECT_YEAR ]: ( state, action ) => state = action.payload,
+});
+
 
 export default combineReducers( {
     list: applyListReducer,
     detail: applyDetailReducer,
-    status: applyStatusActReducer
+    status: applyStatusActReducer,
+    select: applySelectReducer
 } );

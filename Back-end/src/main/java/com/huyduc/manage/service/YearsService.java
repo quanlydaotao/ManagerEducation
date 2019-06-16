@@ -48,9 +48,9 @@ public interface YearsService {
 
 
     /**
-     * Delete the "id" years.
+     * Delete the "ids" years.
      *
-     * @param ids the id of the entity
+     * @param ids the ids of the entity
      * @return the count is total all id deleted
      */
     AtomicInteger delete(List<Long> ids);

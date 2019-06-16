@@ -10,10 +10,7 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A user.
@@ -112,6 +109,9 @@ public class User implements Serializable {
     @Column(name = "location_identity_card_number", length = 100)
     private String locationIdentityCardNumber;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Tuition> tuitions = new HashSet<>();
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -121,6 +121,7 @@ public class User implements Serializable {
 
     @BatchSize(size = 20)
     private Set<Authority>  authorities = new HashSet<>();
+
 
     public Long getId() {
         return id;
@@ -301,6 +302,14 @@ public class User implements Serializable {
 
     public void setLocationIdentityCardNumber(String locationIdentityCardNumber) {
         this.locationIdentityCardNumber = locationIdentityCardNumber;
+    }
+
+    public Set<Tuition> getTuitions() {
+        return tuitions;
+    }
+
+    public void setTuitions(Set<Tuition> tuitions) {
+        this.tuitions = tuitions;
     }
 
     @Override

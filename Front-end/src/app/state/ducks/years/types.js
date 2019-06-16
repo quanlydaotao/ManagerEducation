@@ -14,3 +14,4 @@ export const CLOSE_EDIT_YEARS = "years/CLOSE_EDIT_YEARS";
 export const GET_YEARS_BY_ID = "years/GET_YEARS_BY_ID";
 export const GET_YEARS_BY_ID_COMPLETED = "years/GET_YEARS_BY_ID_COMPLETED";
 export const GET_YEARS_BY_ID_FAILED = "years/GET_YEARS_BY_ID_FAILED";
+export const SELECT_YEAR = "years/SELECT_YEAR";

@@ -12,6 +12,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
+import { locationOperations } from '../../../../../state/ducks/location';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import LockIcon from '@material-ui/icons/Lock';
@@ -87,7 +88,7 @@ class EditAccount extends React.Component {
         super(props);
         this.state = {
             id: 0, 
-            login: '',
+            login: '', 
             password: '', 
             re_password: '',
             phoneNumber: '', 
@@ -97,23 +98,29 @@ class EditAccount extends React.Component {
             lastName: '', 
             email: '',
             image: null, 
-            birthday: null, 
+            year: '1938',
+            month: '01',
+            day: '01',
             sex: true,
-            nations: 'Kinh', 
-            address: '', 
+            nations: 'Kinh',  
             address1: '',
             langKey: 'vi', 
+            province: '',
+            district: '',
+            ward: '',
             identityCardNumber: '', 
+            dateIdentityCardNumber: null,
+            locationIdentityCardNumber: '',
             activated: true,
             errors: {
                 login: '',
                 password: '',
                 re_password: '',
                 phone_number: '',
+                authorities: ''
             },
             imagePreview: '',
             open: false,
-            expanded: null,
             isBlocking: false,
             lastLocation: null,
             openExit: false
@@ -123,6 +130,7 @@ class EditAccount extends React.Component {
     componentWillMount() {
         this.setState({ isBlocking: true });
         this.props.findAccountById(this.props.match.params.id);
+        this.props.getAllProvince();
     }
 
     componentDidUpdate(prevProps) {
@@ -142,6 +150,8 @@ class EditAccount extends React.Component {
                 nations,
                 address, 
                 address1, 
+                dateIdentityCardNumber,
+                locationIdentityCardNumber,
                 identityCardNumber, 
                 activated
             } = detail;
@@ -154,14 +164,24 @@ class EditAccount extends React.Component {
                 firstName, 
                 lastName, 
                 email,
-                birthday, 
+                birthday,
+                dateIdentityCardNumber,
+                locationIdentityCardNumber,
+                year: birthday.split("-")[0] ? birthday.split("-")[0] : '1938',
+                month: birthday.split("-")[1] ? birthday.split("-")[1] : '01',
+                day: birthday.split("-")[2] ? birthday.split("-")[2] : '01',
                 sex, 
+                province: address.split("-")[0] ? address.split("-")[0] : '',
+                district: address.split("-")[1] ? address.split("-")[1] : '',
+                ward: address.split("-")[2] ? address.split("-")[2] : '',
                 nations, 
                 address, 
                 address1,
                 identityCardNumber, 
                 activated
             });
+            this.props.getDistrictByProvinceId(address.split("-")[0]);
+            this.props.getWardByDistrictId(address.split("-")[1]);
         }
     }
     
@@ -179,6 +199,20 @@ class EditAccount extends React.Component {
         else
             this.setState({ [target.name]: target.value });
     };
+
+    handleSelectLocation = event => {
+        var target = event.target;
+        if (target.name === 'province') {
+            this.setState({ province: target.value, district: '', ward: '' });
+            this.props.getWardByDistrictId(0);
+            this.props.getDistrictByProvinceId(target.value);
+        } else if(target.name === 'district') {
+            this.setState({ district: target.value, ward: '' });
+            this.props.getWardByDistrictId(target.value);
+        } else if (target.name === 'ward') {
+            this.setState({ ward: target.value });
+        }
+    }
 
     handleChangeFile = event => {
         let reader = new FileReader();
@@ -199,14 +233,53 @@ class EditAccount extends React.Component {
         const check = this.isErrors(this.state);
         if (check) {
             const {
-                id, login, password, re_password, phoneNumber, authorities,
-                imageUrl, firstName, lastName, email, birthday, sex, nations,
-                address, address1, langKey, identityCardNumber, activated, image
+                id, 
+                login, 
+                password, 
+                re_password, 
+                phoneNumber, 
+                authorities,
+                imageUrl, 
+                firstName, 
+                lastName, 
+                email, 
+                sex, 
+                nations,
+                province,
+                district,
+                ward,
+                address1,
+                year,
+                month,
+                day, 
+                dateIdentityCardNumber,
+                locationIdentityCardNumber,
+                langKey, 
+                identityCardNumber, 
+                activated, 
+                image
             } = this.state;
             const formData = {
-                id, login, password, re_password, phoneNumber, authorities,
-                imageUrl, firstName, lastName, email, birthday, sex, nations,
-                address, address1, langKey, identityCardNumber, activated, image
+                id,
+                login, 
+                password, 
+                re_password,
+                phoneNumber, 
+                authorities,
+                imageUrl, 
+                firstName, 
+                lastName, 
+                dateIdentityCardNumber,
+                locationIdentityCardNumber,
+                email, 
+                birthday: year+"-"+month+"-"+day, 
+                sex, nations,
+                address: province+"-"+district+"-"+ward, 
+                address1, 
+                langKey, 
+                identityCardNumber, 
+                activated, 
+                image
             }
             this.props.updateAccount(formData);
             if (this.props.status.status !== "UPDATE_FAILED") {
@@ -335,8 +408,9 @@ class EditAccount extends React.Component {
     }
 
     render() {
-        const { classes, status } = this.props;
-        const { expanded, errors, imagePreview, isBlocking, openExit } = this.state;
+        const { classes, status, provinces, districts, wards } = this.props;
+        console.log(this.state);
+        const { expanded, errors, imagePreview, isBlocking, openExit, day, month, year, province, district, ward } = this.state;
         var isShowMessageBeforeSubit = errors.login !== '' 
             || errors.password !== '' 
             || errors.re_password !== '' 
@@ -351,6 +425,19 @@ class EditAccount extends React.Component {
         if (isShowMessageSuccessAfterSubit) {
             history.replace('/admin/account/users');
         }
+        const optionYear = [];
+        const optionMonth = [];
+        const optionDay = [];
+        for (let i=1938; i<(new Date()).getFullYear(); i++) {
+            optionYear.push(<option value={i} selected={i === parseInt(year)}>Năm {i}</option>);
+        } 
+        for (let i=1; i<=12; i++) {
+            optionMonth.push(<option value={i < 10 ? `0${i}` : i} selected={i === parseInt(month)}>{i < 10 ? `Tháng 0${i}` : `Tháng ${i}`}</option>);
+
+        } 
+        for (let i=1; i<=31; i++) {
+            optionDay.push(<option value={i < 10 ? `0${i}` : i} selected={i === parseInt(day)}>{i < 10 ? `Ngày 0${i}` : `Ngày ${i}`}</option>);
+        } 
         let alert = () => {
             if (isShowMessageBeforeSubit 
                 || (!isShowMessageBeforeSubit 
@@ -562,71 +649,108 @@ class EditAccount extends React.Component {
                                     </div>
                                 </div>{/*/col-3*/}
                                 <div className="col-md-9">
-                                    <div className="tab-content">
-                                        <div className="tab-pane active" id="home">
-                                            <div className="form-group row">
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <div className="row">
                                                 <div className="col-md-6">
                                                     <label htmlFor="firstName"><b>Họ và tên đệm:</b></label>
-                                                    <input type="text" defaultValue={this.state.firstName} maxLength="50" onChange={this.handleChange} placeholder="VD: Đào Huy, Hoàng Ngọc, Hoàng Thị..." name="firstName" />
+                                                    <input id="firstName" type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đào Huy, Hoàng Ngọc, Hoàng Thị..." name="firstName" defaultValue={this.state.firstName} />
                                                 </div>
                                                 <div className="col-md-6">
                                                     <label htmlFor="lastName"><b>Tên:</b></label>
-                                                    <input type="text" defaultValue={this.state.lastName} maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName" />
+                                                    <input id="lastName" type="text" maxLength="50" onChange={this.handleChange} placeholder="VD: Đức, Khánh, Hà..." name="lastName" defaultValue={this.state.lastName} />
                                                 </div>
                                             </div>
-                                            <div className="form-group">
-                                                <div className="col-xs-6">
-                                                    <label htmlFor="birthday"><b>Ngày sinh:</b></label>
-                                                    <input type="date" defaultValue={this.state.birthday} placeholder="VD: 1998-10-02, 1999-08-12" name="birthday" onChange={this.handleChange} />
-                                                </div>
-                                            </div>
-                                            <div className="form-group">
-                                                <div className="col-xs-6">
-                                                    <label htmlFor="sex"><b>Giới tính:</b></label>
-                                                <div className="sex">
-                                                    <div class="form-check-inline">
-                                                        <label className="form-check-label">
-                                                            <input type="radio" defaultValue={true} onChange={this.handleChange} className="form-check-input" name="sex" defaultChecked={this.state.sex === true ? true : false} />Nam
-                                                    </label>
-                                                    </div>
-                                                    <div className="form-check-inline">
-                                                        <label className="form-check-label">
-                                                            <input type="radio" defaultValue={false} onChange={this.handleChange} className="form-check-input" name="sex" defaultChecked={this.state.sex === false ? true : false} />Nữ
-                                                    </label>
-                                                    </div>
-                                                </div>
-
-                                                </div>
-                                            </div>
-                                            <div className="form-group row">
-                                                <div className="col-md-2">
-                                                    <label htmlFor="nations"><b>Dân tộc:</b></label>
-                                                    <select name="nations" id="nations" onChange={this.handleChange}>
-                                                        <option value="Kinh" selected={this.state.nations === "Kinh" ? true : false}>Kinh</option>
-                                                        <option value="Khác" selected={this.state.nations === "Khác" ? true : false}>Khác...</option>
+                                            <div className="row">
+                                                <div className="col-12"><label htmlFor="day"><b>Ngày sinh:</b></label><br/></div>
+                                                <div className="col-4">
+                                                    <select name="day" id="day" onChange={this.handleChange}>
+                                                        { optionDay }
                                                     </select>
                                                 </div>
-                                                <div className="col-md-5">
-                                                    <label htmlFor="email"><b>Email:</b></label>
-                                                    <input type="email" defaultValue={this.state.email} maxLength="5" maxLength="254" onChange={this.handleChange} placeholder="VD: huyducactvn.edu.vn, huyduc@gmail.com..." name="email" />
+                                                <div className="col-4">
+                                                    <select name="month" id="month" onChange={this.handleChange}>
+                                                        { optionMonth }
+                                                    </select>
                                                 </div>
-                                                <div className="col-md-5">
+                                                <div className="col-4">
+                                                    <select name="year" id="year" onChange={this.handleChange}>
+                                                        { optionYear }
+                                                    </select>
+                                                </div>
+                                                
+                                                <div className="col-12">
+                                                    <label htmlFor="sex"><b>Giới tính:</b></label>
+                                                    <div className="sex">
+                                                        <div class="form-check-inline">
+                                                            <label className="form-check-label">
+                                                            <input type="radio" defaultValue={true} onChange={this.handleChange} className="form-check-input" defaultChecked={this.state.sex === true ? true : false} name="sex" />Nam
+                                                        </label>
+                                                        </div>
+                                                        <div className="form-check-inline">
+                                                            <label className="form-check-label">
+                                                                <input type="radio" defaultValue={false} onChange={this.handleChange} className="form-check-input" defaultChecked={this.state.sex === false ? true : false} name="sex" />Nữ
+                                                        </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-12">
+                                            <div className="row">
+                                                <div className="col-3">
+                                                    <label htmlFor="nations"><b>Dân tộc:</b></label>
+                                                    <select id="nations" name="nations" id="nations" onChange={this.handleChange}>
+                                                        <option value="Kinh" selected={this.state.nations === 'Kinh'}>Kinh</option>
+                                                        <option value="Khác" selected={this.state.nations === 'Khác'}>Khác...</option>
+                                                    </select>
+                                                </div>
+                                                <div className="col-3">
                                                     <label htmlFor="identity_card_number"><b>Số CMND/CCCD:</b></label>
-                                                    <input type="text" defaultValue={this.state.identityCardNumber} onChange={this.handleChange} placeholder="VD: 175077212, 178221981..." name="identityCardNumber" />
+                                                    <input id="identity_card_number" type="text" onChange={this.handleChange} placeholder="VD: 175077212, 178221981..." name="identityCardNumber" defaultValue={this.state.identityCardNumber} />
+                                                </div>
+                                                <div className="col-2">
+                                                    <label htmlFor="date_card_number"><b>Ngày cấp:</b></label>
+                                                    <input id="date_card_number" type="date" onChange={this.handleChange} placeholder="Ngày cấp" name="dateIdentityCardNumber" defaultValue={this.state.dateIdentityCardNumber} />
+                                                </div>
+                                                <div className="col-4">
+                                                    <label htmlFor="locate_card_number"><b>Nơi cấp:</b></label>
+                                                    <input id="locate_card_number" type="text" maxLength="100" onChange={this.handleChange} placeholder="VD: CA tỉnh Thanh Hóa..." name="locationIdentityCardNumber" defaultValue={this.state.locationIdentityCardNumber}/>
                                                 </div>
                                             </div>
-
-                                            <div className="form-group row">
-                                                <div className="col-md-12">
-                                                    <label htmlFor="address"><b>Hộ khẩu thường trú:</b></label>
-                                                    <input type="text" defaultValue={this.state.address} maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address" />
+                                        </div>
+                                        <div className="col-md-12">
+                                            <label htmlFor="email"><b>Email:</b></label>
+                                            <input id="email" type="email" maxLength="5" maxLength="254" onChange={this.handleChange} placeholder="VD: huyducactvn.edu.vn, huyduc@gmail.com..." name="email" defaultValue={this.state.email}  />
+                                        </div>
+                                        <div className="col-md-12">
+                                            <label htmlFor="tinh"><b>Quê quán:</b></label>
+                                            <div className="row">
+                                                <div className="col-3">
+                                                    <select name="province" id="tinh" onChange={this.handleSelectLocation}>
+                                                        <option value="0">Tỉnh/ Thành phố</option>
+                                                        { provinces.map((value, index) => <option key={index} value={value.id} selected={value.id === province}>{value.name}</option>) }
+                                                    </select>
                                                 </div>
-                                                <div className="col-md-12">
-                                                    <label htmlFor="address1"><b>Nơi sống hiện tại:</b></label>
-                                                    <input type="text" defaultValue={this.state.address1} maxLength="254" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address1" />
+                                                <div className="col-3">
+                                                    <select name="district" id="quan" onChange={this.handleSelectLocation}>
+                                                        <option value="0">Quận/ Huyện (TX)</option>
+                                                        { districts.map((value, index) => <option key={index} value={value.id} selected={value.id === district}>{value.name}</option>) }
+                                                    </select>
+                                                </div>
+                                                <div className="col-6">
+                                                    <select name="ward" id="xa" onChange={this.handleSelectLocation}>
+                                                        <option value="0">Xã/ Phường/ Thị trấn</option>
+                                                        { wards.map((value, index) => <option key={index} value={value.id} selected={value.id === ward}>{value.name}</option>) }
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <hr />
+                                        </div>
+                                        <div className="col-md-12">
+                                            <label htmlFor="address1"><b>Nơi sống hiện tại:</b></label>
+                                            <textarea id="address1" maxLength="254" rows="1" onChange={this.handleChange} placeholder="VD: 180 Chiến Thắng, Văn Quán, Hà Đông, Hà Nội...." name="address1" value={this.state.address1}>
+                                                
+                                            </textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -655,6 +779,9 @@ class EditAccount extends React.Component {
 
 EditAccount.propTypes = {
     classes: PropTypes.object.isRequired,
+    provinces: PropTypes.array.isRequired,
+    districts: PropTypes.array.isRequired,
+    wards: PropTypes.array.isRequired,
     status: PropTypes.objectOf({
         progress: PropTypes.bool.isRequired,
         status: PropTypes.string.isRequired,
@@ -664,22 +791,34 @@ EditAccount.propTypes = {
     updateAccount: PropTypes.func.isRequired,
     updateAvatar: PropTypes.func.isRequired,
     closeFormEdit: PropTypes.func.isRequired,
+    getAllProvince: PropTypes.func.isRequired,
+    getDistrictByProvinceId: PropTypes.func.isRequired,
+    getWardByDistrictId: PropTypes.func.isRequired
 };
 
 EditAccount.defaultProps = {
     status: { progress: false, status: '', data: {} },
-    detail: {}
+    detail: {},
+    provinces: [],
+    districts: [],
+    wards: []
 }
 
 const mapStateToProps = state => ({
     status: state.account.status,
-    detail: state.account.detail
+    detail: state.account.detail,
+    provinces: state.location.provinces,
+    districts: state.location.districts,
+    wards: state.location.wards
 });
 
 const mapDispatchToProps = {
     updateAccount: accountOperations.doUpdateAccount,
     updateAvatar: fileOperations.doUpdateFile,
     findAccountById: accountOperations.doGetAccountById,
+    getAllProvince: locationOperations.doGetAllProvince,
+    getDistrictByProvinceId: locationOperations.doGetDistrictsByProvinceId,
+    getWardByDistrictId: locationOperations.doGetWardByDistrictId
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(style)(EditAccount)));

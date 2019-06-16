@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import styles from './styles.css';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import RateReviewIcon from '@material-ui/icons/RateReview';
+import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import { Link } from 'react-router-dom';
 
 const style = theme => ({
     root: {
@@ -29,7 +32,7 @@ const style = theme => ({
     conf: {
         fontSize: 11,
         fontWeight: '400',
-        color: '#455e6b', 
+        color: '#455e6b',
     }
 });
 
@@ -58,34 +61,48 @@ class ListSelection extends React.Component {
         this.props.getSelectId(param);
     }
     render() {
-        const { classes, data, dataSelect, title } = this.props;
+        const { classes, data, dataSelect, title, classify } = this.props;
         const { id } = this.state;
         return (
             <List className={classes.root} subheader={<li />}>
-                <ListSubheader 
+                <ListSubheader
                     style={{
                         backgroundColor: '#ececec',
-                        color: '#445e6c', 
-                        fontWeight: '700', 
+                        color: '#445e6c',
+                        fontWeight: '700',
                         fontSize: '11px'
                     }}
                 >
-                    <RateReviewIcon /> 
+                    <RateReviewIcon />
                     {title}
                 </ListSubheader>
-                {data.map((value, index) => (
-                    <ListItem 
-                        key={index} 
-                        className={`item-list ${id == value.id ? 'activeLink' : ''}`} 
-                        onClick={() => this.setDataSelect({ id: value.id, name: value.name })}
-                    >
-                        <ListItemText 
-                            primary={value.startYears ? `Năm học đào tạo [ ${value.startYears} ]` : `Khóa - ${value.name}`} 
-                            classes={{ primary: classes.conf }}
-                        />
-                        <KeyboardArrowRightIcon />
+                {data.length === 0 ? (
+                    <ListItem>
+                        <Link
+                            to={classify === 'year' ? '/admin/edu/years/new' : '/admin/edu/courses/new'}
+                            className={`${styles.buttonConfigBlank}`}>
+                            <ControlPointIcon
+                                color="disabled"
+                                style={{ fontSize: 35 }}
+                            />
+                            {classify === 'year' ? 'THÊM MỚI NĂM HỌC' : 'THÊM MỚI KHÓA HỌC'}
+                        </Link>
                     </ListItem>
-                ))}
+                ) : (
+                        data.map((value, index) => (
+                            <ListItem
+                                key={index}
+                                className={`item-list ${id == value.id ? 'activeLink' : ''}`}
+                                onClick={() => this.setDataSelect({ id: value.id, name: value.name })}
+                            >
+                                <ListItemText
+                                    primary={value.startYears ? `Năm học đào tạo [ ${value.startYears} ]` : `Khóa - ${value.name}`}
+                                    classes={{ primary: classes.conf }}
+                                />
+                                <KeyboardArrowRightIcon />
+                            </ListItem>
+                        ))
+                    )}
             </List>
         );
     }

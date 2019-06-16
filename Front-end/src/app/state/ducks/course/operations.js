@@ -1,6 +1,11 @@
-import { doGetAllCourseByYearId, doGetAllCourseByMaxClasses } from "./actions";
+import { 
+    doGetAllCourseByYearId, 
+    doGetAllCourseByMaxClasses,
+    doSelectCourse
+} from "./actions";
 
 export {
     doGetAllCourseByYearId,
-    doGetAllCourseByMaxClasses
+    doGetAllCourseByMaxClasses,
+    doSelectCourse
 };
