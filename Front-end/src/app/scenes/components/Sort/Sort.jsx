@@ -32,19 +32,29 @@ const style = theme => ({
 class Sort extends React.Component {
     state = {
         open: false,
+        yearId: 0,
+        courseId: 0
     };
 
     componentDidMount() {
         this.props.getAllYears();
     }
+
     handleChange = name => event => {
         const target = event.target;
         if (name === 'year') {
             this.props.getCourseByYearId(target.value);
-            this.props.selectYear(target.value);
+            this.setState({ yearId: target.value });
         } else if (name === 'course') {
-            this.props.selectCourse(target.value);
+            this.setState({ courseId: target.value });
         }
+    }
+
+    handleOk = () => {
+        const { yearId, courseId } = this.state;
+        this.props.selectYear(yearId);
+        this.props.selectCourse(courseId);
+        this.setState({ open: false });
     }
 
     handleClickOpen = () => {
@@ -60,7 +70,7 @@ class Sort extends React.Component {
         let courseOption = courses.map((value, index) => <option key={index} value={value.id}>KHÓA  {value.name}</option>);
         return (
             <div className={`${styles.sort}`}>
-                <Button onClick={this.handleClickOpen}>CHỌN LỚP HỌC</Button>
+                <Button variant="outlined" onClick={this.handleClickOpen}>CHỌN LỚP HỌC</Button>
                 <Dialog
                     disableBackdropClick
                     disableEscapeKeyDown
@@ -97,10 +107,10 @@ class Sort extends React.Component {
                     <DialogActions>
                         <Button onClick={this.handleClose} color="primary">
                             Cancel
-            </Button>
-                        <Button onClick={this.handleClose} color="primary">
+                        </Button>
+                        <Button onClick={this.handleOk} color="primary">
                             Ok
-            </Button>
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>
